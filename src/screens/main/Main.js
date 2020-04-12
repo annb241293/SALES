@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar, Image, View, StyleSheet, Button, Text } from 'react-native';
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import DialogManager from '../../components/dialog/DialogManager';
-// import { RootSiblingPortal, RootSiblings } from 'react-native-root-siblings';
+import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
+import { HTTPService } from "../../services/HttpService";
+import { ApiPath } from "../../services/ApiPath";
+import { useFetch } from "../../customHook/useFetch";
+
 
 const Realm = require('realm');
-
 // Define your models and their properties
 const CarSchema = {
   name: 'Car',
@@ -27,6 +28,10 @@ const PersonSchema = {
 
 export default ({ navigation, style }) => {
 
+  // const [data, loading] = useFetch(
+  //   "https://jsonplaceholder.typicode.com/photos?albumId=1"
+  // );
+  
   useEffect(() => {
     Realm.open({ schema: [CarSchema, PersonSchema] })
       .then(realm => {
@@ -65,12 +70,16 @@ export default ({ navigation, style }) => {
         console.log(error);
       });
   }, [])
-  // let sibling = new RootSiblings(<View
-  //   style={{ top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'red' }}
-  // />);
-  // let dialog = new DialogManager();
-  //  const [count, setCount] = React.useState(0);
 
+  const clickRightIcon = () => {
+    navigation.openDrawer();
+  }
+
+  const clickLeftIcon = () => {
+    console.log("A");
+    
+  }
+  //  const [count, setCount] = React.useState(0);
   // React.useLayoutEffect(() => {
   //   navigation.setOptions({
   //     headerRight: () => (
@@ -79,34 +88,16 @@ export default ({ navigation, style }) => {
   //   });
   // }, [navigation, setCount]);
   return (
-    // <RootSiblingPortal>
-    <View
-      // color="#88B04B"
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        ...style,
-      }}>
-      {/* <StatusBar /> */}
-      {/* <Icon
-          name='ios-person'
-          color="blue"
-          size={25}
-        /> */}
-      <Text>
-        New video comming soon
-      </Text>
-      <Button
-        title="nba"
-      // onPress={() => {
-      //   sibling.update(<View
-      //     style={{ top: 10, right: 10, bottom: 10, left: 10, backgroundColor: 'blue' }}
-      //   />);
-      //   console.log('dialog');
-      // }}
-      ></Button>
+    <View>
+      <ToolBarDefault
+        navigation={navigation}
+        title="Main"
+        rightIcon="menu"
+        clickRightIcon={clickRightIcon}
+        leftIcon="refresh"
+        clickLeftIcon={clickLeftIcon}
+      />
+      <View></View>
     </View>
-    // </RootSiblingPortal>
   );
 };

@@ -1,19 +1,12 @@
 import React from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
 import Animated from 'react-native-reanimated';
+import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 
-function MyTabBar(props) {
-    const { state, descriptors, navigation, position } = props;
-    console.log(navigation,'navigationnavigation');
-    
+function MyTabBar({ state, descriptors, navigation }) {
     return (
         <View>
-            <View style={{ height: 100, backgroundColor: "blue" }}>
-                <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={() =>{ navigation.openDrawer()}}>
-                    <Text style={{ color: "#000" }}>Menu</Text>
-                </TouchableOpacity>
-            </View>
-
+            <ToolBarDefault navigation={navigation}/>
             <View style={{ flexDirection: 'row' }}>
                 {state.routes.map((route, index) => {
                     const { options } = descriptors[route.key];
@@ -45,12 +38,6 @@ function MyTabBar(props) {
                         });
                     };
 
-                    const inputRange = state.routes.map((_, i) => i);
-                    const opacity = Animated.interpolate(position, {
-                        inputRange,
-                        outputRange: inputRange.map(i => (i === index ? 1 : 0)),
-                    });
-
                     return (
                         <TouchableOpacity
                             accessibilityRole="button"
@@ -59,11 +46,11 @@ function MyTabBar(props) {
                             testID={options.tabBarTestID}
                             onPress={onPress}
                             onLongPress={onLongPress}
-                            style={{ flex: 1 }}
+                            style={{ flex: 1 ,backgroundColor: isFocused ? 'orange' : 'white', padding: 10 }}
                         >
-                            <Animated.Text style={{}}>
+                            <Text style={{ }}>
                                 {label}
-                            </Animated.Text>
+                            </Text>
                         </TouchableOpacity>
                     );
                 })}
