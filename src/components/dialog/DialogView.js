@@ -9,30 +9,29 @@ import { Paragraph, Dialog, Button, Subheading } from 'react-native-paper';
 import color from 'color';
 
 
-export default class HopThoai extends Component {
+export default function HopThoai(props) {
 
 
-    handleClickOutside() {
+    const handleClickOutside = () => {
 
-        this.props.dismissOnTouchOutside ? this.props.dismiss() : null
+        props.dismissOnTouchOutside ? props.dismiss() : null
     }
 
-    handleClickOk() {
-        if (this.props.callback) {
-            this.props.callback(1)
+    const handleClickOk = () => {
+        if (props.callback) {
+            props.callback(1)
         }
 
-        this.props.dismiss()
+        props.dismiss()
 
     }
-    handleClickCancle() {
-        if (this.props.callback) {
-            this.props.callback(0)
+    const handleClickCancle = () => {
+        if (props.callback) {
+            props.callback(0)
         }
-        this.props.dismiss()
+        props.dismiss()
     }
 
-    render() {
 
 
         return (
@@ -40,7 +39,7 @@ export default class HopThoai extends Component {
             <FadeInView style={[styles.container, styles.ovelap]}>
                 <StatusBar animated barStyle="light-content" backgroundColor={color(Colors.colorchinh).darken(0.5).rgb().string()} />
                 <TouchableWithoutFeedback
-                    onPress={() => this.handleClickOutside()}
+                    onPress={handleClickOutside}
                     style={styles.ovelap}>
                     <View style={[styles.ovelap, { backgroundColor: '#000', opacity: .5 }]}></View>
 
@@ -52,7 +51,7 @@ export default class HopThoai extends Component {
                 }}>
 
                     <Dialog.Title>
-                        {this.props.title ? this.props.title : I18n.t('thong_bao')}
+                        {props.title ? props.title : I18n.t('thong_bao')}
                     </Dialog.Title>
 
                     <Dialog.Content>
@@ -60,22 +59,22 @@ export default class HopThoai extends Component {
                             // fontSize: Fonts.size.covuanhohon,
                             letterSpacing: 0.15, lineHeight: 24
                         }}>
-                            {this.props.content}
+                            {props.content}
                         </Paragraph>
                     </Dialog.Content>
 
                     <Dialog.Actions>
                         {/* <Icon name='close'/> */}
-                        {!this.props.one ?
+                        {!props.one ?
                             <Button
                                 color={Colors.text}
-                                onPress={() => this.handleClickCancle()}
+                                onPress={handleClickCancle}
                             >
                                 <Text style={{
                                     fontSize: Fonts.size.mainSize,
                                 }}>
-                                    {this.props.label1 ?
-                                        this.props.label1.toUpperCase()
+                                    {props.label1 ?
+                                        props.label1.toUpperCase()
                                         :
                                         I18n.t('huy').toUpperCase()
                                     }
@@ -85,11 +84,11 @@ export default class HopThoai extends Component {
                         }
                         <Button
                             color={Colors.colorBlueText}
-                            onPress={() => this.handleClickOk()}
+                            onPress={handleClickOk}
                         >
                             <Text style={{ fontSize: Fonts.size.mainSize }}>
-                                {this.props.label2 ?
-                                    this.props.label2.toUpperCase()
+                                {props.label2 ?
+                                    props.label2.toUpperCase()
                                     :
                                     I18n.t('dong_y').toUpperCase()
                                 }
@@ -102,7 +101,7 @@ export default class HopThoai extends Component {
 
             </FadeInView>
         )
-    }
+    
 }
 
 const styles = StyleSheet.create({

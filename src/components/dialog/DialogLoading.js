@@ -6,8 +6,7 @@ import {
     View, Image
 } from 'react-native'
 
-export default class DialogLoading extends Component {
-    render() {
+export default function DialogLoading () {
         return (
             <FadeInView style={[styles.container, styles.ovelap]}>
                 <View style={[styles.ovelap, { backgroundColor: 'rgba(0, 0, 0, 0.5)', opacity: .7, justifyContent: 'center', alignItems: 'center' }]}></View>
@@ -18,7 +17,6 @@ export default class DialogLoading extends Component {
                 </View>
             </FadeInView>
         )
-    }
 }
 
 const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import Screens from '../stack/StackNavigation';
 import DrawerContent from './DrawerContent';
 import Animated from 'react-native-reanimated';
@@ -21,24 +21,14 @@ export default () => {
   const animatedStyle = { borderRadius, transform: [{ scale }] };
 
   return (
-    <LinearGradient style={{ flex: 1 }} colors={['#E94057', '#4A00E0']}>
+    <LinearGradient style={{ flex: 1 }} colors={['#FFAB40', '#FF5722']}>
       <Drawer.Navigator
-        // hideStatusBar
-        drawerType="slide"
-        overlayColor="transparent"
-        drawerStyle={styles.drawerStyles}
-        contentContainerStyle={{ flex: 1 }}
-        drawerContentOptions={{
-          activeBackgroundColor: 'transparent',
-          activeTintColor: 'white',
-          inactiveTintColor: 'white',
-        }}
-        sceneContainerStyle={{ backgroundColor: 'blue' }}
         drawerContent={props => {
           setProgress(props.progress);
           return <DrawerContent {...props} />;
-        }}>
-        <Drawer.Screen name="Screens">
+        }}
+      >
+        <Drawer.Screen name="Screens" options={{ title: "abc" }}>
           {props => <Screens {...props} style={animatedStyle} />}
         </Drawer.Screen>
       </Drawer.Navigator>

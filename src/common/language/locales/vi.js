@@ -88,6 +88,7 @@ export default {
   mat_khau: "Mật khẩu",
   ma_HH: "Mã HH",
   moi_ban_nhap_tin_nhan: "Mời bạn nhập tin nhắn",
+  man_hinh_thu_ngan:"Màn hình thu ngân",
 
   // TODO: N
   no:"Nợ",
@@ -107,6 +108,7 @@ export default {
   ngay_sinh: "Ngày sinh",
   nam: "Nam",
   nu: "Nữ",
+  nhan_vien_order:"Nhân viên Order",
 
   // TODO: O
 

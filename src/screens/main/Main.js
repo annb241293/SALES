@@ -1,11 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar, Image, View, StyleSheet, Button, Text } from 'react-native';
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import DialogManager from '../../components/dialog/DialogManager';
-// import { RootSiblingPortal, RootSiblings } from 'react-native-root-siblings';
+import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
+import { HTTPService } from "../../services/HttpService";
+import { ApiPath } from "../../services/ApiPath";
+import { useFetch } from "../../customHook/useFetch";
 
+<<<<<<< HEAD
 //const Realm = require('realm');
+=======
+>>>>>>> 563edb33a2e0d11cf2fd5496f25f218aa729e163
 
+const Realm = require('realm');
 // Define your models and their properties
 const CarSchema = {
   name: 'Car',
@@ -27,6 +32,7 @@ const PersonSchema = {
 
 export default ({ navigation, style }) => {
 
+<<<<<<< HEAD
   //useEffect(() => {
   //   Realm.open({ schema: [CarSchema, PersonSchema] })
   //     .then(realm => {
@@ -45,6 +51,41 @@ export default ({ navigation, style }) => {
   //       alert(cars.length)
   //       // Will return a Results object with our 1 car
   //       cars.length // => 1
+=======
+  // const [data, loading] = useFetch(
+  //   "https://jsonplaceholder.typicode.com/photos?albumId=1"
+  // );
+
+  useEffect(() => {
+    // const getServerEvent = () => {
+    //   new HTTPService().setPath(ApiPath.SERVEREVENTS).GET().then(res => {
+    //     console.log(res, 'aaaaaaaaaaaaaaaaaaaaaaaaa');
+    //   })
+    // }
+    // getServerEvent();
+    console.log(new HTTPService().setPath(ApiPath.SERVEREVENTS),'ss');
+    
+  },[])
+
+  useEffect(() => {
+    Realm.open({ schema: [CarSchema, PersonSchema] })
+      .then(realm => {
+        // Create Realm objects and write to local storage
+        realm.write(() => {
+          const myCar = realm.create('Car', {
+            make: 'Honda',
+            model: 'Civic',
+            miles: 1000,
+          });
+          myCar.miles += 20; // Update a property value
+        });
+
+        // Query Realm for all cars with a high mileage
+        const cars = realm.objects('Car').filtered('miles > 1000');
+        // alert(cars.length)
+        // Will return a Results object with our 1 car
+        cars.length // => 1
+>>>>>>> 563edb33a2e0d11cf2fd5496f25f218aa729e163
 
   //       // Add another car
   //       realm.write(() => {
@@ -58,6 +99,7 @@ export default ({ navigation, style }) => {
   //       // Query results are updated in realtime
   //       cars.length // => 2
 
+<<<<<<< HEAD
   //       // Remember to close the realm when finished.
   //       realm.close();
   //     })
@@ -70,7 +112,25 @@ export default ({ navigation, style }) => {
   // />);
   // let dialog = new DialogManager();
   //  const [count, setCount] = React.useState(0);
+=======
+        // Remember to close the realm when finished.
+        realm.close();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [])
+>>>>>>> 563edb33a2e0d11cf2fd5496f25f218aa729e163
 
+  const clickRightIcon = () => {
+    navigation.openDrawer();
+  }
+
+  const clickLeftIcon = () => {
+    console.log("A");
+
+  }
+  //  const [count, setCount] = React.useState(0);
   // React.useLayoutEffect(() => {
   //   navigation.setOptions({
   //     headerRight: () => (
@@ -79,34 +139,16 @@ export default ({ navigation, style }) => {
   //   });
   // }, [navigation, setCount]);
   return (
-    // <RootSiblingPortal>
-    <View
-      // color="#88B04B"
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        ...style,
-      }}>
-      {/* <StatusBar /> */}
-      {/* <Icon
-          name='ios-person'
-          color="blue"
-          size={25}
-        /> */}
-      <Text>
-        New video comming soon
-      </Text>
-      <Button
-        title="nba"
-      // onPress={() => {
-      //   sibling.update(<View
-      //     style={{ top: 10, right: 10, bottom: 10, left: 10, backgroundColor: 'blue' }}
-      //   />);
-      //   console.log('dialog');
-      // }}
-      ></Button>
+    <View>
+      <ToolBarDefault
+        navigation={navigation}
+        title="Main"
+        rightIcon="menu"
+        clickRightIcon={clickRightIcon}
+        leftIcon="refresh"
+        clickLeftIcon={clickLeftIcon}
+      />
+      <View></View>
     </View>
-    // </RootSiblingPortal>
   );
 };

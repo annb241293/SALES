@@ -14,17 +14,6 @@ const initState = {
 		currentAccount: "",
 		notificationCount: 0
 	},
-	device_finger_scanner: {
-		type: 'TouchID', // FaceID
-		isDeviceTouchId: false,
-		errorDeviceFinger: false,
-		// false: Có và đang bật vân tay; 
-		// ERROR_AVAILABLE: 'NOT_AVAILABLE':  Thiết bị không hỗ trợ vân tay
-		// ERROR_ENROLLED: 'NOT_ENROLLED', : Thiết bị chưa cài đặt vân tay
-		// ERROR_FALLBACK_NOT_ENROLLED: 'FALLBACK_NOT_ENROLLED' : Thiết bị chưa cài đặt vân tay
-		statusAuthFinger: false, // false: App chưa bật xác thực vân tay; true: App đang bật xác thực vân tay,
-
-	},
 	isActiveOTP: false,
 	isLogin: false,
 	currentBranch: "",
@@ -41,12 +30,7 @@ const commonReducer = (state = initState, action = {}) => {
 				...action.data
 			}
 			return { ...state, info: info }
-		case 'FINGERPRINT':
-			let fingerprint = {
-				...state.device_finger_scanner,
-				...action.data,
-			}
-			return { ...state, device_finger_scanner: fingerprint }
+	
 		case "SAVE_STATE_ACTIVE_OTP":
 			return {
 				...state,
