@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
 import {
     DrawerItem,
     DrawerContentScrollView,
   } from '@react-navigation/drawer';
+import { syncServerEvent } from '../../data/DataManager'
 
 const DrawerContent = props => {
+    useEffect(()=>{
+        syncServerEvent().then( res =>
+            alert("Sync Done")
+        )
+    }
+    ,[])
     return (
         <DrawerContentScrollView {...props} scrollEnabled={false} contentContainerStyle={{ flex: 1 }}>
             <View style={{ marginTop: 30, }}>

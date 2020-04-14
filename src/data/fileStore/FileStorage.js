@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import RNFS from 'react-native-fs';
-import { ecryption, decryption } from '../common/pcrypto/pcrypto';
+import { ecryption, decryption } from '../../common/pcrypto/pcrypto';
 
 export const encrypto = (plaintext) => {
 
