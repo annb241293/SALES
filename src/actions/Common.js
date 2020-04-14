@@ -1,7 +1,7 @@
 import React, { Component, Platform } from 'react';
 import {
   setFileLuuDuLieu, getFileDuLieuString
-} from "../common/FileStorage";
+} from "../data/fileStore/FileStorage";
 import { Constant } from "../common/Constant";
 import DeviceInfo from 'react-native-device-info';
 

@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import React, { useEffect } from 'react';
-import { Image, View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
-import {
-    DrawerItem,
-    DrawerContentScrollView,
-  } from '@react-navigation/drawer';
-import { syncServerEvent } from '../../data/DataManager'
-=======
 import React from 'react';
 import { Image, View, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native';
 import {
@@ -15,15 +6,7 @@ import {
 } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
->>>>>>> 563edb33a2e0d11cf2fd5496f25f218aa729e163
-
 const DrawerContent = props => {
-    useEffect(()=>{
-        syncServerEvent().then( res =>
-            alert("Sync Done")
-        )
-    }
-    ,[])
     return (
         <View style={{ flex: 1 }}>
             <View>
