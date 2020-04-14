@@ -10,17 +10,14 @@ const dialogManager = new DialogManager();
 // import { Platform, NativeModules } from 'react-native';
 // const { AzureHub } = NativeModules;
 
-const URL_DEBUG = "https://kt365cafe.pos365.vn/";
+const URL_DEBUG = "https://cafe365.pos365.vn/";
 
-export var URL = { link: "https://kt365cafe.pos365.vn/" };
+export var URL = { link: "" };
 
 export class HTTPService {
 
     _api = URL.link;
     _path = ''
-
-    HTTP_OK = 200 | 204;
-
 
     constructor() {
 

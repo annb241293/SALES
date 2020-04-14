@@ -1,6 +1,6 @@
 export const ApiPath = {
     SERVEREVENTS: "api/serverevents",
-    // LOGIN: "api/auth/credentials",
+    LOGIN: "api/auth/credentials",
     // RETAILER_INFO: "api/mobile/vendorsession",
     // REVENUE: "api/chart/revenue",
     // DASHBOARD: "api/chart/dashboard",

@@ -31,7 +31,18 @@ export default ({ navigation, style }) => {
   // const [data, loading] = useFetch(
   //   "https://jsonplaceholder.typicode.com/photos?albumId=1"
   // );
-  
+
+  useEffect(() => {
+    // const getServerEvent = () => {
+    //   new HTTPService().setPath(ApiPath.SERVEREVENTS).GET().then(res => {
+    //     console.log(res, 'aaaaaaaaaaaaaaaaaaaaaaaaa');
+    //   })
+    // }
+    // getServerEvent();
+    console.log(new HTTPService().setPath(ApiPath.SERVEREVENTS),'ss');
+    
+  },[])
+
   useEffect(() => {
     Realm.open({ schema: [CarSchema, PersonSchema] })
       .then(realm => {
@@ -47,7 +58,7 @@ export default ({ navigation, style }) => {
 
         // Query Realm for all cars with a high mileage
         const cars = realm.objects('Car').filtered('miles > 1000');
-        alert(cars.length)
+        // alert(cars.length)
         // Will return a Results object with our 1 car
         cars.length // => 1
 
@@ -77,7 +88,7 @@ export default ({ navigation, style }) => {
 
   const clickLeftIcon = () => {
     console.log("A");
-    
+
   }
   //  const [count, setCount] = React.useState(0);
   // React.useLayoutEffect(() => {

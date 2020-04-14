@@ -6,6 +6,7 @@ import Animated from 'react-native-reanimated';
 import Main from '../../screens/main/Main';
 import Messages from '../../screens/messenger/Messages';
 import Contact from '../../screens/contact/Contact';
+import Login from '../../screens/login/LoginScreen';
 import TopTabNavigation from '../topTab/TopTabNavigation';
 
 

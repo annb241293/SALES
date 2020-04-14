@@ -94,9 +94,13 @@ const styles = StyleSheet.create({
 })
 
 ToolBarDefault.propTypes = {
-    showIconBack: PropTypes.bool
+    title: PropTypes.string,
+    rightIcon: PropTypes.string,
+    leftIcon:PropTypes.string,
+    clickRightIcon:PropTypes.func,
+    clickLeftIcon:PropTypes.func   
 }
 
 ToolBarDefault.defaultProps = {
-    showIconBack: true
+   
 }
