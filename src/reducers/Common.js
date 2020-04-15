@@ -17,7 +17,9 @@ const initState = {
 	isActiveOTP: false,
 	isLogin: false,
 	currentBranch: "",
-	tabIndex: 0
+	tabIndex: 0,
+	deviceType: "",
+	orientaition: "",
 }
 
 const commonReducer = (state = initState, action = {}) => {
@@ -30,7 +32,7 @@ const commonReducer = (state = initState, action = {}) => {
 				...action.data
 			}
 			return { ...state, info: info }
-	
+
 		case "SAVE_STATE_ACTIVE_OTP":
 			return {
 				...state,
@@ -70,8 +72,18 @@ const commonReducer = (state = initState, action = {}) => {
 				...state,
 				tabIndex: action.tabIndex
 			}
+		case "TYPE_DEVICE":
+			return {
+				...state,
+				deviceType: action.deviceType
+			}
+		case "ORIENTAITION":
+			return {
+				...state,
+				orientaition: action.orientaition
+			}
 		default:
-			return state
+			return state 
 	}
 }
 

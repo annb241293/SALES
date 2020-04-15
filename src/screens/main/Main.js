@@ -2,9 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar, Image, View, StyleSheet, Button, Text } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import { syncServerEvent } from '../../data/DataManager'
+import { useSelector } from 'react-redux';
 
 
 export default ({ navigation, style }) => {
+
+  const deviceType = useSelector(state => {
+    console.log("useSelector state ", state);
+    return state.Common.deviceType
+  });
+
+  const orientaition = useSelector(state => {
+    console.log("useSelector state ", state);
+    return state.Common.orientaition
+  });
 
   useEffect(() => {
     syncServerEvent().then(res =>
@@ -33,7 +44,12 @@ export default ({ navigation, style }) => {
         leftIcon="refresh"
         clickLeftIcon={clickLeftIcon}
       />
-      <View></View>
+      <View>
+
+        <Text>deviceType : {deviceType}</Text>
+        <Text>orientaition : {orientaition}</Text>
+
+      </View>
     </View>
   );
 };
