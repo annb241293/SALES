@@ -22,15 +22,6 @@ export default function ToolBarDefault(props) {
         }
     };
     return (
-        // <LinearGradient
-        //     start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
-        //     colors={['#FFAB40', '#FF5722']}
-        //     style={{ height: 44 }}
-        // >
-        //     <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={() => props.navigation.openDrawer()}>
-        //         <Text style={{ color: "#000" }}>Menu</Text>
-        //     </TouchableOpacity>
-        // </LinearGradient>
         <LinearGradient
             start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             colors={['#FFAB40', '#FF5722']}
@@ -50,7 +41,7 @@ export default function ToolBarDefault(props) {
                         {props.rightIcon && props.clickRightIcon ?
                             <Icon name={props.rightIcon} size={30} color="white" onPress={props.clickRightIcon} />
                             :
-                            null
+                            <Icon name="menu" size={30} color="white" onPress={() => { props.navigation.openDrawer() }} />
                         }
                     </View>
                     <View style={{ flex: 5, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -96,11 +87,11 @@ const styles = StyleSheet.create({
 ToolBarDefault.propTypes = {
     title: PropTypes.string,
     rightIcon: PropTypes.string,
-    leftIcon:PropTypes.string,
-    clickRightIcon:PropTypes.func,
-    clickLeftIcon:PropTypes.func   
+    leftIcon: PropTypes.string,
+    clickRightIcon: PropTypes.func,
+    clickLeftIcon: PropTypes.func
 }
 
 ToolBarDefault.defaultProps = {
-   
+
 }

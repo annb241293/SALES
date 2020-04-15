@@ -23,22 +23,8 @@ export default {
   con_lai: "Còn lại",
 
   // TODO: D
-  dong: 'Đóng',
-  dong_y: 'Đồng ý',
-  dang_nhap: "Đăng nhập",
-  doanh_thu: "Doanh thu",
-  dich_vu: "Dịch vụ",
-  DVT_co_ban: "DVT cơ bản",
-  DVT_lon: "DVT lớn",
-  dang_su_dung: "Đang sử dụng",
-  don_gia: "Đơn giá",
-  dang_xu_ly: "Đang xử lý",
-  diem_thuong: "Điểm thưởng",
-  du_no: "Dư nợ",
-  dia_chi: "Địa chỉ",
-  diem_thuong: "Điểm thưởng",
-  doi_diem_thuong: "Đổi điểm thưởng",
-  dieu_chinh_cong_no:"Điều chỉnh công nợ",
+dang_dung:"Đang dùng",
+dang_trong:"Đang trống",
   // TODO: E
 
 

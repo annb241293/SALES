@@ -7,23 +7,23 @@ import Main from '../../screens/main/Main';
 import Messages from '../../screens/messenger/Messages';
 import Contact from '../../screens/contact/Contact';
 import Login from '../../screens/login/LoginScreen';
+import SelectFood from '../../screens/selectFood/SelectFood';
 import TopTabNavigation from '../topTab/TopTabNavigation';
 
 
-
 const Stack = createStackNavigator();
-export default ({ navigation, style }) => {
-
+export default (props) => {
     return (
         <Animated.View style={{ flex: 1 }}>
             <Stack.Navigator
-                initialRouteName="Home"
                 screenOptions={{
                     headerTransparent: true,
                     headerTitle: null,
                     headerLeft: null
                 }}>
-                <Stack.Screen name="Home">{props => <Main {...props} />}</Stack.Screen>
+                <Stack.Screen name="Login">{props => <Login {...props} />}</Stack.Screen>
+                <Stack.Screen name="Home">{props => <TopTabNavigation {...props} />}</Stack.Screen>
+                <Stack.Screen name="SelectFood">{props => <SelectFood {...props} />}</Stack.Screen>
                 <Stack.Screen name="Messages">{props => <Messages {...props} />}</Stack.Screen>
                 <Stack.Screen name="Contact">{props => <Contact {...props} />}</Stack.Screen>
             </Stack.Navigator>

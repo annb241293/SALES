@@ -13,7 +13,7 @@ export default function MyTabs() {
     return (
         <Tab.Navigator tabBar={props => <MyTabBar {...props} />}
         >
-            <Tab.Screen name="Contact1" component={Contact} />
+            <Tab.Screen name="Contact1" component={Main} />
             <Tab.Screen name="Contact2" component={Contact} />
             <Tab.Screen name="Contact3" component={Contact} />
             <Tab.Screen name="Contac4t" component={Contact} />

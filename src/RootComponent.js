@@ -15,11 +15,8 @@ import {
     Text,
     StatusBar,
 } from 'react-native';
-import SimpleCounter from './SimpleCounter';
-import Photos from './Photo';
 import { NavigationContainer } from '@react-navigation/native';
 import DrawerNavigation from './navigator/drawer/DrawerNavigation';
-import TopTabNavigation from './navigator/topTab/TopTabNavigation';
 
 export default () => {
     return (

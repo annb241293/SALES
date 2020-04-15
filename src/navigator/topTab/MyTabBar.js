@@ -6,7 +6,10 @@ import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 function MyTabBar({ state, descriptors, navigation }) {
     return (
         <View>
-            <ToolBarDefault navigation={navigation}/>
+            <ToolBarDefault
+                navigation={navigation}
+                title="Man hinh thu ngan"
+            />
             <View style={{ flexDirection: 'row' }}>
                 {state.routes.map((route, index) => {
                     const { options } = descriptors[route.key];
@@ -46,9 +49,9 @@ function MyTabBar({ state, descriptors, navigation }) {
                             testID={options.tabBarTestID}
                             onPress={onPress}
                             onLongPress={onLongPress}
-                            style={{ flex: 1 ,backgroundColor: isFocused ? 'orange' : 'white', padding: 10 }}
+                            style={{ flex: 1, backgroundColor: isFocused ? 'orange' : 'white', padding: 10 }}
                         >
-                            <Text style={{ }}>
+                            <Text style={{}}>
                                 {label}
                             </Text>
                         </TouchableOpacity>

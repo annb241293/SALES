@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
-    NativeEventEmitter,
-    NativeModules,
     View, Text, Image,
-    StyleSheet, TouchableOpacity, TextInput, Linking, Platform
+    StyleSheet, TouchableOpacity, TextInput,
 } from "react-native";
 import { Snackbar, } from "react-native-paper";
 import I18n from '../../common/language/i18n';
@@ -15,11 +13,14 @@ import { ApiPath } from "../../data/services/ApiPath";
 import { HTTPService, getHeaders, URL } from "../../data/services/HttpService";
 import { useSelector, useDispatch } from 'react-redux';
 import { saveDeviceInfoToStore, updateStatusLogin, saveCurrentBranch, saveNotificationCount } from "../../actions/Common";
-import store from "../../store/configureStore";
+import useDidMountEffect from '../../customHook/useDidUpdateEffect';
+import DialogManager from "../../components/dialog/DialogManager";
 
 
 
 let error = "";
+
+
 
 export default (props) => {
     const [extraHeight, setExtraHeight] = useState(0);
@@ -28,45 +29,51 @@ export default (props) => {
     const [password, setPassword] = useState("");
     const [showToast, setShowToast] = useState(false);
     const [logIn, setLogIn] = useState(false);
-    const isFirstRun = useRef(true);
     const dispatch = useDispatch();
+    const SessionId = useSelector(state => {
+        console.log("useSelector state ", state.Common.info.SessionId);
+        return state.Common.info.SessionId
+    });
 
-    useEffect(() => {
-        const onClickLogin = () => {
-            if (!checkDataLogin())
-                return;
-            // this.dialog.showLoading();
-            URL.link = "https://" + shop + ".pos365.vn/"
-            console.log("onClickLogin URL ", URL, shop);
-            let params = { UserName: userName, Password: password };
-            new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
-                console.log("onClickLogin res ", res);
-                if (res.SessionId && res.SessionId != "") {
-                    // this.props.saveDeviceInfo({ SessionId: res.SessionId })
-                    // this.handlerLoginSuccess(params, res);
-                    dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
-                }
-                if (res.status == 401) {
-                    // this.dialog.hiddenLoading();
-                    error = I18n.t('loi_dang_nhap');
-                    setShowToast(true)
-                }
-            }).catch((e) => {
+    const onClickLogin = useCallback(() => {
+        if (!checkDataLogin())
+            return;
+        // this.dialog.showLoading();
+        URL.link = "https://" + shop + ".pos365.vn/"
+        console.log("onClickLogin URL ", URL, shop);
+        let params = { UserName: userName, Password: password };
+        new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
+            console.log("onClickLogin res ", res);
+            if (res.SessionId && res.SessionId != "") {
+                // this.props.saveDeviceInfo({ SessionId: res.SessionId })
+                // this.handlerLoginSuccess(params, res);
+                dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
+                // console.log(SessionId, 'SessionId');
+            }
+            if (res.status == 401) {
                 // this.dialog.hiddenLoading();
-                error = I18n.t('loi_server');
-                setShowToast(true);
-                console.log("onClickLogin err ", e);
-            })
-        }
-        if (isFirstRun.current) {
-            isFirstRun.current = false
-            return
-        }
-        onClickLogin();
+                error = I18n.t('loi_dang_nhap');
+                setShowToast(true)
+            }
+        }).catch((e) => {
+            // this.dialog.hiddenLoading(); 
+            error = I18n.t('loi_server');
+            setShowToast(true);
+            console.log("onClickLogin err ", e);
+        })
     }, [logIn])
 
+    useDidMountEffect(onClickLogin, [onClickLogin])
+
+    useEffect(() => {
+        if (SessionId == "") {
+            return
+        } else {
+            props.navigation.navigate("Home")
+        }
+    }, [SessionId])
+
     const onChangeText = (text, type) => {
-        console.log("onChangeText text ", text);
         if (type == 1) {
             setShop(text)
         } else if (type == 2) {
@@ -122,7 +129,7 @@ export default (props) => {
                             <TextInput
                                 onChangeText={text => onChangeText(text, 2)}
                                 value={userName}
-                                // onFocus={() => this.setState({ extraHeight: 200 })}
+                                onFocus={() => { setExtraHeight(200) }}
                                 keyboardType={"default"}
                                 style={{ height: 40, flex: 1 }}
                                 placeholder={I18n.t('ten_dang_nhap')} />
@@ -132,7 +139,7 @@ export default (props) => {
                             <TextInput
                                 onChangeText={text => onChangeText(text, 3)}
                                 value={password}
-                                // onFocus={() => this.setState({ extraHeight: 130 })}
+                                onFocus={() => { setExtraHeight(130) }}
                                 keyboardType={"default"}
                                 style={{ height: 40, margin: 0, flex: 1 }}
                                 placeholder={I18n.t('mat_khau')}
@@ -155,6 +162,7 @@ export default (props) => {
                             <Text style={{ color: "#fff", fontWeight: "bold" }}>{Constant.HOTLINE}</Text>
                         </TouchableOpacity>
                     </View>
+                    <Text>{SessionId}</Text>
                 </KeyboardAwareScrollView>
 
                 <Snackbar

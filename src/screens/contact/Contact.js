@@ -2,11 +2,9 @@ import React from 'react';
 import { Image, View, StyleSheet, Button, Text } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 
-export default ({navigation, style }) => {
+export default ({ navigation, style }) => {
   return (
-    <View>
-      <ToolBarDefault navigation={navigation} />
-
+    <View style={{flex: 1}}>
       <View
         style={{
           flex: 1,
@@ -17,6 +15,7 @@ export default ({navigation, style }) => {
         <Text >
           Contact me at
    </Text>
-      </View></View>
+      </View>
+    </View>
   );
 };
