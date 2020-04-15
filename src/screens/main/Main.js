@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, createRef } from 'react';
 import { StatusBar, Image, View, StyleSheet, TouchableOpacity, Text, ScrollView, SectionList } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import { syncServerEvent } from '../../data/DataManager'
+import { useSelector } from 'react-redux';
 import Images from '../../theme/Images';
 import I18n from '../../common/language/i18n';
 
@@ -28,6 +29,7 @@ const data = [
   },
 ];
 export default (props) => {
+
   useEffect(() => {
     syncServerEvent().then(res => {
       alert("Sync Done")
@@ -46,9 +48,19 @@ export default (props) => {
     )
   }
 
+  const deviceType = useSelector(state => {
+    console.log("useSelector state ", state);
+    return state.Common.deviceType
+  });
+
+  const orientaition = useSelector(state => {
+    console.log("useSelector state ", state);
+    return state.Common.orientaition
+  });
+
   return (
     <View style={{ flex: 1 }}>
-      
+
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "red" }}>
         <View style={{ flexDirection: "row", flex: 1 }}>
           <Image source={Images.icon_transfer_money} style={{ width: 20, height: 20 }}></Image>
@@ -91,6 +103,13 @@ export default (props) => {
           })}
         </View>
       </ScrollView>
+
+      <View>
+
+        <Text>deviceType : {deviceType}</Text>
+        <Text>orientaition : {orientaition}</Text>
+
+      </View>
     </View>
   );
 };
