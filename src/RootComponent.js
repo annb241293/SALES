@@ -18,12 +18,9 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import DrawerNavigation from './navigator/drawer/DrawerNavigation';
-<<<<<<< HEAD
-=======
 import TopTabNavigation from './navigator/topTab/TopTabNavigation';
 import { useDispatch } from 'react-redux';
 import { Constant } from './common/Constant'
->>>>>>> 177d308e7c859bd4af2d47c1dcd4208d27481103
 
 export default () => {
 
