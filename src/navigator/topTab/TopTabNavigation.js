@@ -4,22 +4,25 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 const Tab = createMaterialTopTabNavigator();
 import Main from '../../screens/main/Main';
-import Messages from '../../screens/messenger/Messages';
-import Contact from '../../screens/contact/Contact';
+import Contact from '../../screens/contact/Contact'; 
 import MyTabBar from './MyTabBar';
 
+const data = [
+    { title: "manhinh1", component: Main },
+    { title: "manhinh2", component: Main },
+    { title: "manhinh3", component: Main }
+];
+export default function MyTabs(props) {
 
-export default function MyTabs() {
     return (
-        <Tab.Navigator tabBar={props => <MyTabBar {...props} />}
+        <Tab.Navigator
+        tabBar={props => <MyTabBar {...props} />}  
         >
-            <Tab.Screen name="Contact1" component={Main} />
-            <Tab.Screen name="Contact2" component={Contact} />
-            <Tab.Screen name="Contact3" component={Contact} />
-            <Tab.Screen name="Contac4t" component={Contact} />
-            <Tab.Screen name="Cont3act" component={Contact} />
-            <Tab.Screen name="Cont5act" component={Contact} />
-
+            <Tab.Screen name="tat ca" component={Main} />
+            {data.map(item => {
+                const Component = item.component;
+                return (<Tab.Screen name={item.title} key={item.title.toString()}>{() => <Component someProps="someProps" {...props}/>}</Tab.Screen>);
+            })}
 
         </Tab.Navigator>
     );

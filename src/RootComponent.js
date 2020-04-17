@@ -19,6 +19,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import DrawerNavigation from './navigator/drawer/DrawerNavigation';
 import TopTabNavigation from './navigator/topTab/TopTabNavigation';
+import StackNavigation from './navigator/stack/StackNavigation';
 import { useDispatch } from 'react-redux';
 import { Constant } from './common/Constant'
 
@@ -55,7 +56,7 @@ export default () => {
     return (
 
         <NavigationContainer>
-            <DrawerNavigation />
+            <StackNavigation />
         </NavigationContainer>
     );
 };

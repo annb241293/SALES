@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import Screens from '../stack/StackNavigation';
+import TopTabNavigation from '../topTab/TopTabNavigation';
 import DrawerContent from './DrawerContent';
 import Animated from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
@@ -29,7 +29,7 @@ export default () => {
         }}
       >
         <Drawer.Screen name="Screens" options={{ title: "abc" }}>
-          {props => <Screens {...props} style={animatedStyle} />}
+          {props => <TopTabNavigation {...props} style={animatedStyle} />}
         </Drawer.Screen>
       </Drawer.Navigator>
     </LinearGradient>
@@ -37,26 +37,5 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
-  stack: {
-    flex: 1,
-    shadowColor: '#FFF',
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.44,
-    shadowRadius: 10.32,
-    elevation: 5,
-    overflow: 'scroll',
-    borderWidth: 1,
-  },
-  drawerStyles: { flex: 1, width: '80%', backgroundColor: 'transparent' },
-  drawerItem: { alignItems: 'flex-start', marginVertical: 0 },
-  drawerLabel: { color: 'white', marginLeft: 0 },
-  avatar: {
-    borderRadius: 60,
-    marginBottom: 16,
-    borderColor: 'white',
-    borderWidth: StyleSheet.hairlineWidth,
-  },
+
 });
