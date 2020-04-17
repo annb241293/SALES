@@ -13,8 +13,8 @@ import { ApiPath } from "../../data/services/ApiPath";
 import { HTTPService, getHeaders, URL } from "../../data/services/HttpService";
 import { useSelector, useDispatch } from 'react-redux';
 import { saveDeviceInfoToStore, updateStatusLogin, saveCurrentBranch, saveNotificationCount } from "../../actions/Common";
-import useDidMountEffect from '../../customHook/useDidUpdateEffect';
-import DialogManager from "../../components/dialog/DialogManager";
+import useDidMountEffect from '../../customHook/useDidMountEffect';
+import { getFileDuLieuString, setFileLuuDuLieu } from "../../data/fileStore/FileStorage";
 
 
 
@@ -45,10 +45,8 @@ export default (props) => {
         new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
             console.log("onClickLogin res ", res);
             if (res.SessionId && res.SessionId != "") {
-                // this.props.saveDeviceInfo({ SessionId: res.SessionId })
-                // this.handlerLoginSuccess(params, res);
                 dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
-                // console.log(SessionId, 'SessionId');
+                // handlerLoginSuccess(params, res);
             }
             if (res.status == 401) {
                 // this.dialog.hiddenLoading();
@@ -63,15 +61,42 @@ export default (props) => {
         })
     }, [logIn])
 
-    useDidMountEffect(onClickLogin, [onClickLogin])
+    useDidMountEffect(() => {
+        onClickLogin()
+    }, [onClickLogin])
 
-    useEffect(() => {
-        if (SessionId == "") {
-            return
-        } else {
-            props.navigation.navigate("Home")
-        }
-    }, [SessionId])
+    const handlerLoginSuccess = (params, res) => {
+        let account = { SessionId: res.SessionId, UserName: params.UserName, Link: shop };
+        setFileLuuDuLieu(Constant.CURRENT_ACCOUNT, JSON.stringify(account));
+        getRetailerInfoAndNavigate();
+    }
+
+    const getRetailerInfoAndNavigate = () => {
+        let inforParams = {};
+        new HTTPService().setPath(ApiPath.RETAILER_INFO).GET(inforParams, getHeaders()).then((res) => {
+            console.log("getDataRetailerInfo res ", res);
+            // this.props.saveDeviceInfo({
+            //     Logo: res.CurrentRetailer && res.CurrentRetailer.Logo ? res.CurrentRetailer.Logo : "",
+            //     CurrentName: res.CurrentRetailer && res.CurrentUser.Name ? res.CurrentUser.Name : "",
+            //     CurrentRetailerName: res.CurrentRetailer && res.CurrentRetailer.Name ? res.CurrentRetailer.Name : "",
+            //     CurrentFieldId: res.CurrentRetailer && res.CurrentRetailer.FieldId ? res.CurrentRetailer.FieldId : 3,
+            //     bId: res.BID ? res.BID : "",
+            //     rId: res.RID ? res.RID : ""
+            // })
+            // if (res.Branchs && res.Branchs.length > 0)
+            //     this.props.saveCurrentBranch(JSON.stringify(res.Branchs[0]))
+            // this.setAzureNotification(res)
+            // this.saveVendorSessionToListAccount(res)
+
+            if (res.CurrentUser && res.CurrentUser.IsAdmin == true)
+                props.navigation.navigate("Home")
+            // this.dialog.hiddenLoading();
+        }).catch((e) => {
+            // this.dialog.hiddenLoading();
+            console.log("getDataRetailerInfo err ", e);
+        })
+    }
+
 
     const onChangeText = (text, type) => {
         if (type == 1) {

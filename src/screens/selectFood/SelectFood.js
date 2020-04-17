@@ -4,6 +4,70 @@ import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import { HTTPService, ApiPath } from "../../data/services/HttpClient";
 import { useFetch } from "../../customHook/useFetch";
 
+
+const DATA = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    title: 'First Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+];
+
 const screen = Dimensions.get("screen");
 
 export default ({ navigation, style }) => {
@@ -30,187 +94,206 @@ export default ({ navigation, style }) => {
         leftIcon="refresh"
         clickLeftIcon={clickLeftIcon}
       />
-      <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.categoryItem}>
-          <Text>tat ca</Text>
-        </TouchableOpacity>
+      <View style={{ flex: 1 ,flexWrap: "wrap"}}>
+        <ScrollView
+          horizontal={true}>
+          <View style={{ flexDirection: "row", }}>
+            {DATA.map(item => {
+              return (<TouchableOpacity style={{ padding: 5, backgroundColor: "red", margin: 5, height: "20%",  }}>
+                <Text>tat ca</Text>
+              </TouchableOpacity>)
+            })}
+          </View>
+        </ScrollView>
+      </View>
+      <View style={{ flex: 5, backgroundColor: "red" }}>
+        <ScrollView style={{}}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center", flex: 1 }}>
+            <TouchableOpacity style={styles.foodItem} onPress={() => { }}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.foodItem}>
+              <Image
+                source={{
+                  uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+                  height: 60,
+                  width: "80%",
+                }}
+              />
+              <Text>tat ca</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
 
-      <ScrollView style={{ marginTop: 20 }}>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
-          <TouchableOpacity style={styles.foodItem} onPress={() => { }}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.foodItem}>
-            <Image
-              source={{
-                uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
-                height: 60,
-                width: "80%",
-              }}
-            />
-            <Text>tat ca</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+
     </View>
 
   );

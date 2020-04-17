@@ -30,13 +30,12 @@ const data = [
 ];
 export default (props) => {
 
-  useEffect(() => {
-    syncServerEvent().then(res => {
-      alert("Sync Done")
-    }
-    )
-  }
-    , [])
+  // useEffect(() => {
+  //   syncServerEvent().then(res => {
+  //     alert("Sync Done")
+  //   }
+  //   )
+  // }, [])
 
   const clickRightIcon = () => {
     props.navigation.openDrawer();
