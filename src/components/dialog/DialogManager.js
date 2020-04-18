@@ -4,9 +4,11 @@ import React from 'react';
 import RootSiblings from 'react-native-root-siblings';
 import HopThoai from './DialogView'
 import DialogLoading from './DialogLoading'
-import { STATUS } from '../../model/Object';
 
 const DESTROY_TIMEOUT = 1;
+var STATUS = {
+    POPUP_STATUS: false,
+}
 
 class DialogManager {
 

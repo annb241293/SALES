@@ -12,21 +12,24 @@ import store from './src/store/configureStore';
 import RootComponent from './src/RootComponent';
 import { Platform, StyleSheet, Text, SafeAreaView, View, StatusBar } from 'react-native';
 import { Colors } from './src/theme';
-
-
+import { RootSiblingParent } from 'react-native-root-siblings'
+const Wrapper = Platform.OS === 'ios' ? React.Fragment : RootSiblingParent;
 const App = () => {
 
   const [bottomColor, setBottomColor] = useState(Colors.colorchinh);
 
   return (
     <Provider store={store}>
-        <StatusBar barStyle="light-content" />
-        <SafeAreaView style={{ flex: 0, backgroundColor: Colors.colorchinh }} />
-        <SafeAreaView
-          forceInset={{ top: 'never' }}
-          style={{ flex: 1, backgroundColor: bottomColor }}>
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView style={{ flex: 0, backgroundColor: Colors.colorchinh }} />
+      <SafeAreaView
+        forceInset={{ top: 'never' }}
+        style={{ flex: 1, backgroundColor: bottomColor }}>
+        <Wrapper>
           <RootComponent />
-        </SafeAreaView>
+        </Wrapper>
+      </SafeAreaView>
+
     </Provider>
   );
 };

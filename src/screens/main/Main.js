@@ -5,6 +5,7 @@ import { syncServerEvent } from '../../data/DataManager'
 import { useSelector } from 'react-redux';
 import Images from '../../theme/Images';
 import I18n from '../../common/language/i18n';
+import DialogManager from '../../components/dialog/DialogManager';
 
 const data = [
   {
@@ -104,10 +105,18 @@ export default (props) => {
       </ScrollView>
 
       <View>
-
-        <Text>deviceType : {deviceType}</Text>
-        <Text>orientaition : {orientaition}</Text>
-
+        <TouchableOpacity onPress={() => {
+          new DialogManager().showPopupOneButton("Nội dung thông báo", "Thông báo")
+          // let dialog = new DialogManager();
+          // dialog.showLoading();
+          // setTimeout(() => {
+          //   dialog.hiddenLoading();
+          // }, 2000);
+        }}
+        >
+          <Text>deviceType : {deviceType}</Text>
+          <Text>orientaition : {orientaition}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
