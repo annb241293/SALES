@@ -59,7 +59,14 @@ export default (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-
+      <ToolBarDefault
+        navigation={props.navigation}
+        title="Main"
+        rightIcon="menu"
+        clickRightIcon={clickRightIcon}
+        leftIcon="refresh"
+        clickLeftIcon={clickLeftIcon}
+      />
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "red" }}>
         <View style={{ flexDirection: "row", flex: 1 }}>
           <Image source={Images.icon_transfer_money} style={{ width: 20, height: 20 }}></Image>

@@ -20,13 +20,13 @@ const App = () => {
 
   return (
     <Provider store={store}>
-        <StatusBar barStyle="light-content" />
-        <SafeAreaView style={{ flex: 0, backgroundColor: Colors.colorchinh }} />
-        <SafeAreaView
-          forceInset={{ top: 'never' }}
-          style={{ flex: 1, backgroundColor: bottomColor }}>
-          <RootComponent />
-        </SafeAreaView>
+      <StatusBar barStyle="light-content" backgroundColor={Colors.colorchinh} />
+      <SafeAreaView style={{ flex: 0, backgroundColor: Colors.colorchinh }} />
+      <SafeAreaView
+        forceInset={{ top: 'never' }}
+        style={{ flex: 1, backgroundColor: bottomColor }}>
+        <RootComponent />
+      </SafeAreaView>
     </Provider>
   );
 };

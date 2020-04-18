@@ -72,27 +72,14 @@ const screen = Dimensions.get("screen");
 
 export default ({ navigation, style }) => {
   const [data, setData] = useState([])
-  useEffect(() => {
-    console.log(Dimensions.get('window').height, 'ss');
-  }, [])
 
-  const clickRightIcon = () => {
-    navigation.openDrawer();
-  }
-
-  const clickLeftIcon = () => {
-    console.log(screen);
-
-  };
   return (
     <View style={{ flex: 1, backgroundColor: "orange" }}>
       <ToolBarDefault
         navigation={navigation}
         title="Select Food"
-        rightIcon="menu"
-        clickRightIcon={clickRightIcon}
-        leftIcon="refresh"
-        clickLeftIcon={clickLeftIcon}
+        rightIcon="keyboard-backspace"
+        clickRightIcon={()=>{navigation.goBack()}}
       />
       <View style={{ flex: 1 ,flexWrap: "wrap"}}>
         <ScrollView

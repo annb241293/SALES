@@ -14,7 +14,7 @@ const useDidMountEffect = (func, deps) => {
 
         return () => {
             didMount.current = false;
-            func();
+            func && func();
         }
     }, deps);
 }

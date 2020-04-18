@@ -14,21 +14,13 @@ import PropTypes from 'prop-types';
 
 export default function ToolBarDefault(props) {
 
-    const onClickBack = () => {
-        if (props.onClickBack) {
-            props.onClickBack();
-        } else {
-            props.navigation.pop();
-        }
-    };
     return (
         <LinearGradient
             start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             colors={['#FFAB40', '#FF5722']}
             style={{ height: 44 }}
         >
-            <View style={styles.toolbarContainer}>
-                <StatusBar barStyle="light-content" backgroundColor={Colors.colorchinh} />
+            <View style={styles.toolbarContainer}> 
                 <View style={{
                     flex: 1,
                     flexDirection: 'row',
@@ -38,11 +30,13 @@ export default function ToolBarDefault(props) {
                 >
 
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        {props.rightIcon && props.clickRightIcon ?
-                            <Icon name={props.rightIcon} size={30} color="white" onPress={props.clickRightIcon} />
-                            :
-                            <Icon name="menu" size={30} color="white" onPress={() => { props.navigation.openDrawer() }} />
-                        }
+                        <TouchableOpacity onPress={props.clickRightIcon}>
+                            {props.rightIcon && props.clickRightIcon ?
+                                <Icon name={props.rightIcon} size={props.size ? props.size : 30} color="white" />
+                                :
+                                null
+                            }
+                        </TouchableOpacity>
                     </View>
                     <View style={{ flex: 5, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                         <Subheading
@@ -56,11 +50,13 @@ export default function ToolBarDefault(props) {
                     </View>
 
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        {props.leftIcon && props.clickLeftIcon ?
-                            <Icon name={props.leftIcon} size={30} color="white" onPress={props.clickLeftIcon} />
-                            :
-                            null
-                        }
+                        <TouchableOpacity onPress={props.clickLeftIcon} >
+                            {props.leftIcon && props.clickLeftIcon ?
+                                <Icon name={props.leftIcon} size={30} color="white" />
+                                :
+                                null
+                            }
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

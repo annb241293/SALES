@@ -15,6 +15,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveDeviceInfoToStore, updateStatusLogin, saveCurrentBranch, saveNotificationCount } from "../../actions/Common";
 import useDidMountEffect from '../../customHook/useDidMountEffect';
 import { getFileDuLieuString, setFileLuuDuLieu } from "../../data/fileStore/FileStorage";
+import { StackActions } from '@react-navigation/native';
+
 
 
 
@@ -22,31 +24,48 @@ let error = "";
 
 
 
-export default (props) => {
+const LoginScreen = (props) => {
     const [extraHeight, setExtraHeight] = useState(0);
     const [shop, setShop] = useState("");
     const [userName, setUserName] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState("");   
     const [showToast, setShowToast] = useState(false);
     const [logIn, setLogIn] = useState(false);
     const dispatch = useDispatch();
-    const SessionId = useSelector(state => {
+    const SessionId = useSelector(state => { 
         console.log("useSelector state ", state.Common.info.SessionId);
         return state.Common.info.SessionId
     });
+
+    useEffect(() => {
+        const getCurrentAccount = async () => {
+            let currentAccount = await getFileDuLieuString(Constant.CURRENT_ACCOUNT, true);
+            console.log(currentAccount, 'currentAccount');
+            if (currentAccount && currentAccount != "") {
+                currentAccount = JSON.parse(currentAccount);
+                URL.link = "https://" + currentAccount.Link + ".pos365.vn/";
+                dispatch(saveDeviceInfoToStore({ SessionId: currentAccount.SessionId }))
+                getRetailerInfoAndNavigate();
+            } else {
+                return
+            }
+        }
+        getCurrentAccount()
+    }, [])
+
 
     const onClickLogin = useCallback(() => {
         if (!checkDataLogin())
             return;
         // this.dialog.showLoading();
-        URL.link = "https://" + shop + ".pos365.vn/"
+        URL.link = "https://" + shop + ".pos365.vn/";
         console.log("onClickLogin URL ", URL, shop);
         let params = { UserName: userName, Password: password };
         new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
             console.log("onClickLogin res ", res);
             if (res.SessionId && res.SessionId != "") {
                 dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
-                // handlerLoginSuccess(params, res);
+                handlerLoginSuccess(params, res);
             }
             if (res.status == 401) {
                 // this.dialog.hiddenLoading();
@@ -88,8 +107,12 @@ export default (props) => {
             // this.setAzureNotification(res)
             // this.saveVendorSessionToListAccount(res)
 
-            if (res.CurrentUser && res.CurrentUser.IsAdmin == true)
+            if (res.CurrentUser && res.CurrentUser.IsAdmin == true) {
                 props.navigation.navigate("Home")
+            } else {
+                error = I18n.t('ban_khong_co_quyen_truy_cap');
+                setShowToast(true)
+            }
             // this.dialog.hiddenLoading();
         }).catch((e) => {
             // this.dialog.hiddenLoading();
@@ -208,3 +231,5 @@ const styles = StyleSheet.create({
         margin: 10, padding: 10, borderColor: Colors.colorchinh, borderRadius: 5, borderWidth: 1, height: 50, width: Metrics.screenWidth - 50
     }
 });
+
+export default React.memo(LoginScreen)
