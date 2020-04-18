@@ -20,7 +20,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.colorchinh} />
       <SafeAreaView style={{ flex: 0, backgroundColor: Colors.colorchinh }} />
       <SafeAreaView
         forceInset={{ top: 'never' }}
@@ -29,7 +29,6 @@ const App = () => {
           <RootComponent />
         </Wrapper>
       </SafeAreaView>
-
     </Provider>
   );
 };

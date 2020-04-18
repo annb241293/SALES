@@ -6,22 +6,25 @@
  * @flow
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useFocusEffect, useCallback } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
     ScrollView,
     View,
     Text,
-    StatusBar,
-    Dimensions,
+    BackHandler,
+    Dimensions, ToastAndroid
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import DrawerNavigation from './navigator/drawer/DrawerNavigation';
-import TopTabNavigation from './navigator/topTab/TopTabNavigation';
 import StackNavigation from './navigator/stack/StackNavigation';
 import { useDispatch } from 'react-redux';
 import { Constant } from './common/Constant'
+import { navigationRef } from './navigator/stack/StackNavigation';
+import RNExitApp from "react-native-exit-app";
+
+
+let time = 0;
 
 export default () => {
 
@@ -45,17 +48,52 @@ export default () => {
 
     const dispatch = useDispatch();
 
+    const clickBack = () => {
+        if (time + 1000 > new Date().getTime()) {
+            RNExitApp.exitApp();
+        } else {
+            time = new Date().getTime();
+            let thongbao = "Nhấn back thêm lần nữa để thoát";
+            ToastAndroid.show(thongbao, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+        }
+    }
+
+    const backButtonHandler = useCallback(() => {
+        console.log(navigationRef.current, 'back buttom');
+        if (navigationRef.current.getRootState().index == 1) {
+            clickBack()
+            return true
+        }
+    }, [])
+
+
+
     useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
+
+        return () => {
+            BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
+        };
+    }, [backButtonHandler]);
+
+    const handleChange = useCallback(() => {
         setDeviceType(isTablet)
         setOrientaition(isPortrait)
         console.log("isTablet ", isTablet());
-        dispatch({ type: 'TYPE_DEVICE', deviceType: isTablet()})
-        dispatch({ type: 'ORIENTAITION', orientaition: isPortrait()})
-    }, [])
+        dispatch({ type: 'TYPE_DEVICE', deviceType: isTablet() })
+        dispatch({ type: 'ORIENTAITION', orientaition: isPortrait() })
+    }, [deviceType, orientaition])
+
+    useEffect(() => {
+        Dimensions.addEventListener('change', handleChange)
+        return () => {
+            Dimensions.removeEventListener('change', handleChange)
+        }
+    }, [handleChange])
 
     return (
 
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <StackNavigation />
         </NavigationContainer>
     );
