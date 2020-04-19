@@ -63,6 +63,7 @@ const images = {
     icon_woman: require("../../assets/icons/icon_woman.png"),
     icon_male: require("../../assets/icons/icon_male.png"),
     icon_group: require("../../assets/icons/icon_group.png"),
+    default_food_image: require('../../assets/images/default-image.png'),
 
 
 

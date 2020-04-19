@@ -7,6 +7,8 @@ import Images from '../../theme/Images';
 import I18n from '../../common/language/i18n';
 import DialogManager from '../../components/dialog/DialogManager';
 
+const dialog = new DialogManager();
+
 const data = [
   {
     name: "tang1",
@@ -88,7 +90,7 @@ export default (props) => {
         <View>
           {data.map((item, index) => {
             return (
-              <View style={{ marginVertical: 10 }} key={index}>
+              <View style={{}} key={index}>
                 <View style={{ flexDirection: "row" }}>
                   <Image source={Images.icon_transfer_money} style={{ width: 20, height: 20 }}></Image>
                   <Text style={{ textTransform: "uppercase", fontSize: 15, }}>{item.name}</Text>
@@ -113,7 +115,7 @@ export default (props) => {
 
       <View>
         <TouchableOpacity onPress={() => {
-          new DialogManager().showPopupOneButton("Nội dung thông báo", "Thông báo")
+          dialog.showPopupOneButton("Nội dung thông báo", "Thông báo")
           // let dialog = new DialogManager();
           // dialog.showLoading();
           // setTimeout(() => {

@@ -15,8 +15,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveDeviceInfoToStore, updateStatusLogin, saveCurrentBranch, saveNotificationCount } from "../../actions/Common";
 import useDidMountEffect from '../../customHook/useDidMountEffect';
 import { getFileDuLieuString, setFileLuuDuLieu } from "../../data/fileStore/FileStorage";
-import { StackActions } from '@react-navigation/native';
+import DialogManager from '../../components/dialog/DialogManager';
 
+const dialog = new DialogManager();
 
 
 
@@ -28,16 +29,18 @@ const LoginScreen = (props) => {
     const [extraHeight, setExtraHeight] = useState(0);
     const [shop, setShop] = useState("");
     const [userName, setUserName] = useState("");
-    const [password, setPassword] = useState("");   
+    const [password, setPassword] = useState("");
     const [showToast, setShowToast] = useState(false);
     const [logIn, setLogIn] = useState(false);
+    const [hasLogin, setHasLogin] = useState(true);
     const dispatch = useDispatch();
-    const SessionId = useSelector(state => { 
-        console.log("useSelector state ", state.Common.info.SessionId);
-        return state.Common.info.SessionId
-    });
+
+
 
     useEffect(() => {
+        // if (props.route.params && props.route.params.param == "logout") {
+        //     setHasLogin(false)
+        // } else {
         const getCurrentAccount = async () => {
             let currentAccount = await getFileDuLieuString(Constant.CURRENT_ACCOUNT, true);
             console.log(currentAccount, 'currentAccount');
@@ -47,17 +50,23 @@ const LoginScreen = (props) => {
                 dispatch(saveDeviceInfoToStore({ SessionId: currentAccount.SessionId }))
                 getRetailerInfoAndNavigate();
             } else {
-                return
+                setTimeout(() => {
+                    setHasLogin(false)
+                }, 2000);
             }
         }
         getCurrentAccount()
+        // }
     }, [])
 
+    useEffect(() => {
+        setLogIn(false)
+    }, [props.route.params])
 
     const onClickLogin = useCallback(() => {
         if (!checkDataLogin())
             return;
-        // this.dialog.showLoading();
+        dialog.showLoading();
         URL.link = "https://" + shop + ".pos365.vn/";
         console.log("onClickLogin URL ", URL, shop);
         let params = { UserName: userName, Password: password };
@@ -68,12 +77,12 @@ const LoginScreen = (props) => {
                 handlerLoginSuccess(params, res);
             }
             if (res.status == 401) {
-                // this.dialog.hiddenLoading();
+                dialog.hiddenLoading();
                 error = I18n.t('loi_dang_nhap');
                 setShowToast(true)
             }
         }).catch((e) => {
-            // this.dialog.hiddenLoading(); 
+            dialog.hiddenLoading();
             error = I18n.t('loi_server');
             setShowToast(true);
             console.log("onClickLogin err ", e);
@@ -113,9 +122,9 @@ const LoginScreen = (props) => {
                 error = I18n.t('ban_khong_co_quyen_truy_cap');
                 setShowToast(true)
             }
-            // this.dialog.hiddenLoading();
+            dialog.hiddenLoading();
         }).catch((e) => {
-            // this.dialog.hiddenLoading();
+            dialog.hiddenLoading();
             console.log("getDataRetailerInfo err ", e);
         })
     }
@@ -149,6 +158,13 @@ const LoginScreen = (props) => {
         return true;
     }
 
+    if (hasLogin) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
+                <Text>INTRO</Text>
+            </View>
+        );
+    }
 
     return (
         <LinearGradient
@@ -210,7 +226,7 @@ const LoginScreen = (props) => {
                             <Text style={{ color: "#fff", fontWeight: "bold" }}>{Constant.HOTLINE}</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text>{SessionId}</Text>
+                    {/* <Text>{SessionId}</Text> */}
                 </KeyboardAwareScrollView>
 
                 <Snackbar

@@ -14,7 +14,6 @@ const initState = {
 		currentAccount: "",
 		notificationCount: 0
 	},
-	isActiveOTP: false,
 	isLogin: false,
 	currentBranch: "",
 	tabIndex: 0,
@@ -33,11 +32,6 @@ const commonReducer = (state = initState, action = {}) => {
 			}
 			return { ...state, info: info }
 
-		case "SAVE_STATE_ACTIVE_OTP":
-			return {
-				...state,
-				isActiveOTP: action.isActive
-			}
 		case "SAVE_STATE_LOGIN":
 			return {
 				...state,
@@ -91,7 +85,7 @@ const commonReducer = (state = initState, action = {}) => {
 const persistConfig = {
 	key: 'auth',
 	storage: AsyncStorage,
-	whitelist: ['isActiveOTP']
+	whitelist: []
 };
 
 const Common = persistReducer(persistConfig, commonReducer)

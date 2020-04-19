@@ -53,7 +53,7 @@ export default () => {
             RNExitApp.exitApp();
         } else {
             time = new Date().getTime();
-            let thongbao = "Nhấn back thêm lần nữa để thoát";
+            let thongbao = "Nhấn back 2 lần nữa để thoát";
             ToastAndroid.show(thongbao, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
         }
     }

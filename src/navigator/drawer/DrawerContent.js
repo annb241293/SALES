@@ -44,7 +44,7 @@ const DrawerContent = props => {
                     labelStyle={{}}
                     onPress={() => {
                         setFileLuuDuLieu(Constant.CURRENT_ACCOUNT, "");
-                        props.navigation.navigate('Login')
+                        props.navigation.navigate('Login',{param: "logout"})
                     }}
                 />
             </DrawerContentScrollView>
