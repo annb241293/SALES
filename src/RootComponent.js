@@ -22,12 +22,13 @@ import { useDispatch } from 'react-redux';
 import { Constant } from './common/Constant'
 import { navigationRef } from './navigator/stack/StackNavigation';
 import RNExitApp from "react-native-exit-app";
-
+import I18n from './common/language/i18n'
 
 let time = 0;
 
 export default () => {
 
+    const [forceUpdate, setForceUpdate] = useState(false);
     const [deviceType, setDeviceType] = useState("");
     const [orientaition, setOrientaition] = useState("");
 
@@ -45,6 +46,10 @@ export default () => {
         return ((dim.scale < 2 && msp(dim, 1000) || (dim.scale >= 2 && msp(dim, 1900)))) ? Constant.TABLET : Constant.PHONE;
     }
 
+    useEffect(() => {
+        I18n.locale = "vi";
+        setForceUpdate(!forceUpdate);
+    }, [])
 
     const dispatch = useDispatch();
 

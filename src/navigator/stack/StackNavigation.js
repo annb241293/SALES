@@ -51,7 +51,7 @@
 //         </Animated.View>
 //     );
 // };
-import React, { useState, useEffect,createRef } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Animated from 'react-native-reanimated';
 import {
@@ -64,6 +64,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import DrawerNavigation from '../drawer/DrawerNavigation';
 import { getFileDuLieuString, setFileLuuDuLieu } from "../../data/fileStore/FileStorage";
 import Main from '../../screens/main/Main';
+import BottomTabNavigation from '../bottomTab/BottomTabNavigation';
 
 
 const MainStack = createStackNavigator();
@@ -76,7 +77,8 @@ export default (props) => {
                 headerMode="none"
             >
                 <MainStack.Screen name="Login">{props => <Login {...props} />}</MainStack.Screen>
-                <MainStack.Screen name="Home">{props => <DrawerNavigation {...props} screenOptions={{ headerLeft: null }} />}</MainStack.Screen>
+                {/* <MainStack.Screen name="Home">{props => <DrawerNavigation {...props} screenOptions={{ headerLeft: null }} />}</MainStack.Screen> */}
+                <MainStack.Screen name="Home">{props => <BottomTabNavigation {...props} screenOptions={{ headerLeft: null }} />}</MainStack.Screen>
                 <MainStack.Screen name="SelectFood">{props => <SelectFood {...props} />}</MainStack.Screen>
                 <MainStack.Screen name="Messages">{props => <SelectFood {...props} />}</MainStack.Screen>
             </MainStack.Navigator>

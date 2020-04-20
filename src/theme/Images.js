@@ -1,6 +1,6 @@
 // leave off @2x/@3x
 const images = {
-    icon: require('../assets/icon.png'),
+    // icon: require('../../assets/icon.png'),
     image_bitmap: require('../../assets/images/bitmap.png'),
     icon_menu: require('../../assets/icons/menu.png'),
     icon_phone_header: require('../../assets/icons/phone.png'),
@@ -34,10 +34,12 @@ const images = {
     icon_red_x: require('../../assets/icons/icon_red_x.png'),
 
     icon_home: require('../../assets/icons/icon_home.png'),
+    icon_home_active: require('../../assets/icons/home_active.png'),
     icon_invoice: require('../../assets/icons/icon_invoice.png'),
     icon_transfer_money: require('../../assets/icons/icon_transfer_money.png'),
     icon_table: require('../../assets/icons/icon_table.png'),
     icon_more: require('../../assets/icons/icon_more.png'),
+    icon_more_active: require('../../assets/icons/icon_more_active.png'),
     icon_line_chart: require('../../assets/icons/icon_line_chart.png'),
 
     icon_truck: require('../../assets/icons/icon_truck.png'),
