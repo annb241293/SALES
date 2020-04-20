@@ -1,37 +1,43 @@
 import { schemaVersion } from 'realm';
 const Realm = require('realm');
 
-//define function
-export const queryAll = async (schema) => {
-    let realm = await Realm.open(databaseOption)
-    return realm.objects(schema)
-}
+export class RealmBase {
 
-export const insertNewData = async (schema, data) => {
-    let realm = await Realm.open(databaseOption)
-    return new Promise((resolve) => realm.write(() => {
-        realm.create(schema, data)
-        resolve(data)
-    })
-    )
-}
+    constructor(){}
 
-export const insertData = async (schema, data) => {
-    let realm = await Realm.open(databaseOption)
-    return new Promise((resolve) => realm.write(() => {
-        realm.create(schema, data, true)
-        resolve(data)
-    })
-    )
-}
+    async queryAll (databaseOption, schema) {        
+        let realm = await Realm.open(databaseOption)
+        let objects = realm.objects(schema)
+        return Object.values(JSON.parse(JSON.stringify(objects)))
+    }
 
-export const insertDatas = async (schema, datas) => {
-    let realm = await Realm.open(databaseOption)
-    return new Promise((resolve) => realm.write(() => {
-        datas.map( data => {
-            realm.create(schema, data, true)
+    insertNewData = async (databaseOption, schema, data) => {
+        let realm = await Realm.open(databaseOption)
+        return new Promise((resolve) => realm.write(() => {
+            realm.create(schema, data)
+            resolve(data)
         })
-        resolve(datas)  
-    })
-    )
+        )
+    }
+
+    insertData = async (databaseOption, schema, data) => {
+        let realm = await Realm.open(databaseOption)
+        return new Promise((resolve) => realm.write(() => {
+            realm.create(schema, data, true)
+            resolve(data)
+        })
+        )
+    }
+
+    async insertDatas (databaseOption, schema, datas) {
+        let realm = await Realm.open(databaseOption)
+        return new Promise((resolve) => realm.write(() => {
+            datas.map( data => {
+                console.log("insertDatas", data)
+                realm.create(schema, data, true)
+            })
+            resolve(datas)  
+        })
+        )
+    }
 }

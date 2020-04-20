@@ -1,10 +1,8 @@
 import { decodeBase64 } from "../../common/Base64";
 import { jsonToObject } from "../../common/Converter";
 import I18n from "../../common/language/i18n";
-import DialogManager from "../../components/dialog/DialogManager";
+import dialogManager from "../../components/dialog/DialogManager";
 import store from "../../store/configureStore";
-
-const dialogManager = new DialogManager();
 
 const URL_RELEASE = "";
 const URL_DEBUG = "https://oke.pos365.vn";
@@ -158,7 +156,7 @@ export const serviceBuilderGetMethod = (
     };
     let dialog = null;
     if (showLoading) {
-        dialog = new DialogManager();
+        dialog = dialogManager;
         dialog.showLoading();
     }
 
@@ -195,7 +193,7 @@ export const serviceBuilderDeleteMethod = (
 
     let dialog = null;
     if (showLoading) {
-        dialog = new DialogManager();
+        dialog = dialogManager;
         dialog.showLoading();
     }
 
@@ -232,7 +230,7 @@ export const serviceBuilderPutMethod = (
 
     let dialog = null;
     if (showLoading) {
-        dialog = new DialogManager();
+        dialog = dialogManager;
         dialog.showLoading();
     }
     return Put(URL, path, param, getPostHeaders(headers)).then(
@@ -261,7 +259,7 @@ export const serviceBuilderPostMethod = (
 
     let dialog = null;
     if (showLoading) {
-        dialog = new DialogManager();
+        dialog = dialogManager;
         dialog.showLoading();
     }
     let header = {

@@ -1,10 +1,9 @@
 
 import I18n from '../../common/language/i18n';
-import DialogManager from '../../components/dialog/DialogManager';
+import dialogManager from '../../components/dialog/DialogManager';
 import store from "../../store/configureStore";
 import { NavigateScreen, ScreenList } from '../../common/ScreenList';
 import { ApiPath } from './ApiPath';
-const dialogManager = new DialogManager();
 const CookieManager = require('react-native-cookies');
 import { Platform, NativeModules } from 'react-native';
 const { AzureHub } = NativeModules;

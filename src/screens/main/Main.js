@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar, Image, View, StyleSheet, Button, Text } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
-import { syncServerEvent } from '../../data/DataManager'
+import { syncAllDatas } from '../../data/DataManager'
+import realmStore from '../../data/realm/RealmStore'
+import Order from '../order/Order';
 
 
 export default ({ navigation, style }) => {
 
-  useEffect(() => {
-    syncServerEvent().then(res =>
-      alert("Sync Done")
-    )
-  }
-    , [])
+  // useEffect(() => {
+  //   syncServerEvent().then(res =>
+  //     alert("Sync Done")
+  //   )
+  // }
+  //   , [])
 
   const clickRightIcon = () => {
     navigation.openDrawer();
   }
 
-  const clickLeftIcon = () => {
-    syncServerEvent().then(res =>
-      alert("Sync Done")
-    )
+  const clickLeftIcon = async () => {
+    await syncAllDatas()
   }
 
   return (
@@ -33,7 +33,8 @@ export default ({ navigation, style }) => {
         leftIcon="refresh"
         clickLeftIcon={clickLeftIcon}
       />
-      <View></View>
+      <Order>
+      </Order>
     </View>
   );
 };

@@ -100,8 +100,6 @@ class DialogManager {
         });
     }
 
-
-
     showLoading() {
         this.hiddenLoading()
         DialogManager.STATUSLOADING = true;
@@ -117,6 +115,7 @@ class DialogManager {
 
 DialogManager.STATUSLOADING = false;
 
+const dialogManager = new DialogManager();
 
-export default DialogManager;
+export default dialogManager;
 

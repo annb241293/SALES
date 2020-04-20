@@ -1,6 +1,7 @@
 import I18n from "./language/i18n";
 import moment from "moment";
 
+//Convert number, currency format
 export const currencyToString = value => {
   if (!value || (value && value == "")) {
     value = "0";
@@ -9,40 +10,39 @@ export const currencyToString = value => {
   value = parseInt(value)
   value = value.toString();
   let money = parseInt(value.replace(/\D/g, ""), 10);
-  currentMoney = I18n.toNumber(money, { delimiter: ",", precision: 0 });
+  let currentMoney = I18n.toNumber(money, { delimiter: ",", precision: 0 });
   return currentMoney.toString();
 };
 
-export const dateToStringFormatUTC = (
-  date,
-  inputFormat = "YYYYMMDDhhmmss",
-  outputFormat = "HH:mm DD/MM/YYYY"
-) => {
-  var momentdate = moment.utc(date, inputFormat)
-
-  var dateITC = moment(momentdate).local();
-  var dateTimezone = dateITC.format(outputFormat);
-
-  return dateTimezone;
-};
-
-export const momentToStringDateLocal = (
-  momentInput,
-  outputFormat = "YYYY-MM-DDTHH:mm:ss.SS"
-) => {
-  let dateTimeUtc = moment.utc(momentInput).format(outputFormat)
-  return dateTimeUtc
-}
-
-export const dateToString = (date, formatOutput = "DD/MM/YYYY") => {
-  let momentdate = "";
+//Convert Time (Date is String type, moment is Moment type)
+export const dateToDate = (date, inputFormat = "YYYY-MM-DD HH:mm:ss",  outputFormat = "DD/MM/YYYY") => {
+  let dateOutput = "";
   try {
-    momentdate = moment(date, "YYYY-MM-DD HH:mm:ss").format(formatOutput);
-    if (momentdate == "Invalid date") {
-      momentdate = "";
+    dateOutput = moment(date, inputFormat).format(outputFormat);
+    if (dateOutput == "Invalid date") {
+      dateOutput = "";
     }
   } catch (e) {
-    momentdate = "";
+    dateOutput = "";
   }
-  return momentdate;
+  return dateOutput;
 };
+
+export const dateUTCToDate = (date, inputFormat = "YYYYMMDDhhmmss", outputFormat = "HH:mm DD/MM/YYYY" ) => {
+  let momentUTC = moment.utc(date, inputFormat)
+  let momentITC = moment(momentUTC).local();
+  let dateITC = momentITC.format(outputFormat);
+  return dateITC;
+};
+
+export const dateUTCToMoment = (date, inputFormat = "yyyy-MM-dd'T'HH:mm:ss.SSFFFFF'Z'") => {
+  let momentUTC = moment.utc(date, inputFormat)
+  let momentITC = moment(momentUTC).local();
+  return momentITC;
+}
+
+export const momentToDateUTC = (momentInput, outputFormat = "YYYY-MM-DDTHH:mm:ss.SS") => {
+  let dateUTC = moment.utc(momentInput).format(outputFormat)
+  return dateUTC
+}
+
