@@ -1,6 +1,6 @@
 
 
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View, Text, TouchableOpacity, Image, StyleSheet,
     StatusBar, Keyboard, Linking, Platform, SafeAreaView
@@ -12,7 +12,14 @@ import Fonts from '../../theme/Fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 
-export default function ToolBarDefault(props) {
+export default function ToolBarSelectFood(props) {
+
+    const [badge, setBadge] = useState(0)
+
+    useEffect(() => {
+        const badge = props.product.reduce((total, current) => (total + current.quantity), 0)
+        setBadge(badge)
+    }, [props.product])
 
     return (
         <LinearGradient
@@ -20,7 +27,7 @@ export default function ToolBarDefault(props) {
             colors={['#FFAB40', '#FF5722']}
             style={{ height: 44 }}
         >
-            <View style={styles.toolbarContainer}> 
+            <View style={styles.toolbarContainer}>
                 <View style={{
                     flex: 1,
                     flexDirection: 'row',
@@ -49,15 +56,19 @@ export default function ToolBarDefault(props) {
                         </Subheading>
                     </View>
 
-                    <View style={{ flex: 1, alignItems: "center" }}>
+                    <View style={{ flex: 1, alignItems: "center", }}>
                         <TouchableOpacity onPress={props.clickLeftIcon} >
                             {props.leftIcon && props.clickLeftIcon ?
-                                <Icon name={props.leftIcon} size={30} color="white" />
+                                <View style={{}}>
+                                    <Icon name={props.leftIcon} size={30} color="white" style={{ marginRight: 5 }} />
+                                    <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>{badge}</Text>
+                                </View>
                                 :
                                 null
                             }
                         </TouchableOpacity>
                     </View>
+                    
                 </View>
             </View>
         </LinearGradient>
@@ -80,7 +91,7 @@ const styles = StyleSheet.create({
     },
 })
 
-ToolBarDefault.propTypes = {
+ToolBarSelectFood.propTypes = {
     title: PropTypes.string,
     rightIcon: PropTypes.string,
     leftIcon: PropTypes.string,
@@ -88,6 +99,6 @@ ToolBarDefault.propTypes = {
     clickLeftIcon: PropTypes.func
 }
 
-ToolBarDefault.defaultProps = {
+ToolBarSelectFood.defaultProps = {
 
 }

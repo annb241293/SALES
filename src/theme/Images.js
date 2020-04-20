@@ -1,5 +1,6 @@
 // leave off @2x/@3x
 const images = {
+    icon: require('../assets/icon.png'),
     image_bitmap: require('../../assets/images/bitmap.png'),
     icon_menu: require('../../assets/icons/menu.png'),
     icon_phone_header: require('../../assets/icons/phone.png'),
@@ -62,6 +63,7 @@ const images = {
     icon_woman: require("../../assets/icons/icon_woman.png"),
     icon_male: require("../../assets/icons/icon_male.png"),
     icon_group: require("../../assets/icons/icon_group.png"),
+    default_food_image: require('../../assets/images/default-image.png'),
 
 
 

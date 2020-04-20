@@ -88,10 +88,3 @@ export function isIphoneXorAbove() {
 }
 
 
-// Login
-export const activeOTPRedux = (isActive) => {
-  return {
-    type: "SAVE_STATE_ACTIVE_OTP",
-    isActive
-  }
-}

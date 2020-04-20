@@ -62,7 +62,7 @@ export class HTTPService {
 
                 })
         });
-       
+
     }
 
     POST(jsonParam, headers = getHeaders()) {
@@ -129,8 +129,8 @@ export function getHeaders(jsonHeader = null, isLogin = false) {
         'Accept': 'application/json',
         // 'Content-Type': 'application/json',
     }
-    //if (state.Common.info && state.Common.info.SessionId && state.Common.info.SessionId != "" && isLogin == false)
-        headers["COOKIE"] = "ss-id=Z4VBefli74MP6iGOCScz";
+    if (state.Common.info && state.Common.info.SessionId && state.Common.info.SessionId != "" && isLogin == false)
+        headers["COOKIE"] = "ss-id=" + state.Common.info.SessionId;
 
     if (jsonHeader) {
         Object.keys(jsonHeader).forEach(function (key) {

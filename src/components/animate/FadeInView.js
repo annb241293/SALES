@@ -10,6 +10,7 @@ export default function FadeInView(props) {
       {
         toValue: 1,                   // Animate to opacity: 1 (opaque)
         duration: 300,              // Make it take a while
+        useNativeDriver: true
       }
     ).start();
   }, [])

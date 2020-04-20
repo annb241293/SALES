@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
-    NativeEventEmitter,
-    NativeModules,
     View, Text, Image,
-    StyleSheet, TouchableOpacity, TextInput, Linking, Platform
+    StyleSheet, TouchableOpacity, TextInput,
 } from "react-native";
 import { Snackbar, } from "react-native-paper";
 import I18n from '../../common/language/i18n';
@@ -15,58 +13,119 @@ import { ApiPath } from "../../data/services/ApiPath";
 import { HTTPService, getHeaders, URL } from "../../data/services/HttpService";
 import { useSelector, useDispatch } from 'react-redux';
 import { saveDeviceInfoToStore, updateStatusLogin, saveCurrentBranch, saveNotificationCount } from "../../actions/Common";
-import store from "../../store/configureStore";
-
+import useDidMountEffect from '../../customHook/useDidMountEffect';
+import { getFileDuLieuString, setFileLuuDuLieu } from "../../data/fileStore/FileStorage";
+import dialogManager from '../../components/dialog/DialogManager';
 
 
 let error = "";
 
-export default (props) => {
+const LoginScreen = (props) => {
     const [extraHeight, setExtraHeight] = useState(0);
     const [shop, setShop] = useState("");
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [showToast, setShowToast] = useState(false);
     const [logIn, setLogIn] = useState(false);
-    const isFirstRun = useRef(true);
+    const [hasLogin, setHasLogin] = useState(true);
     const dispatch = useDispatch();
 
+
+
     useEffect(() => {
-        const onClickLogin = () => {
-            if (!checkDataLogin())
-                return;
-            // this.dialog.showLoading();
-            URL.link = "https://" + shop + ".pos365.vn/"
-            console.log("onClickLogin URL ", URL, shop);
-            let params = { UserName: userName, Password: password };
-            new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
-                console.log("onClickLogin res ", res);
-                if (res.SessionId && res.SessionId != "") {
-                    // this.props.saveDeviceInfo({ SessionId: res.SessionId })
-                    // this.handlerLoginSuccess(params, res);
-                    dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
-                }
-                if (res.status == 401) {
-                    // this.dialog.hiddenLoading();
-                    error = I18n.t('loi_dang_nhap');
-                    setShowToast(true)
-                }
-            }).catch((e) => {
-                // this.dialog.hiddenLoading();
-                error = I18n.t('loi_server');
-                setShowToast(true);
-                console.log("onClickLogin err ", e);
-            })
+        // if (props.route.params && props.route.params.param == "logout") {
+        //     setHasLogin(false)
+        // } else {
+        const getCurrentAccount = async () => {
+            let currentAccount = await getFileDuLieuString(Constant.CURRENT_ACCOUNT, true);
+            console.log(currentAccount, 'currentAccount');
+            if (currentAccount && currentAccount != "") {
+                currentAccount = JSON.parse(currentAccount);
+                URL.link = "https://" + currentAccount.Link + ".pos365.vn/";
+                dispatch(saveDeviceInfoToStore({ SessionId: currentAccount.SessionId }))
+                getRetailerInfoAndNavigate();
+            } else {
+                setTimeout(() => {
+                    setHasLogin(false)
+                }, 2000);
+            }
         }
-        if (isFirstRun.current) {
-            isFirstRun.current = false
-            return
-        }
-        onClickLogin();
+        getCurrentAccount()
+        // }
+    }, [])
+
+    useEffect(() => {
+        setLogIn(false)
+    }, [props.route.params])
+
+    const onClickLogin = useCallback(() => {
+        if (!checkDataLogin())
+            return;
+        dialogManager.showLoading();
+        URL.link = "https://" + shop + ".pos365.vn/";
+        console.log("onClickLogin URL ", URL, shop);
+        let params = { UserName: userName, Password: password };
+        new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
+            console.log("onClickLogin res ", res);
+            if (res.SessionId && res.SessionId != "") {
+                dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
+                handlerLoginSuccess(params, res);
+            }
+            if (res.status == 401) {
+                dialogManager.hiddenLoading();
+                error = I18n.t('loi_dang_nhap');
+                setShowToast(true)
+            }
+        }).catch((e) => {
+            dialogManager.hiddenLoading();
+            error = I18n.t('loi_server');
+            setShowToast(true);
+            console.log("onClickLogin err ", e);
+        })
     }, [logIn])
 
+    useDidMountEffect(() => {
+        onClickLogin()
+    }, [onClickLogin])
+
+    const handlerLoginSuccess = (params, res) => {
+        let account = { SessionId: res.SessionId, UserName: params.UserName, Link: shop };
+        setFileLuuDuLieu(Constant.CURRENT_ACCOUNT, JSON.stringify(account));
+        getRetailerInfoAndNavigate();
+    }
+
+    const getRetailerInfoAndNavigate = () => {
+        let inforParams = {};
+        new HTTPService().setPath(ApiPath.RETAILER_INFO).GET(inforParams, getHeaders()).then((res) => {
+            console.log("getDataRetailerInfo res ", res);
+            // this.props.saveDeviceInfo({
+            //     Logo: res.CurrentRetailer && res.CurrentRetailer.Logo ? res.CurrentRetailer.Logo : "",
+            //     CurrentName: res.CurrentRetailer && res.CurrentUser.Name ? res.CurrentUser.Name : "",
+            //     CurrentRetailerName: res.CurrentRetailer && res.CurrentRetailer.Name ? res.CurrentRetailer.Name : "",
+            //     CurrentFieldId: res.CurrentRetailer && res.CurrentRetailer.FieldId ? res.CurrentRetailer.FieldId : 3,
+            //     bId: res.BID ? res.BID : "",
+            //     rId: res.RID ? res.RID : ""
+            // })
+            // if (res.Branchs && res.Branchs.length > 0)
+            //     this.props.saveCurrentBranch(JSON.stringify(res.Branchs[0]))
+            // this.setAzureNotification(res)
+            // this.saveVendorSessionToListAccount(res)
+
+            if (res.CurrentUser && res.CurrentUser.IsAdmin == true) {
+                props.navigation.navigate("Home")
+            } else {
+                error = I18n.t('ban_khong_co_quyen_truy_cap');
+                setShowToast(true)
+            }
+            dialogManager.hiddenLoading();
+        }).catch((e) => {
+            dialogManager.hiddenLoading();
+            console.log("getDataRetailerInfo err ", e);
+        })
+    }
+
+
     const onChangeText = (text, type) => {
-        console.log("onChangeText text ", text);
         if (type == 1) {
             setShop(text)
         } else if (type == 2) {
@@ -94,6 +153,13 @@ export default (props) => {
         return true;
     }
 
+    if (hasLogin) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", }}>
+                <Text>INTRO</Text>
+            </View>
+        );
+    }
 
     return (
         <LinearGradient
@@ -122,7 +188,7 @@ export default (props) => {
                             <TextInput
                                 onChangeText={text => onChangeText(text, 2)}
                                 value={userName}
-                                // onFocus={() => this.setState({ extraHeight: 200 })}
+                                onFocus={() => { setExtraHeight(200) }}
                                 keyboardType={"default"}
                                 style={{ height: 40, flex: 1 }}
                                 placeholder={I18n.t('ten_dang_nhap')} />
@@ -132,7 +198,7 @@ export default (props) => {
                             <TextInput
                                 onChangeText={text => onChangeText(text, 3)}
                                 value={password}
-                                // onFocus={() => this.setState({ extraHeight: 130 })}
+                                onFocus={() => { setExtraHeight(130) }}
                                 keyboardType={"default"}
                                 style={{ height: 40, margin: 0, flex: 1 }}
                                 placeholder={I18n.t('mat_khau')}
@@ -155,6 +221,7 @@ export default (props) => {
                             <Text style={{ color: "#fff", fontWeight: "bold" }}>{Constant.HOTLINE}</Text>
                         </TouchableOpacity>
                     </View>
+                    {/* <Text>{SessionId}</Text> */}
                 </KeyboardAwareScrollView>
 
                 <Snackbar
@@ -175,3 +242,5 @@ const styles = StyleSheet.create({
         margin: 10, padding: 10, borderColor: Colors.colorchinh, borderRadius: 5, borderWidth: 1, height: 50, width: Metrics.screenWidth - 50
     }
 });
+
+export default React.memo(LoginScreen)
