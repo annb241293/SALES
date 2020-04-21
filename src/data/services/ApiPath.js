@@ -12,5 +12,6 @@ export const ApiPath = {
     SERVER_EVENT:"api/serverevents",
     SYNC_ROOMS: "api/rooms/sync",
     SYNC_ROOM_GROUPS: "api/roomgroups/sync",
-    SYNC_PRODUCTS: "api/products/sync" 
+    SYNC_PRODUCTS: "api/products/sync" ,
+    SYNC_CATEGORIES: "api/categories/sync"
 }

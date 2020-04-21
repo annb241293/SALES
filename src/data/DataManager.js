@@ -29,10 +29,11 @@ const syncData = async (apiPath, schemaName) => {
 
 export const syncAllDatas = async () => {
     console.log("syncAllDatas");
-    await Promise.all(
-        syncServerEvent(),
-        syncProduct(),
-        syncData(ApiPath.SYNC_ROOMS, SchemaName.ROOM),
-        syncData(ApiPath.SYNC_ROOM_GROUPS, SchemaName.ROOM_GROUP)
-    )
+    //Promise.all(
+        await syncServerEvent(),
+        await syncProduct(),
+        await syncData(ApiPath.SYNC_ROOMS, SchemaName.ROOM),
+        await syncData(ApiPath.SYNC_ROOM_GROUPS, SchemaName.ROOM_GROUP),
+        await syncData(ApiPath.SYNC_CATEGORIES, SchemaName.CATEGORIES)
+    // )
 }

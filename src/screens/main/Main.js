@@ -46,7 +46,9 @@ export default (props) => {
   }
 
   const clickLeftIcon = async () => {
+    dialogManager.showLoading()
     await syncAllDatas()
+    dialogManager.hiddenLoading()
   }
 
   const deviceType = useSelector(state => {
@@ -69,9 +71,9 @@ export default (props) => {
         leftIcon="refresh"
         clickLeftIcon={clickLeftIcon}
       />
-      {/* <Order>
-      </Order> */}
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "red" }}>
+      <Order numberColumn = {4} >
+      </Order>
+      {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "red" }}>
         <View style={{ flexDirection: "row", flex: 1 }}>
           <Image source={Images.icon_transfer_money} style={{ width: 20, height: 20 }}></Image>
           <Text>123,456</Text>
@@ -112,7 +114,7 @@ export default (props) => {
             )
           })}
         </View>
-      </ScrollView>
+      </ScrollView> */}
 
       <View>
         <TouchableOpacity onPress={() => {

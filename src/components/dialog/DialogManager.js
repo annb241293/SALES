@@ -103,7 +103,7 @@ class DialogManager {
     }
 
     showLoading() {
-        if (this.dialogLoading) return
+        this.hiddenLoading()
         DialogManager.STATUSLOADING = true;
         this.dialogLoading = new RootSiblings(
             <DialogLoading></DialogLoading>);

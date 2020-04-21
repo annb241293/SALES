@@ -7,8 +7,7 @@ export class RealmBase {
 
     async queryAll (databaseOption, schema) {        
         let realm = await Realm.open(databaseOption)
-        let objects = realm.objects(schema)
-        return Object.values(JSON.parse(JSON.stringify(objects)))
+        return realm.objects(schema)
     }
 
     insertNewData = async (databaseOption, schema, data) => {

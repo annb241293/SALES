@@ -73,7 +73,7 @@ class RealmStore extends RealmBase{
     async insertProducts (newProducts) {
         let realm = await Realm.open(databaseOption)
         return new Promise((resolve) => realm.write(() => {
-            newProducts.map( product => {                
+            newProducts.map( product => {                                
                 product.ProductImages = JSON.stringify(product.ProductImages)
                 realm.create(SchemaName.PRODUCT, product, true)
             })
@@ -86,6 +86,15 @@ class RealmStore extends RealmBase{
         return this.queryAll(databaseOption, SchemaName.PRODUCT)
     }
 
+    //Categories
+    insertCategories (newCategories) {
+        return this.insertDatas( databaseOption, SchemaName.CATEGORIES, newCategories)
+    }
+
+    queryCategories () {
+        return this.queryAll(databaseOption, SchemaName.CATEGORIES)
+    }
+
 }
 
 //define schema
@@ -93,7 +102,8 @@ export const SchemaName = {
     SERVER_EVENT: "ServerEventSchema",
     ROOM: "Room",
     ROOM_GROUP: "RoomGroup",
-    PRODUCT: "Product"
+    PRODUCT: "Product",
+    CATEGORIES: "Categories"
 }
 
 const ServerEventSchema = {
@@ -163,10 +173,20 @@ const ProductSchema = {
     }
 }
 
+const CategoriesSchema = {
+    name: SchemaName.CATEGORIES,
+    primaryKey: 'Id',
+    properties: {
+        Id: 'int',
+        Name: 'string',
+        ParentId: {type: 'int', default: 0}
+    }
+}
+
 const databaseOption = {
     path: 'Pos365Boss.realm',
-    schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema],
-    schemaVersion: 1
+    schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema],
+    schemaVersion: 3
 }
 
 const realmStore = new RealmStore();
