@@ -9,6 +9,8 @@ import Contact from '../../screens/contact/Contact';
 import { IconButton } from 'react-native-paper';
 import colors from '../../theme/Colors';
 
+import More from '../../screens/more/More'
+
 export default () => {
     return (
         <Tab.Navigator
@@ -41,8 +43,8 @@ export default () => {
                     <Image style={{ width: 20, height: 20, padding: 5 }} source={Images.icon_transfer_money} />
                 ),
             }} />
-            <Tab.Screen name="Contact" component={Contact} options={{
-                tabBarLabel: 'Contact',
+            <Tab.Screen name="More" component={More} options={{
+                tabBarLabel: 'More',
                 tabBarIcon: ({ color }) => (
                     color == colors.colorchinh ?
                         <Image style={{ width: 20, height: 20, padding: 5 }} color={color} source={Images.icon_more_active} />

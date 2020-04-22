@@ -66,6 +66,7 @@ import { getFileDuLieuString, setFileLuuDuLieu } from "../../data/fileStore/File
 import Main from '../../screens/main/Main';
 import BottomTabNavigation from '../bottomTab/BottomTabNavigation';
 
+import PrintHtml from '../../screens/more/printHtml/PrintHtml'
 
 const MainStack = createStackNavigator();
 export const navigationRef = createRef();
@@ -81,6 +82,7 @@ export default (props) => {
                 <MainStack.Screen name="Home">{props => <BottomTabNavigation {...props} screenOptions={{ headerLeft: null }} />}</MainStack.Screen>
                 <MainStack.Screen name="SelectFood">{props => <SelectFood {...props} />}</MainStack.Screen>
                 <MainStack.Screen name="Messages">{props => <SelectFood {...props} />}</MainStack.Screen>
+                <MainStack.Screen name="PrintHtml">{props => <PrintHtml {...props} />}</MainStack.Screen>
             </MainStack.Navigator>
         </Animated.View>
     );
