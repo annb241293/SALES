@@ -67,6 +67,7 @@ import Main from '../../screens/main/Main';
 import BottomTabNavigation from '../bottomTab/BottomTabNavigation';
 
 import PrintHtml from '../../screens/more/printHtml/PrintHtml'
+import Preview from '../../screens/more/printHtml/Preview'
 
 const MainStack = createStackNavigator();
 export const navigationRef = createRef();
@@ -83,6 +84,7 @@ export default (props) => {
                 <MainStack.Screen name="SelectFood">{props => <SelectFood {...props} />}</MainStack.Screen>
                 <MainStack.Screen name="Messages">{props => <SelectFood {...props} />}</MainStack.Screen>
                 <MainStack.Screen name="PrintHtml">{props => <PrintHtml {...props} />}</MainStack.Screen>
+                <MainStack.Screen name="Preview">{props => <Preview {...props} />}</MainStack.Screen>
             </MainStack.Navigator>
         </Animated.View>
     );

@@ -12,6 +12,8 @@ import { ApiPath } from '../../../data/services/ApiPath';
 export default (props) => {
 
     const [tabType, setTabType] = useState(1);
+    const [dataDefault, setDataDefault] = useState("");
+    const [dataOnline, setDataOnline] = useState("");
 
     return (
         <View style={{ flex: 1 }}>
@@ -19,32 +21,38 @@ export default (props) => {
                 navigation={props.navigation} title="Print HTML"
                 clickDefault={() => { setTabType(1) }}
                 clickLoadOnline={() => { setTabType(2) }}
-                clickShow={() => { setTabType(3) }}
+                clickShow={() => { props.navigation.navigate("Preview", { data: tabType == 1 ? dataDefault : dataOnline }) }}
             />
             {
                 tabType == 1 ?
-                    <DefaultComponent />
-                    : (tabType == 2 ? <OnlineComponent /> : <WebviewComponent />)
+                    <DefaultComponent output={(text) => setDataDefault(text)} />
+                    : <OnlineComponent output={(text) => setDataOnline(text)} />
             }
         </View>
     );
 };
 
-const DefaultComponent = () => {
+const DefaultComponent = (props) => {
     const [contentHtml, setContentHtml] = useState(htmlDefault);
+
+    useEffect(()=>{
+        props.output(contentHtml)
+    },[])
+
     return (
         <ScrollView style={{ flex: 1 }}>
             <TextInput style={{
                 margin: 10,
                 flex: 1,
             }} multiline={true} onChangeText={text => {
+                props.output(text)
                 setContentHtml(text)
             }} value={contentHtml} />
         </ScrollView>
     )
 }
 
-const OnlineComponent = () => {
+const OnlineComponent = (props) => {
 
     const [dataHTML, setDataHTML] = useState("");
     const onClickLoadOnline = useCallback(() => {
@@ -53,6 +61,7 @@ const OnlineComponent = () => {
         new HTTPService().setPath(ApiPath.PRINT_TEMPLATES).GET(params).then((res) => {
             console.log("onClickLoadOnline res ", res);
             setDataHTML(res.Content)
+            props.output(res.Content)
             dialogManager.hiddenLoading()
         }).catch((e) => {
             console.log("onClickLoadOnline err ", e);
@@ -70,30 +79,9 @@ const OnlineComponent = () => {
                 margin: 10,
                 flex: 1,
             }} multiline={true} onChangeText={text => {
+                props.output(text)
                 setDataHTML(text)
             }} value={dataHTML} />
         </ScrollView>
-    )
-}
-
-const WebviewComponent = () => {
-
-    useEffect(() => {
-        dialogManager.showLoading();
-    }, [])
-
-    return (
-        <View style={{ flex: 1 }}>
-            <WebView
-                source={{ uri: 'https://reactnative.dev/docs/webview.html' }}
-                style={{ marginTop: 0 }}
-                onError={syntheticEvent => {
-                    dialogManager.hiddenLoading();
-                }}
-                onLoadEnd={syntheticEvent => {
-                    dialogManager.hiddenLoading();
-                }}
-            />
-        </View>
     )
 }

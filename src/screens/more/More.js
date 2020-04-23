@@ -2,6 +2,8 @@ import React from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import { Images, Colors } from '../../theme';
+import { setFileLuuDuLieu } from '../../data/fileStore/FileStorage';
+import { Constant } from '../../common/Constant';
 
 export default (props) => {
     return (
@@ -38,11 +40,22 @@ const HeaderComponent = () => {
 
 const ContentComponent = (props) => {
     return (
-        <View style={{ padding: 20, borderBottomWidth: 0.5, borderBottomColor: "#ddd" }}>
-            <Text style={{ color: Colors.colorchinh, fontSize: 18 }}>Print setup</Text>
-            <TouchableOpacity onPress={() => { props.navigation.navigate("PrintHtml")}}>
-                <Text style={{ marginTop: 20 }}>HTML print</Text>
-            </TouchableOpacity>
+        <View>
+            <View style={{ padding: 20, borderBottomWidth: 0.5, borderBottomColor: "#ddd" }}>
+                <Text style={{ color: Colors.colorchinh, fontSize: 18 }}>Print setup</Text>
+                <TouchableOpacity onPress={() => { props.navigation.navigate("PrintHtml") }}>
+                    <Text style={{ marginTop: 20 }}>HTML print</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={{ padding: 20, borderBottomWidth: 0.5, borderBottomColor: "#ddd" }}>
+                <TouchableOpacity onPress={() => {
+                    setFileLuuDuLieu(Constant.CURRENT_ACCOUNT, "");
+                    props.navigation.navigate('Login', { param: "logout" })
+                }}>
+                    <Text style={{ marginTop: 20 }}>Logout</Text>
+                </TouchableOpacity>
+            </View>
+
         </View>
     )
 }
