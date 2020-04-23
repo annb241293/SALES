@@ -21,7 +21,6 @@ const onItemPress = (item) => { }
 
 const renderRoom = (item, widthRoom) => {
     if(item.RoomMoment) console.log("renderRoom", item.RoomMoment._i);
-    
     return item.isEmpty ?
     (<View style = {{width: widthRoom - 8}}></View>)
     :
@@ -30,7 +29,7 @@ const renderRoom = (item, widthRoom) => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: "space-between" }}>
                 <View style={{ justifyContent: "center", padding: 4, flex: 1 }}>
                     <Text style={{ fontSize: 14, textTransform: "uppercase", color: item.IsActive? 'white': 'black' }}>{item.Name}</Text>
-                    <Text style={{ paddingTop: 10, fontSize: 12, color: item.IsActive? 'white': 'black' }}>{item.RoomMoment? moment(item.RoomMoment._i).fromNow(): ""}</Text>
+                    <Text style={{ paddingTop: 10, fontSize: 12, color: item.IsActive? 'white': 'black' }}>{item.RoomMoment && item.IsActive? moment(item.RoomMoment._i).fromNow(): ""}</Text>
                 </View>
 
                 <View style={{ justifyContent: "center", padding: 0, alignItems: "flex-end" }}>
@@ -42,6 +41,7 @@ const renderRoom = (item, widthRoom) => {
 }
 
 const renderRoomGroup = (item) => {
+    console.log("renderRoomm", item.Name);
     return (
         <View style={styles.roomGroup}>
             <Text style={{ padding: 0, fontSize: 16, textTransform: "uppercase" }}>{item.Name}</Text>
@@ -58,66 +58,81 @@ export default (props) => {
 
     useEffect(() => {
         init()
+        return () => { 
+            realmStore.removeAllListener()
+         } 
     }, [])
 
     const init = async () => {
-        rooms = await realmStore.queryRooms().then(res => Object.values(JSON.parse(JSON.stringify(res))))
-        roomGroups = await realmStore.queryRoomGroups().then(res => Object.values(JSON.parse(JSON.stringify(res))))
-        serverEvents = await realmStore.queryServerEvents().then(res => Object.values(JSON.parse(JSON.stringify(res))))
-        serverEvents.forEach(serverEvent =>
-            serverEvent.JsonContent = JSON.parse(serverEvent.JsonContent)
-        )
+        rooms = await realmStore.queryRooms()
+        roomGroups = await realmStore.queryRoomGroups()
+        serverEvents = await realmStore.queryServerEvents()
         console.log("init: ", rooms, roomGroups, serverEvents);
 
         let newDatas = insertServerEvent(getDatas(rooms, roomGroups), serverEvents)
         setData(newDatas)
+        serverEvents.addListener((collection, changes) => {
+            if( changes.insertions.length || changes.modifications.length) {
+                console.log("change", datas, roomGroups, serverEvents);
+                let newDatas = insertServerEvent(getDatas(rooms, roomGroups), serverEvents)
+                setData(newDatas)
+                
+            }            
+        })
     }
 
     const getDatas = (rooms, roomGroups) => {
         let newDatas = []
-        if (rooms && rooms.length > 1) rooms.sort((a, b) => a.Position - b.Position)
+        if (rooms && rooms.length > 1) rooms.sorted('Position')
         if (roomGroups) {
             roomGroups.push({ Id: 0, Name: "Others" })
             roomGroups.forEach(roomGroup => {
-                let roomsInside = rooms.filter(room => room.RoomGroupId == roomGroup.Id)
+                let roomsInside = rooms.filtered(`RoomGroupId == ${roomGroup.Id}`)
                 let lengthRoomsInside = roomsInside.length
                 if (roomsInside && lengthRoomsInside > 0) {
-                    newDatas.push({ ...roomGroup, isGroup: true })
-                    newDatas = newDatas.concat(roomsInside)
+                    roomGroup.isGroup = true
+                    newDatas.push(roomGroup)
+                    newDatas = newDatas.concat(roomsInside.slice())
                     let itemEmty = (lengthRoomsInside % props.numberColumn == 0) ? 0 
                         : props.numberColumn - lengthRoomsInside % props.numberColumn 
                     
-                    for (i = 1; i <= itemEmty; i++) newDatas.push({isEmpty: true})
+                    for (let i = 1; i <= itemEmty; i++) newDatas.push({isEmpty: true})
                 }
             })
         }
         else
-            newDatas = [...rooms]
+            newDatas = rooms
 
+        console.log("room data", newDatas);
+            
         return newDatas
     }
 
     const insertServerEvent = (newDatas, serverEvents) => {
         newDatas.forEach(data => {
-            let listFiters = serverEvents.filter(serverEvent => serverEvent.RoomId == data.Id)
+            if(data.Id != undefined) {
+            let listFiters = serverEvents.filtered(`RoomId == ${data.Id}`)
             console.log("list: ", listFiters);
             if (listFiters && listFiters.length > 0) {
                 let Total = 0
                 let RoomMoment = ""
                 let IsActive = false
                 listFiters.forEach(elm => {
-                    Total += elm.JsonContent.Total ? elm.JsonContent.Total: 0
-                    if (elm.JsonContent.ActiveDate){
-                        let ActiveMoment = dateUTCToMoment(elm.JsonContent.ActiveDate)
+                    let JsonContentJS = JSON.parse(elm.JsonContent)
+                    Total += JsonContentJS.Total ? JsonContentJS.Total: 0
+                    if (JsonContentJS.ActiveDate){
+                        let ActiveMoment = dateUTCToMoment(JsonContentJS.ActiveDate)
                         if(!RoomMoment) RoomMoment = ActiveMoment 
                         else if (ActiveMoment.isBefore(RoomMoment)) RoomMoment = ActiveMoment
                     }
-                    if (elm.JsonContent.OrderDetails && elm.JsonContent.OrderDetails.length) IsActive = true
+                    if (JsonContentJS.OrderDetails && JsonContentJS.OrderDetails.length) IsActive = true
                 })                
                 data.Total = Total
                 data.RoomMoment = RoomMoment
                 data.IsActive = IsActive
             }
+        }
+            
         })
         console.log("insertServerEvent: ", newDatas);
 

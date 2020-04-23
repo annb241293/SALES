@@ -108,15 +108,7 @@ const LoginScreen = (props) => {
             // })
             // if (res.Branchs && res.Branchs.length > 0)
             //     this.props.saveCurrentBranch(JSON.stringify(res.Branchs[0]))
-            // this.setAzureNotification(res)
-            // this.saveVendorSessionToListAccount(res)
-
-            if (res.CurrentUser && res.CurrentUser.IsAdmin == true) {
-                props.navigation.navigate("Home")
-            } else {
-                error = I18n.t('ban_khong_co_quyen_truy_cap');
-                setShowToast(true)
-            }
+            props.navigation.navigate("Home")
             dialogManager.hiddenLoading();
         }).catch((e) => {
             dialogManager.hiddenLoading();

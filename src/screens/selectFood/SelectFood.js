@@ -122,7 +122,7 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar, Image, View, StyleSheet, Button, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import ToolBarSelectFood from './ToolBarSelectFood';
-import { HTTPService, URL, getHeaders } from "../../data/services/HttpService";
+import HTTPService, { URL, getHeaders } from "../../data/services/HttpService";
 import { ApiPath } from "../../data/services/ApiPath";
 import { FlatList } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
@@ -143,7 +143,7 @@ export default ({ navigation, style }) => {
   useEffect(() => {
     const getCategories = () => {
       let cateParams = {};
-      new HTTPService().setPath('api/categories/sync').GET(cateParams).then(res => {
+      HTTPService.setPath('api/categories/sync').GET(cateParams).then(res => {
         res.Data.splice(0, 1, { Id: -1, Name: "All" })
         const results = res.Data.map(item => {
           item.isSelected = false;
@@ -154,7 +154,7 @@ export default ({ navigation, style }) => {
     }
     const getProducts = () => {
       let productParams = {};
-      new HTTPService().setPath('api/products/sync').GET(productParams).then(res => {
+      HTTPService.setPath('api/products/sync').GET(productParams).then(res => {
         const results = res.Data.map(item => {
           item.quantity = 0;
           return item
