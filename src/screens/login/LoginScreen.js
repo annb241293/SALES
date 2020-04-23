@@ -33,12 +33,9 @@ const LoginScreen = (props) => {
 
 
     useEffect(() => {
-        // if (props.route.params && props.route.params.param == "logout") {
-        //     setHasLogin(false)
-        // } else {
         const getCurrentAccount = async () => {
             let currentAccount = await getFileDuLieuString(Constant.CURRENT_ACCOUNT, true);
-            console.log(currentAccount, 'currentAccount');
+            console.log('currentAccount', typeof currentAccount);
             if (currentAccount && currentAccount != "") {
                 currentAccount = JSON.parse(currentAccount);
                 URL.link = "https://" + currentAccount.Link + ".pos365.vn/";
@@ -51,41 +48,53 @@ const LoginScreen = (props) => {
             }
         }
         getCurrentAccount()
-        // }
     }, [])
 
     useEffect(() => {
-        setLogIn(false)
-    }, [props.route.params])
+        if (props.route.params && props.route.params.param == "logout") {
+            console.log("LOGOUT");
+            setHasLogin(false)
+        }
+    }, [(props) => props.route.params])
 
     const onClickLogin = useCallback(() => {
-        if (!checkDataLogin())
-            return;
-        dialogManager.showLoading();
-        URL.link = "https://" + shop + ".pos365.vn/";
-        console.log("onClickLogin URL ", URL, shop);
-        let params = { UserName: userName, Password: password };
-        new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
-            console.log("onClickLogin res ", res);
-            if (res.SessionId && res.SessionId != "") {
-                dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
-                handlerLoginSuccess(params, res);
+        if (logIn) {
+            if (!checkDataLogin()) {
+                return
+            } else {
+                dialogManager.showLoading();
+                URL.link = "https://" + shop + ".pos365.vn/";
+                console.log("onClickLogin URL ", URL, shop);
+                let params = { UserName: userName, Password: password };
+                new HTTPService().setPath(ApiPath.LOGIN).POST(params, getHeaders({}, true)).then((res) => {
+                    console.log("onClickLogin res ", res);
+                    if (res.SessionId && res.SessionId != "") {
+                        dispatch(saveDeviceInfoToStore({ SessionId: res.SessionId }))
+                        handlerLoginSuccess(params, res);
+                    }
+                    if (res.status == 401) {
+                        dialogManager.hiddenLoading();
+                        error = I18n.t('loi_dang_nhap');
+                        setShowToast(true)
+                    }
+                }).catch((e) => {
+                    dialogManager.hiddenLoading();
+                    error = I18n.t('loi_server');
+                    setShowToast(true);
+                    console.log("onClickLogin err ", e);
+                })
             }
-            if (res.status == 401) {
-                dialogManager.hiddenLoading();
-                error = I18n.t('loi_dang_nhap');
-                setShowToast(true)
-            }
-        }).catch((e) => {
-            dialogManager.hiddenLoading();
-            error = I18n.t('loi_server');
-            setShowToast(true);
-            console.log("onClickLogin err ", e);
-        })
+        }
+        else {
+            return
+        }
     }, [logIn])
 
-    useDidMountEffect(() => {
+    useEffect(() => {
         onClickLogin()
+        return () => {
+            setLogIn(false)
+        }
     }, [onClickLogin])
 
     const handlerLoginSuccess = (params, res) => {
@@ -213,7 +222,6 @@ const LoginScreen = (props) => {
                             <Text style={{ color: "#fff", fontWeight: "bold" }}>{Constant.HOTLINE}</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* <Text>{SessionId}</Text> */}
                 </KeyboardAwareScrollView>
 
                 <Snackbar

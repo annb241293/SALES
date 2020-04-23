@@ -8,10 +8,11 @@ export const ApiPath = {
     INVOICE_DETAIL: "api/orders/detail",
     USERS: "api/users",
     LOGOUT: "api/auth/logout",
-    CUSTOMER:"api/partners",
-    SERVER_EVENT:"api/serverevents",
+    CUSTOMER: "api/partners",
+    SERVER_EVENT: "api/serverevents",
     SYNC_ROOMS: "api/rooms/sync",
     SYNC_ROOM_GROUPS: "api/roomgroups/sync",
-    SYNC_PRODUCTS: "api/products/sync" ,
-    SYNC_CATEGORIES: "api/categories/sync"
+    SYNC_PRODUCTS: "api/products/sync",
+    SYNC_CATEGORIES: "api/categories/sync",
+    PRINT_TEMPLATES: "api/printtemplates/11",
 }

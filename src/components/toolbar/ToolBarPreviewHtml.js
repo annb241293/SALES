@@ -8,11 +8,16 @@ import {
 import { Colors, Metrics, Images } from '../../theme'
 import { IconButton, Subheading } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fonts from '../../theme/Fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 
-export default function ToolBarDefault(props) {
+export default function ToolBarPreviewHtml(props) {
+
+    onClickBack = () => {
+        props.navigation.pop();
+    };
 
     return (
         <LinearGradient
@@ -30,15 +35,15 @@ export default function ToolBarDefault(props) {
                 >
 
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        <TouchableOpacity onPress={props.clickRightIcon ? props.clickRightIcon : () => { navigation.goBack() }}>
+                        <TouchableOpacity onPress={props.clickRightIcon}>
                             {props.rightIcon && props.clickRightIcon ?
                                 <Icon name={props.rightIcon} size={props.size ? props.size : 30} color="white" />
                                 :
-                                <Icon name="keyboard-backspace" size={30} color="white" />
+                                <Icon delayPressIn={0} name="keyboard-backspace" onPress={onClickBack} size={24} />
                             }
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 5, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                         <Subheading
                             numberOfLines={1}
                             style={{
@@ -48,14 +53,14 @@ export default function ToolBarDefault(props) {
                             {props.title}
                         </Subheading>
                     </View>
-
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        <TouchableOpacity onPress={props.clickLeftIcon} >
-                            {props.leftIcon && props.clickLeftIcon ?
-                                <Icon name={props.leftIcon} size={30} color="white" />
-                                :
-                                null
-                            }
+                        <TouchableOpacity onPress={props.clickPrint} >
+                            <Text style={{ color: 'white' }}>IN</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1, alignItems: "center" }}>
+                        <TouchableOpacity onPress={props.clickCheck} >
+                            <Icon delayPressIn={0} name="check" size={24} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
     },
 })
 
-ToolBarDefault.propTypes = {
+ToolBarPreviewHtml.propTypes = {
     title: PropTypes.string,
     rightIcon: PropTypes.string,
     leftIcon: PropTypes.string,
@@ -88,6 +93,6 @@ ToolBarDefault.propTypes = {
     clickLeftIcon: PropTypes.func
 }
 
-ToolBarDefault.defaultProps = {
+ToolBarPreviewHtml.defaultProps = {
 
 }
