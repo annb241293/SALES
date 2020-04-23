@@ -20,7 +20,7 @@ export default function ToolBarDefault(props) {
             colors={['#FFAB40', '#FF5722']}
             style={{ height: 44 }}
         >
-            <View style={styles.toolbarContainer}> 
+            <View style={styles.toolbarContainer}>
                 <View style={{
                     flex: 1,
                     flexDirection: 'row',
@@ -30,11 +30,11 @@ export default function ToolBarDefault(props) {
                 >
 
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        <TouchableOpacity onPress={props.clickRightIcon}>
+                        <TouchableOpacity onPress={props.clickRightIcon ? props.clickRightIcon : () => { navigation.goBack() }}>
                             {props.rightIcon && props.clickRightIcon ?
                                 <Icon name={props.rightIcon} size={props.size ? props.size : 30} color="white" />
                                 :
-                                null
+                                <Icon name="keyboard-backspace" size={30} color="white" />
                             }
                         </TouchableOpacity>
                     </View>

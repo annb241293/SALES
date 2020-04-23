@@ -14,13 +14,6 @@ import PropTypes from 'prop-types';
 
 export default function ToolBarSelectFood(props) {
 
-    const [badge, setBadge] = useState(0)
-
-    useEffect(() => {
-        const badge = props.product.reduce((total, current) => (total + current.quantity), 0)
-        setBadge(badge)
-    }, [props.product])
-
     return (
         <LinearGradient
             start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
@@ -37,12 +30,7 @@ export default function ToolBarSelectFood(props) {
                 >
 
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        <TouchableOpacity onPress={props.clickRightIcon}>
-                            {props.rightIcon && props.clickRightIcon ?
-                                <Icon name={props.rightIcon} size={props.size ? props.size : 30} color="white" />
-                                :
-                                null
-                            }
+                        <TouchableOpacity onPress={() => { }}>
                         </TouchableOpacity>
                     </View>
                     <View style={{ flex: 5, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -51,24 +39,19 @@ export default function ToolBarSelectFood(props) {
                             style={{
                                 color: 'white'
                             }}
-                        >
-                            {props.title}
+                        >Select Food
                         </Subheading>
                     </View>
 
                     <View style={{ flex: 1, alignItems: "center", }}>
-                        <TouchableOpacity onPress={props.clickLeftIcon} >
-                            {props.leftIcon && props.clickLeftIcon ?
-                                <View style={{}}>
-                                    <Icon name={props.leftIcon} size={30} color="white" style={{ marginRight: 5 }} />
-                                    <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>{badge}</Text>
-                                </View>
-                                :
-                                null
-                            }
+                        <TouchableOpacity onPress={() => { }} >
+                            <View style={{}}>
+                                <Icon name="cart-outline" size={30} color="white" style={{ marginRight: 5 }} />
+                                <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>2</Text>
+                            </View>
                         </TouchableOpacity>
                     </View>
-                    
+
                 </View>
             </View>
         </LinearGradient>
