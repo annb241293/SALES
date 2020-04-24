@@ -2,10 +2,10 @@ const Realm = require('realm');
 import { Observable } from 'rxjs';
 import { RealmBase } from './RealmBase';
 
-class RealmStore extends RealmBase{
+class RealmStore extends RealmBase {
 
     constructor() {
-         return super();
+        return super();
     }
 
     //override
@@ -29,7 +29,7 @@ class RealmStore extends RealmBase{
     }
 
     insertServerEvents(newServerEvents) {
-        return Observable.create( async (observer) => { 
+        return Observable.create(async (observer) => {
             let realm = await Realm.open(databaseOption)
 
             realm.write(() => {
@@ -47,51 +47,51 @@ class RealmStore extends RealmBase{
         })
     }
 
-    queryServerEvents = async () =>  {
+    queryServerEvents = async () => {
         return this.queryAll(databaseOption, SchemaName.SERVER_EVENT)
     }
 
     //Room
-    insertRooms (newRooms) {
+    insertRooms(newRooms) {
         return this.insertDatas(databaseOption, SchemaName.ROOM, newRooms)
     }
 
-    queryRooms () {
+    queryRooms() {
         return this.queryAll(databaseOption, SchemaName.ROOM)
     }
 
     //RoomGroup
-    insertRoomGroups (newRoomGroups) {
-        return this.insertDatas( databaseOption, SchemaName.ROOM_GROUP, newRoomGroups)
+    insertRoomGroups(newRoomGroups) {
+        return this.insertDatas(databaseOption, SchemaName.ROOM_GROUP, newRoomGroups)
     }
 
-    queryRoomGroups () {
+    queryRoomGroups() {
         return this.queryAll(databaseOption, SchemaName.ROOM_GROUP)
     }
 
     //Product
-    async insertProducts (newProducts) {
+    async insertProducts(newProducts) {
         let realm = await Realm.open(databaseOption)
         return new Promise((resolve) => realm.write(() => {
-            newProducts.map( product => {                                
+            newProducts.map(product => {
                 product.ProductImages = JSON.stringify(product.ProductImages)
                 realm.create(SchemaName.PRODUCT, product, true)
             })
-            resolve(newProducts)  
+            resolve(newProducts)
         })
-        )    
+        )
     }
 
-    queryProducts () {
+    queryProducts() {
         return this.queryAll(databaseOption, SchemaName.PRODUCT)
     }
 
     //Categories
-    insertCategories (newCategories) {
-        return this.insertDatas( databaseOption, SchemaName.CATEGORIES, newCategories)
+    insertCategories(newCategories) {
+        return this.insertDatas(databaseOption, SchemaName.CATEGORIES, newCategories)
     }
 
-    queryCategories () {
+    queryCategories() {
         return this.queryAll(databaseOption, SchemaName.CATEGORIES)
     }
 
@@ -129,9 +129,9 @@ const RoomSchema = {
         Id: 'int',
         Name: 'string',
         Position: 'int',
-        Description: {type: 'string', default: ""},
-        RoomGroupId: {type: 'int', default: 0},
-        Printer: {type: 'string', default: ""},
+        Description: { type: 'string', default: "" },
+        RoomGroupId: { type: 'int', default: 0 },
+        Printer: { type: 'string', default: "" },
     }
 }
 
@@ -162,14 +162,15 @@ const ProductSchema = {
         SplitForSalesOrder: 'bool',
         Printer: 'string',
         ProductType: 'int',
-        Coefficient: { type: 'double', default: 0.0},
+        Coefficient: { type: 'double', default: 0.0 },
         BonusPoint: 'double',
         BonusPointForAssistant: 'double',
         BonusPointForAssistant2: 'double',
         BonusPointForAssistant3: 'double',
-        PriceConfig: {type: 'string', default: "{}"},
+        PriceConfig: { type: 'string', default: "{}" },
         BlockOfTimeToUseService: 'double',
-        IsPriceForBlock: 'bool'
+        IsPriceForBlock: 'bool',
+        CategoryId: { type: 'int', default: 0 },
     }
 }
 
@@ -179,14 +180,14 @@ const CategoriesSchema = {
     properties: {
         Id: 'int',
         Name: 'string',
-        ParentId: {type: 'int', default: 0}
+        ParentId: { type: 'int', default: 0 }
     }
 }
 
 const databaseOption = {
     path: 'Pos365Boss.realm',
     schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema],
-    schemaVersion: 3
+    schemaVersion: 32
 }
 
 const realmStore = new RealmStore();

@@ -1,6 +1,6 @@
 export const ApiPath = {
     LOGIN: "api/auth/credentials",
-    RETAILER_INFO: "api/mobile/vendorsession",
+    VENDOR_SESSION: "api/mobile/vendorsession",
     PRODUCT: "api/products",
     CATEGORIES_PRODUCT: "api/categories",
     INVOICE: 'api/orders',

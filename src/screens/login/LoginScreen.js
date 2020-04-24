@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useLayoutEffect } from 'react';
 import {
     View, Text, Image,
     StyleSheet, TouchableOpacity, TextInput,
@@ -50,7 +50,7 @@ const LoginScreen = (props) => {
         getCurrentAccount()
     }, [])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (props.route.params && props.route.params.param == "logout") {
             console.log("LOGOUT");
             setHasLogin(false)
@@ -105,20 +105,9 @@ const LoginScreen = (props) => {
 
     const getRetailerInfoAndNavigate = () => {
         let inforParams = {};
-        new HTTPService().setPath(ApiPath.RETAILER_INFO).GET(inforParams, getHeaders()).then((res) => {
+        new HTTPService().setPath(ApiPath.VENDOR_SESSION).GET(inforParams, getHeaders()).then((res) => {
             console.log("getDataRetailerInfo res ", res);
-            // this.props.saveDeviceInfo({
-            //     Logo: res.CurrentRetailer && res.CurrentRetailer.Logo ? res.CurrentRetailer.Logo : "",
-            //     CurrentName: res.CurrentRetailer && res.CurrentUser.Name ? res.CurrentUser.Name : "",
-            //     CurrentRetailerName: res.CurrentRetailer && res.CurrentRetailer.Name ? res.CurrentRetailer.Name : "",
-            //     CurrentFieldId: res.CurrentRetailer && res.CurrentRetailer.FieldId ? res.CurrentRetailer.FieldId : 3,
-            //     bId: res.BID ? res.BID : "",
-            //     rId: res.RID ? res.RID : ""
-            // })
-            // if (res.Branchs && res.Branchs.length > 0)
-            //     this.props.saveCurrentBranch(JSON.stringify(res.Branchs[0]))
-            // this.setAzureNotification(res)
-            // this.saveVendorSessionToListAccount(res)
+            setFileLuuDuLieu(Constant.VENDOR_SESSION, JSON.stringify(res))
 
             if (res.CurrentUser && res.CurrentUser.IsAdmin == true) {
                 props.navigation.navigate("Home")
