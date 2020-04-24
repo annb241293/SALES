@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import ToolBarPrintHtml from '../../../components/toolbar/ToolBarPrintHtml';
-import { Images, Colors } from '../../../theme';
+import { Images, Colors, Metrics } from '../../../theme';
 import { WebView } from 'react-native-webview';
-import htmlDefault from '../../../data/html/htmlDefault';
+import HtmlDefault from '../../../data/html/HtmlDefault';
 import useDidMountEffect from '../../../customHook/useDidMountEffect';
 import dialogManager from '../../../components/dialog/DialogManager';
 import { HTTPService } from '../../../data/services/HttpService';
@@ -33,17 +33,19 @@ export default (props) => {
 };
 
 const DefaultComponent = (props) => {
-    const [contentHtml, setContentHtml] = useState(htmlDefault);
+    const [contentHtml, setContentHtml] = useState(HtmlDefault);
 
     useEffect(()=>{
         props.output(contentHtml)
     },[])
 
     return (
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <TextInput style={{
                 margin: 10,
                 flex: 1,
+                width: Metrics.screenWidth - 5,
+                height: Metrics.screenHeight -50
             }} multiline={true} onChangeText={text => {
                 props.output(text)
                 setContentHtml(text)
@@ -58,7 +60,7 @@ const OnlineComponent = (props) => {
     const onClickLoadOnline = useCallback(() => {
         dialogManager.showLoading();
         let params = {};
-        new HTTPService().setPath(ApiPath.PRINT_TEMPLATES).GET(params).then((res) => {
+        new HTTPService().setPath(ApiPath.PRINT_TEMPLATES + "/10").GET(params).then((res) => {
             console.log("onClickLoadOnline res ", res);
             setDataHTML(res.Content)
             props.output(res.Content)
@@ -74,14 +76,16 @@ const OnlineComponent = (props) => {
     }, [])
 
     return (
-        <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }} >
             <TextInput style={{
                 margin: 10,
                 flex: 1,
+                width: Metrics.screenWidth - 5,
+                height: Metrics.screenHeight - 50
             }} multiline={true} onChangeText={text => {
                 props.output(text)
                 setDataHTML(text)
             }} value={dataHTML} />
-        </ScrollView>
+        </View>
     )
 }

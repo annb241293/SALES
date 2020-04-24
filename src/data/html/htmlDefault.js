@@ -1,6 +1,7 @@
 export default `<!DOCTYPE html>
 <html lang="en">
    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta charset="UTF-8">
       <title>Document</title>
       <style>
@@ -9,7 +10,7 @@ export default `<!DOCTYPE html>
           body { margin:0 auto; }
       </style>
    </head>
-   <body style="width:70%;" rules=rows align="center">
+   <body style="width:76mm;" rules=rows align="center">
       <table style="width:100%; border: none;" rules=rows >
          <tr {Logo_Full_Check}>
             <td style="text-align: center; border: none;">
@@ -78,7 +79,7 @@ export default `<!DOCTYPE html>
             <td style="border: none; text-align: left"> <b>Tổng thành tiền</b> </td>
             <td style="border: none;"> <b>{Tong_Truoc_Chiet_Khau}</b> </td>
          </tr>
-         <tr {Chiet_Khau_Check}">
+         <tr {Chiet_Khau_Check}>
          <td style="border: none; text-align: left"> <b> Chiết khấu </b> </td>
          <td  style="border: none;"> <b> {Chiet_Khau} </b> </td>
          </tr>
@@ -104,7 +105,7 @@ export default `<!DOCTYPE html>
             <td style="text-align: left; border: none;"> {Ghi_Chu} </td>
          </tr>
          <tr>
-            <td style="text-align: center; border: none;"> <b>  ----------------------------<br> {Chan_Trang}<br>{FOOTER_POS_365} </b> </td>
+            <td style="text-align: center; border: none;"> <b>  ----------------------------<br> {Chan_Trang}<br><br>{FOOTER_POS_365} </b> </td>
          </tr>
       </table>
         <br>
