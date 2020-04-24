@@ -10,28 +10,6 @@ import Images from '../../theme/Images';
 import I18n from '../../common/language/i18n';
 import dialogManager from '../../components/dialog/DialogManager';
 
-const data = [
-  {
-    name: "tang1",
-    dataTable: [{ nameTable: "ban1", status: 0 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }]
-  },
-  {
-    name: "tang2",
-    dataTable: [{ nameTable: "ban1", status: 0 }, { nameTable: "ban122", status: 1 }, { nameTable: "ban13", status: 1 }]
-  },
-  {
-    name: "tang1",
-    dataTable: [{ nameTable: "ban1", status: 0 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }]
-  },
-  {
-    name: "tang1",
-    dataTable: [{ nameTable: "ban1", status: 0 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }]
-  },
-  {
-    name: "tang1",
-    dataTable: [{ nameTable: "ban1", status: 0 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }, { nameTable: "ban12", status: 1 }]
-  },
-];
 export default (props) => {
 
   // useEffect(() => {

@@ -23,6 +23,7 @@ import { Constant } from './common/Constant'
 import { navigationRef } from './navigator/stack/StackNavigation';
 import RNExitApp from "react-native-exit-app";
 import I18n from './common/language/i18n'
+import signalRManager from './common/SignalR';
 
 let time = 0;
 
@@ -47,6 +48,7 @@ export default () => {
     }
 
     useEffect(() => {
+        signalRManager.init()
         I18n.locale = "vi";
         setForceUpdate(!forceUpdate);
     }, [])

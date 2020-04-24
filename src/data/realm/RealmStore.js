@@ -6,6 +6,11 @@ class RealmStore extends RealmBase {
 
     constructor() {
         return super();
+
+    }
+
+    removeAllListener() {
+        realm.removeAllListeners()
     }
 
     //override
@@ -18,7 +23,7 @@ class RealmStore extends RealmBase {
         let realm = await Realm.open(databaseOption)
         return new Promise((resolve) => realm.write(() => {
             let serverEvent = realm.objectForPrimaryKey(SchemaName.SERVER_EVENT, newServerEvent.RowKey)
-            if (serverEvent && serverEvent.Version > newServerEvent.Version) {
+            if (serverEvent && serverEvent.Version > newServerEvent.Version) {                
                 resolve({ result: false, serverEvent: serverEvent })
             } else {
                 realm.create(SchemaName.SERVER_EVENT, newServerEvent, true)
@@ -189,6 +194,8 @@ const databaseOption = {
     schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema],
     schemaVersion: 32
 }
+
+const realm = new Realm(databaseOption);
 
 const realmStore = new RealmStore();
 

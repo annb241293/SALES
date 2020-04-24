@@ -160,15 +160,10 @@ export default ({ navigation, style }) => {
           />
         </View>
       </View>
-      {isLoadMore ? <ActivityIndicator color="orange"/> : null}
+      {isLoadMore ? <ActivityIndicator color="orange" /> : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
 });
-
-
-
-
-
