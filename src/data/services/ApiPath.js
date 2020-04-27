@@ -14,5 +14,5 @@ export const ApiPath = {
     SYNC_ROOM_GROUPS: "api/roomgroups/sync",
     SYNC_PRODUCTS: "api/products/sync",
     SYNC_CATEGORIES: "api/categories/sync",
-    PRINT_TEMPLATES: "api/printtemplates/11",
+    PRINT_TEMPLATES: "api/printtemplates",
 }

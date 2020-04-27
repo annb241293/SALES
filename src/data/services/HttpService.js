@@ -45,23 +45,16 @@ export class HTTPService {
     }
 
     GET(jsonParam, headers = getHeaders(), ) {
-        return new Promise((resolve, reject) => {
-            CookieManager.clearAll()
-                .then((res) => {
-                    console.log('CookieManager.clearAll =>', res);
-                    let params = jsonParam ? convertJsonToPrameter(jsonParam) : ''
-                    this._path = this._path + params
-                    console.log('GET:', this._path, JSON.stringify(headers));
-                    fetch(this._path, {
-                        method: 'GET',
-                        headers: headers,
-                    }).then(response => {
-                        console.log("response ", response);
-                        resolve(response.json())
-                    });
+        let params = jsonParam ? convertJsonToPrameter(jsonParam) : ''
+        this._path = this._path + params
 
-                })
-        });
+        console.log('GET:', this._path, JSON.stringify(headers));
+
+        return fetch(this._path, {
+            method: 'GET',
+            headers: headers,
+            credentials: "omit",
+        }).then(extractData);
 
     }
 
@@ -70,6 +63,7 @@ export class HTTPService {
         console.log('POST:', this._path, headers, jsonParam);
         return fetch(this._path, {
             method: 'POST',
+            credentials: "omit",
             headers: headers,
             body: JSON.stringify(jsonParam),
         }).then(extractData);
@@ -79,6 +73,7 @@ export class HTTPService {
         headers['Content-Type'] = 'application/json'
         return fetch(this._path, {
             method: 'PUT',
+            credentials: "omit",
             headers: headers,
             body: JSON.stringify(jsonParam),
         }).then(extractData);
@@ -88,6 +83,7 @@ export class HTTPService {
         let params = convertJsonToPrameter(jsonParam)
         return fetch(this._path + params, {
             method: 'DELETE',
+            credentials: "omit",
             headers: headers,
         }).then(extractData);
     }

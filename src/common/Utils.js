@@ -1,6 +1,8 @@
 import I18n from "./language/i18n";
 import moment from "moment";
 
+export const DATE_FORMAT = "YYYY-MM-DD'T'HH:mm:ss.SSFFFFF'Z'";
+
 //Convert number, currency format
 export const currencyToString = value => {
   if (!value || (value && value == "")) {
