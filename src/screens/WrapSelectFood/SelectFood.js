@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import Images from '../../theme/Images';
 import dialogManager from '../../components/dialog/DialogManager';
 import { currencyToString } from '../../common/Utils';
-import ToolBarSelectFood from './ToolBarSelectFood';
 import ProductsItem from './ProductsItem';
 
 const limit = 20;
@@ -17,7 +16,6 @@ export default (props) => {
   const [skip, setSkip] = useState(0)
   const [listCateId, setListCateId] = useState([])
   const [numColumns, setNumColumns] = useState(1)
-  const [itemSelected, setItemSelected] = useState([])
   const count = useRef(0)
   const productsRef = useRef([]);
 
@@ -142,8 +140,6 @@ export default (props) => {
 
   return (
     <View style={{ flex: 1, }}>
-      <ToolBarSelectFood
-      />
       <View style={{ flex: orientaition == 'LANDSCAPE' ? 1 : 0.5, flexDirection: "row", marginVertical: 5, }}>
 
         <View style={{ flex: 6, marginHorizontal: 5 }}>
@@ -158,6 +154,7 @@ export default (props) => {
 
         </View>
       </View>
+
       <View style={{ flex: 5, }}>
         <View style={{ flex: 1, justifyContent: "center", }}>
           <FlatList

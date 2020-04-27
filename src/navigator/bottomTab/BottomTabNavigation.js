@@ -5,7 +5,7 @@ import { Images, Colors } from '../../theme';
 const Tab = createMaterialBottomTabNavigator();
 import Main from '../../screens/main/Main';
 import Messages from '../../screens/messenger/Messages';
-import SelectFood from '../../screens/selectFood/SelectFood';
+import WrapSelectFood from '../../screens/WrapSelectFood/WrapSelectFood';
 import { IconButton } from 'react-native-paper';
 import colors from '../../theme/Colors';
 
@@ -52,7 +52,7 @@ export default () => {
                         <Image style={{ width: 20, height: 20, padding: 5 }} color={color} source={Images.icon_more} />
                 ),
             }} />
-            <Tab.Screen name="selectfood" component={SelectFood} options={{
+            <Tab.Screen name="WrapSelectFood" component={WrapSelectFood} options={{
                 tabBarLabel: 'More',
                 tabBarIcon: ({ color }) => (
                     color == colors.colorchinh ?
