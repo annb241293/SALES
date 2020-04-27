@@ -29,13 +29,13 @@ export default (props) => {
             let data = await getFileDuLieuString(Constant.VENDOR_SESSION, true);
             console.log('data', JSON.parse(data));
             setVendorSession(JSON.parse(data))
-            handleDataHtml(props.route.params.data, typeHeader1, code1, number1, JsonContent1, JSON.parse(data))
+            handlerDataHtml(props.route.params.data, typeHeader1, code1, number1, JsonContent1, JSON.parse(data))
         }
         getVendorSession()
         // dialogManager.showLoading();
     }, [])
 
-    function handleDataHtml(html, typeHeader, code, number, JsonContent, vendorSession) {
+    const handlerDataHtml = (html, typeHeader, code, number, JsonContent, vendorSession) => {
         let HTMLBase = html;
         let listHtml = HTMLBase.split("<!--Body Table-->");
         let listTable = ""
