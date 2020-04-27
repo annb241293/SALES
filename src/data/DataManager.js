@@ -3,37 +3,47 @@ import { ApiPath } from "./services/ApiPath";
 import realmStore, { SchemaName } from "./realm/RealmStore"
 import { Observable, map } from 'rxjs';
 
-export const syncServerEvent = async () => {
-    let res = await new HTTPService().setPath(ApiPath.SERVER_EVENT).GET()
-    console.log("syncSE", res);
+class DataManager {
+    constructor() {
+        this.dataChoosing = []
+    }
 
-    if (res.length > 0)
-        realmStore.insertServerEvents(res).subscribe((res, serverEvent) => console.log("syncServerEvent", res, serverEvent))
+    syncServerEvent = async () => {
+        let res = await new HTTPService().setPath(ApiPath.SERVER_EVENT).GET()
+        console.log("syncSE", res);
+    
+        if (res.length > 0)
+            realmStore.insertServerEvents(res).subscribe((res, serverEvent) => console.log("syncServerEvent", res, serverEvent))
+    }
+    
+    syncProduct = async () => {
+        let res = await new HTTPService().setPath(ApiPath.SYNC_PRODUCTS).GET()
+        console.log("syncProduct", res);
+    
+        if (res.Data && res.Data.length > 0)
+            await realmStore.insertProducts(res.Data)
+    }
+    
+    syncData = async (apiPath, schemaName) => {
+        let res = await new HTTPService().setPath(apiPath).GET()
+        console.log("sync", apiPath, res);
+    
+        if (res.Data && res.Data.length > 0)
+            await realmStore.insertDatas(schemaName, res.Data)
+    }
+    
+    syncAllDatas = async () => {
+        console.log("syncAllDatas");
+        //Promise.all(
+            await this.syncServerEvent(),
+            await this.syncProduct(),
+            await this.syncData(ApiPath.SYNC_ROOMS, SchemaName.ROOM),
+            await this.syncData(ApiPath.SYNC_ROOM_GROUPS, SchemaName.ROOM_GROUP),
+            await this.syncData(ApiPath.SYNC_CATEGORIES, SchemaName.CATEGORIES)
+        // )
+    }
+
 }
 
-export const syncProduct = async () => {
-    let res = await new HTTPService().setPath(ApiPath.SYNC_PRODUCTS).GET()
-    console.log("syncProduct", res);
-
-    if (res.Data && res.Data.length > 0)
-        await realmStore.insertProducts(res.Data)
-}
-
-const syncData = async (apiPath, schemaName) => {
-    let res = await new HTTPService().setPath(apiPath).GET()
-    console.log("sync", apiPath, res);
-
-    if (res.Data && res.Data.length > 0)
-        await realmStore.insertDatas(schemaName, res.Data)
-}
-
-export const syncAllDatas = async () => {
-    console.log("syncAllDatas");
-    //Promise.all(
-        await syncServerEvent(),
-        await syncProduct(),
-        await syncData(ApiPath.SYNC_ROOMS, SchemaName.ROOM),
-        await syncData(ApiPath.SYNC_ROOM_GROUPS, SchemaName.ROOM_GROUP),
-        await syncData(ApiPath.SYNC_CATEGORIES, SchemaName.CATEGORIES)
-    // )
-}
+const dataManager = new DataManager();
+export default dataManager;

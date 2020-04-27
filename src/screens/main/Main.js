@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, createRef } from 'react';
 import { StatusBar, Image, View, StyleSheet, TouchableOpacity, Text, ScrollView, SectionList } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
-import { syncAllDatas } from '../../data/DataManager'
+import dataManager from '../../data/DataManager'
 import realmStore from '../../data/realm/RealmStore'
 import Order from '../order/Order';
 import { syncServerEvent } from '../../data/DataManager'
@@ -25,7 +25,7 @@ export default (props) => {
 
   const clickLeftIcon = async () => {
     dialogManager.showLoading()
-    await syncAllDatas()
+    await dataManager.syncAllDatas()
     dialogManager.hiddenLoading()
   }
 
