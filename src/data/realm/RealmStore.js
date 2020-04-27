@@ -23,7 +23,7 @@ class RealmStore extends RealmBase {
         let realm = await Realm.open(databaseOption)
         return new Promise((resolve) => realm.write(() => {
             let serverEvent = realm.objectForPrimaryKey(SchemaName.SERVER_EVENT, newServerEvent.RowKey)
-            if (serverEvent && serverEvent.Version > newServerEvent.Version) {                
+            if (serverEvent && serverEvent.Version > newServerEvent.Version) {
                 resolve({ result: false, serverEvent: serverEvent })
             } else {
                 realm.create(SchemaName.SERVER_EVENT, newServerEvent, true)
@@ -146,7 +146,8 @@ const RoomGroupSchema = {
     properties: {
         Id: 'int',
         Name: 'string'
-    }
+    },
+    isSelected: { type: 'bool', default: false }
 }
 
 const ProductSchema = {
@@ -185,14 +186,15 @@ const CategoriesSchema = {
     properties: {
         Id: 'int',
         Name: 'string',
-        ParentId: { type: 'int', default: 0 }
-    }
+        ParentId: { type: 'int', default: 0 },
+    },
+
 }
 
 const databaseOption = {
     path: 'Pos365Boss.realm',
     schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema],
-    schemaVersion: 32
+    schemaVersion: 38
 }
 
 const realm = new Realm(databaseOption);

@@ -7,17 +7,19 @@ import Images from '../../theme/Images';
 import dialogManager from '../../components/dialog/DialogManager';
 import { currencyToString } from '../../common/Utils';
 import ToolBarSelectFood from './ToolBarSelectFood';
-// import ModalDropdown from 'react-native-modal-dropdown';
-
+import ProductsItem from './ProductsItem';
 
 const limit = 20;
-export default ({ navigation, style }) => {
+export default (props) => {
   const [isLoadMore, setIsLoadMore] = useState(false)
   const [category, setCategory] = useState([])
   const [product, setProduct] = useState([])
   const [skip, setSkip] = useState(0)
+  const [listCateId, setListCateId] = useState([])
   const [numColumns, setNumColumns] = useState(1)
+  const [itemSelected, setItemSelected] = useState([])
   const count = useRef(0)
+  const productsRef = useRef([]);
 
   const { deviceType, orientaition } = useSelector(state => {
     console.log("useSelector state ", state);
@@ -39,20 +41,32 @@ export default ({ navigation, style }) => {
 
   useEffect(() => {
     const getCategories = async () => {
+      let newCategories = [];
       console.log('getCategories');
       let results = await realmStore.queryCategories()
-      console.log(JSON.parse(JSON.stringify(results[0])), 'getCategories');
-      setCategory(results)
+      results.forEach(item => {
+        item.isSelected = false;
+        newCategories.push(item)
+      })
+      setCategory(newCategories)
     }
     getCategories()
   }, [])
 
   const getProducts = useCallback(async () => {
+    let newProducts = [];
     dialogManager.showLoading();
     console.log('getProducts');
     let results = await realmStore.queryProducts().then(res => res.slice(skip, skip + limit));
     count.current = results.length
-    setProduct([...product, ...results])
+    results.forEach(item => {
+      item.quantity = 0;
+      newProducts.push(item)
+    })
+    if (skip == 0) {
+      productsRef.current = newProducts
+    }
+    setProduct([...product, ...newProducts])
     setIsLoadMore(false)
     dialogManager.hiddenLoading();
   }, [skip])
@@ -62,6 +76,14 @@ export default ({ navigation, style }) => {
   }, [getProducts])
 
 
+  useEffect(() => {
+    if (listCateId.length == 0) {
+      setProduct(productsRef.current)
+    } else {
+      let filterProducts = product.filter(product => listCateId.includes(product.Id))
+      setProduct(filterProducts)
+    }
+  }, [listCateId])
 
   const loadMore = (info) => {
     console.log(info, 'loadMore');
@@ -71,79 +93,69 @@ export default ({ navigation, style }) => {
     }
   }
 
-  const renderCateItem = (item) => {
+  const onClickCate = (item, index) => {
+    console.log(index);
+
+    if (item.Id == listCateId[0]) {
+      setListCateId([])
+    } else {
+      setListCateId([item.Id])
+    }
+  }
+
+  const onClickProduct = (item, index) => {
+    console.log('onClickProduct');
+
+    product[index].quantity += 1;
+    setProduct([...product])
+  }
+
+  const handleButtonIncrease = (item, index) => {
+    console.log('handleButtonIncrease', item, index);
+    product[index].quantity += 1;
+    setProduct([...product])
+  }
+
+  const handleButtonDecrease = (item, index) => {
+    console.log('handleButtonIncrease', item, index);
+    product[index].quantity -= 1;
+    setProduct([...product])
+  }
+
+
+  const renderCateItem = (item, index) => {
     return orientaition == "LANDSCAPE" ?
       (
-        <TouchableOpacity key={item.Id.toString()} style={{ backgroundColor: "white", width: 200, height: "100%", justifyContent: "center", alignItems: "center", borderRadius: 10, marginHorizontal: 5 }}>
-          <Text numberOfLines={2} style={{ color: "orange", fontWeight: "bold", textTransform: "uppercase", textAlign: "center", paddingHorizontal: 5 }}>{item.Name}</Text>
+        <TouchableOpacity onPress={() => onClickCate(item, index)} key={item.Id.toString()} style={[styles.renderCateItem, { backgroundColor: item.Id == listCateId[0] ? "orange" : "white" }]}>
+          <Text numberOfLines={2} style={[styles.textRenderCateItem, { color: item.Id == listCateId[0] ? "white" : "orange" }]}>{item.Name}</Text>
         </TouchableOpacity>
       )
       :
       (
-        <TouchableOpacity key={item.Id} style={{ backgroundColor: "white", width: 100, height: "100%", justifyContent: "center", alignItems: "center", borderRadius: 10, marginHorizontal: 5 }}>
-          <Text numberOfLines={2} style={{ color: "orange", fontWeight: "bold", textTransform: "uppercase", textAlign: "center", paddingHorizontal: 5 }}>{item.Name}</Text>
+        <TouchableOpacity onPress={() => onClickCate(item, index)} key={item.Id} style={[styles.renderCateItem, { backgroundColor: item.Id == listCateId[0] ? "orange" : "white" }]}>
+          <Text numberOfLines={2} style={[styles.textRenderCateItem, { color: item.Id == listCateId[0] ? "white" : "orange" }]}>{item.Name}</Text>
         </TouchableOpacity>
       )
   }
 
-  const renderProductItem = (item) => {
-    return orientaition == "LANDSCAPE" ?
-      (
-        <TouchableOpacity key={item.Id.toString()} style={{ width: "24%", backgroundColor: "white", marginHorizontal: 3, marginBottom: 10, borderRadius: 10 }} onPress={() => { }}>
-          <View style={{}}>
-            <Image
-              style={{ height: deviceType == "PHONE" ? 100 : 150, width: "100%", borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
-              source={JSON.parse(item.ProductImages).length > 0 ? { uri: JSON.parse(item.ProductImages)[0].ImageURL } : Images.default_food_image}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text numberOfLines={3} style={{ textTransform: "uppercase", fontWeight: "bold", paddingVertical: 5 }}>{item.Name}</Text>
-              <Text style={{ paddingVertical: 5, fontStyle: "italic" }}>{currencyToString(item.Price)}</Text>
-            </View>
-          </View>
 
-        </TouchableOpacity>
-      )
-      :
-      (
-        <TouchableOpacity style={{ flex: 1, flexDirection: "row", backgroundColor: "white", paddingVertical: 10, margin: 5, borderRadius: 10 }}>
-          <Image
-            style={{ height: 70, width: 70, borderRadius: 50 }}
-            source={JSON.parse(item.ProductImages).length > 0 ? { uri: JSON.parse(item.ProductImages)[0].ImageURL } : Images.default_food_image}
-          />
-          <View style={{ flexDirection: "column", flex: 2, marginLeft: 10, justifyContent: "center" }}>
-            <Text numberOfLines={3} style={{ textTransform: "uppercase", fontWeight: "bold" }}>{item.Name}</Text>
-            <Text style={{ paddingVertical: 5, fontStyle: "italic" }}>{currencyToString(item.Price)}</Text>
-          </View>
-          <View style={{ flex: 1.5 }}></View>
-        </TouchableOpacity>
-      );
-  }
 
   return (
     <View style={{ flex: 1, }}>
       <ToolBarSelectFood
       />
       <View style={{ flex: orientaition == 'LANDSCAPE' ? 1 : 0.5, flexDirection: "row", marginVertical: 5, }}>
-        {/* <View style={{ flex: 1, marginHorizontal: 5 }}>
-          <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "orange", height: "100%", justifyContent: "center", }}>
-            <Text style={{ color: "white", textAlign: "center", fontWeight: "bold", }}>All</Text>
-          </TouchableOpacity>
-        </View> */}
-        <View style={{ flex: 6, }}>
+
+        <View style={{ flex: 6, marginHorizontal: 5 }}>
           <FlatList
+            extraData={listCateId}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             data={category}
-            renderItem={({ item }) => renderCateItem(item)}
+            renderItem={({ item, index }) => renderCateItem(item, index)}
             keyExtractor={item => item.Id}
           />
-          {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={{ flexWrap: "wrap", }}>
-              {category.map(item => {
-                return renderCateItem(item);
-              })}
-            </View>
-          </ScrollView> */}
+
         </View>
       </View>
       <View style={{ flex: 5, }}>
@@ -153,17 +165,27 @@ export default ({ navigation, style }) => {
             data={product}
             key={numColumns}
             numColumns={numColumns}
-            renderItem={({ item }) => renderProductItem(item)}
+            renderItem={({ item, index }) => <ProductsItem
+              item={item}
+              index={index}
+
+              onClickProduct={onClickProduct}
+              handleButtonDecrease={handleButtonDecrease}
+              handleButtonIncrease={handleButtonIncrease}
+            />}
             keyExtractor={item => item.Id}
-            onEndReachedThreshold={0.5}
+            extraData={product.quantity}
             onEndReached={(info) => { loadMore(info) }}
           />
         </View>
       </View>
-      {isLoadMore ? <ActivityIndicator color="orange" /> : null}
+      {isLoadMore ? <ActivityIndicator style={{ position: "absolute", right: 5, bottom: 0 }} color="orange" /> : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  renderCateItem: { width: 200, height: "100%", justifyContent: "center", alignItems: "center", borderRadius: 10, marginHorizontal: 5 },
+  textRenderCateItem: { fontWeight: "bold", textTransform: "uppercase", textAlign: "center", paddingHorizontal: 5 },
+  button: { borderWidth: 1, padding: 20, borderRadius: 10 },
 });
