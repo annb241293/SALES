@@ -13,7 +13,7 @@ export default (props) => {
     }, [])
 
     return (
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
             <View style={{ height: 45, backgroundColor: Colors.colorchinh, alignItems: "center", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 0 }}>
                 <Text style={{ paddingHorizontal: 20 }}>C5</Text>
                 <TouchableOpacity style={{ paddingHorizontal: 20, flexDirection: "row" }}>
@@ -47,6 +47,16 @@ const Order = (props) => {
         setListOrder(props.listProducts)
     }, [props.listProducts])
 
+    const removeItem = (item) => {
+        console.log("removeItem item ", item);
+        let lists = list.filter(el => {
+            return el.Id != item.Id
+        })
+        console.log("removeItem lists ", lists);
+        setListOrder([...lists])
+        props.outputListProducts(lists)
+    }
+
     return (
         <ScrollView>
             <View>
@@ -69,9 +79,13 @@ const Order = (props) => {
                                     </TouchableOpacity>
                                     <Text style={{ padding: 20 }}>{item.Quantity}</Text>
                                     <TouchableOpacity onPress={() => {
-                                        if (item.Quantity > 0)
+                                        if (item.Quantity > 1) {
                                             item.Quantity--
-                                        setListOrder([...list])
+                                            setListOrder([...list])
+                                        } else {
+                                            removeItem(item)
+                                        }
+                                        // setListOrder([...list])
                                         // setTest("" + item.Quantity)
                                     }}>
                                         <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
