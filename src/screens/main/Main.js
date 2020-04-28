@@ -3,7 +3,7 @@ import { StatusBar, Image, View, StyleSheet, TouchableOpacity, Text, ScrollView,
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import dataManager from '../../data/DataManager'
 import realmStore from '../../data/realm/RealmStore'
-import Order from '../order/Order';
+import Order from './order/Order';
 import { syncServerEvent } from '../../data/DataManager'
 import { useSelector } from 'react-redux';
 import Images from '../../theme/Images';

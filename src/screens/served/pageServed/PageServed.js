@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { Colors, Images } from '../../theme';
+import { Colors, Images } from '../../../theme';
 
 
 

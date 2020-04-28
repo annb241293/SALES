@@ -4,7 +4,6 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { Images, Colors } from '../../theme';
 const Tab = createMaterialBottomTabNavigator();
 import Main from '../../screens/main/Main';
-import Messages from '../../screens/messenger/Messages';
 import WrapSelectFood from '../../screens/served/Served';
 import { IconButton } from 'react-native-paper';
 import colors from '../../theme/Colors';
@@ -37,7 +36,7 @@ export default () => {
                     </View>
                 ),
             }} />
-            <Tab.Screen name="Settings" component={Messages} options={{
+            <Tab.Screen name="Settings" component={More} options={{
                 tabBarLabel: 'Settings',
                 tabBarIcon: ({ color }) => (
                     <Image style={{ width: 20, height: 20, padding: 5 }} source={Images.icon_transfer_money} />

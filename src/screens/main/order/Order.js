@@ -8,13 +8,13 @@ import {
     Image,
     Dimensions
 } from 'react-native';
-import Images from '../../theme/Images';
-import I18n from '../../common/language/i18n';
-import realmStore from '../../data/realm/RealmStore'
+import Images from '../../../theme/Images';
+import I18n from '../../../common/language/i18n';
+import realmStore from '../../../data/realm/RealmStore'
 import { useSelector, useDispatch } from 'react-redux';
-import { currencyToString, dateUTCToMoment, momentToDateUTC } from '../../common/Utils'
+import { currencyToString, dateUTCToMoment, momentToDateUTC } from '../../../common/Utils'
 import moment from "moment";
-import { Constant } from '../../common/Constant'
+import { Constant } from '../../../common/Constant'
 
 const onItemPress = (item) => { }
 
