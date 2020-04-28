@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Colors, Images } from '../../../theme';
-
+import MenuConfirm from './MenuConfirm';
 
 
 export default (props) => {
@@ -32,7 +32,7 @@ export default (props) => {
             {tab == 1 ?
                 <Order {...props} />
                 :
-                <Text>Tab b</Text>
+                <MenuConfirm {...props} />
             }
         </View >
     );
