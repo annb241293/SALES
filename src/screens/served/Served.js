@@ -9,6 +9,9 @@ import SelectedItem from './pageServed/PageServed';
 
 export default (props) => {
 
+    console.log(props, 'Served screen');
+
+
     const [numColumns, setNumColumns] = useState(1);
     const [listProducts, setListProducts] = useState([{
         Id: 881790, Name: "NguyenBinhAn", Quantity: 1

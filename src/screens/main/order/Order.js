@@ -16,41 +16,47 @@ import { currencyToString, dateUTCToMoment, momentToDateUTC } from '../../../com
 import moment from "moment";
 import { Constant } from '../../../common/Constant'
 
-const onItemPress = (item) => { }
 
-const renderRoom = (item, widthRoom) => {
-    return item.isEmpty ?
-        (<View style={{ width: widthRoom - 8 }}></View>)
-        :
-        (<TouchableOpacity onPress={() => { onItemPress(item) }}
-            style={[styles.room, { width: widthRoom - 8, height: widthRoom, backgroundColor: item.IsActive ? 'blue' : 'white' }]}>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: "space-between" }}>
-                <View style={{ justifyContent: "center", padding: 4, flex: 1 }}>
-                    <Text style={{ fontSize: 14, textTransform: "uppercase", color: item.IsActive ? 'white' : 'black' }}>{item.Name}</Text>
-                    <Text style={{ paddingTop: 10, fontSize: 12, color: item.IsActive ? 'white' : 'black' }}>{item.RoomMoment && item.IsActive ? moment(item.RoomMoment._i).fromNow() : ""}</Text>
-                </View>
-
-                <View style={{ justifyContent: "center", padding: 0, alignItems: "flex-end" }}>
-                    <Text style={{ paddingTop: 10, color: "red", fontSize: 13 }}>{currencyToString(item.Total)}</Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-        );
-}
-
-const renderRoomGroup = (item) => {
-    return (
-        <View style={styles.roomGroup}>
-            <Text style={{ padding: 0, fontSize: 16, textTransform: "uppercase" }}>{item.Name}</Text>
-        </View>
-    )
-}
 
 export default (props) => {
-    
+
+    const onItemPress = (item) => {
+        console.log(item, 'item', props);
+        props.navigation.navigate('Served', { currentRoom: item })
+
+    }
+
+    const renderRoom = (item, widthRoom) => {
+        return item.isEmpty ?
+            (<View style={{ width: widthRoom - 8 }}></View>)
+            :
+            (<TouchableOpacity onPress={() => { onItemPress(item) }}
+                style={[styles.room, { width: widthRoom - 8, height: widthRoom, backgroundColor: item.IsActive ? 'blue' : 'white' }]}>
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent: "space-between" }}>
+                    <View style={{ justifyContent: "center", padding: 4, flex: 1 }}>
+                        <Text style={{ fontSize: 14, textTransform: "uppercase", color: item.IsActive ? 'white' : 'black' }}>{item.Name}</Text>
+                        <Text style={{ paddingTop: 10, fontSize: 12, color: item.IsActive ? 'white' : 'black' }}>{item.RoomMoment && item.IsActive ? moment(item.RoomMoment._i).fromNow() : ""}</Text>
+                    </View>
+
+                    <View style={{ justifyContent: "center", padding: 0, alignItems: "flex-end" }}>
+                        <Text style={{ paddingTop: 10, color: "red", fontSize: 13 }}>{currencyToString(item.Total)}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+            );
+    }
+
+    const renderRoomGroup = (item) => {
+        return (
+            <View style={styles.roomGroup}>
+                <Text style={{ padding: 0, fontSize: 16, textTransform: "uppercase" }}>{item.Name}</Text>
+            </View>
+        )
+    }
+
     const numberColumn = useSelector(state => {
         console.log("useSelector state ", state);
-        let numberColumn = (state.Common.orientaition == Constant.LANDSCAPE)? 8 : 4
+        let numberColumn = (state.Common.orientaition == Constant.LANDSCAPE) ? 8 : 4
         if (state.Common.deviceType == Constant.TABLET) numberColumn++
         return numberColumn
     });
