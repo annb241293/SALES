@@ -3,16 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import {
     View, Text, TouchableOpacity, Image, StyleSheet,
-    StatusBar, Keyboard, Linking, Platform, SafeAreaView
+    TextInput, Keyboard, Linking, Platform, SafeAreaView
 } from 'react-native';
 import { Colors, Metrics, Images } from '../../theme'
 import { IconButton, Subheading } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fonts from '../../theme/Fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 
 export default function ToolBarSelectFood(props) {
+
+    const [value, onChangeText] = useState('');
+    const [isSearch, setIsSearch] = useState(false);
 
     return (
         <LinearGradient
@@ -34,7 +38,7 @@ export default function ToolBarSelectFood(props) {
                             <Icon name="keyboard-backspace" size={30} color="white" />
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-start',  }}>
+                    <View style={{ flex: 2, justifyContent: 'center', alignItems: 'flex-start', }}>
                         <Subheading
                             numberOfLines={1}
                             style={{
@@ -43,23 +47,32 @@ export default function ToolBarSelectFood(props) {
                         >Select Food
                         </Subheading>
                     </View>
+                    <View style={{ flex: 3, }}>
+                        {isSearch ?
+                            <TextInput
+                                placeholder="what are you searching?"
+                                style={{backgroundColor:"white"}}
+                                onChangeText={text => onChangeText(text)}
+                                value={value}
+                            /> :
+                            null}
+                    </View>
 
-                    <View style={{ flex: 2, alignItems: "center", flexDirection:"row", justifyContent:"space-around" }}>
+                    <View style={{ flex: 2, alignItems: "center", flexDirection: "row", justifyContent: "space-around", }}>
+                        <TouchableOpacity onPress={() => { setIsSearch(!isSearch) }} >
+                            <View style={{}}>
+                                <Ionicons name="md-search" size={30} color="white" style={{}} />
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => { }} >
                             <View style={{}}>
-                                <Icon name="cart-outline" size={30} color="white" style={{ marginRight: 5 }} />
+                                <Icon name="cart-outline" size={30} color="white" style={{}} />
                                 <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>2</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { }} >
                             <View style={{}}>
-                                <Icon name="cart-outline" size={30} color="white" style={{ marginRight: 5 }} />
-                                <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>2</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { }} >
-                            <View style={{}}>
-                                <Icon name="cart-outline" size={30} color="white" style={{ marginRight: 5 }} />
+                                <Icon name="cart-outline" size={30} color="white" style={{}} />
                                 <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>2</Text>
                             </View>
                         </TouchableOpacity>

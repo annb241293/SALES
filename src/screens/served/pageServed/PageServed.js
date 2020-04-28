@@ -54,7 +54,6 @@ const Order = (props) => {
         })
         console.log("removeItem lists ", lists);
         setListOrder([...lists])
-        props.outputListProducts(lists)
     }
 
     return (
@@ -62,7 +61,7 @@ const Order = (props) => {
             <View>
                 {
                     list.map(item => {
-                        return (
+                        return item.Quantity > 0 ? (
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10 }}>
                                 <Image style={{ width: 20, height: 20, margin: 10 }} source={Images.icon_checked} />
                                 <View style={{ flexDirection: "column", flex: 1 }}>
@@ -73,26 +72,22 @@ const Order = (props) => {
                                     <TouchableOpacity onPress={() => {
                                         item.Quantity++
                                         setListOrder([...list])
-                                        // setTest("" + item.Quantity)
+                                        props.outputListProducts([...list])
                                     }}>
                                         <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
                                     </TouchableOpacity>
                                     <Text style={{ padding: 20 }}>{item.Quantity}</Text>
                                     <TouchableOpacity onPress={() => {
-                                        if (item.Quantity > 1) {
-                                            item.Quantity--
-                                            setListOrder([...list])
-                                        } else {
-                                            removeItem(item)
-                                        }
-                                        // setListOrder([...list])
-                                        // setTest("" + item.Quantity)
+                                        item.Quantity--
+                                        setListOrder([...list])
+                                        props.outputListProducts([...list])
                                     }}>
                                         <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                        )
+                        ) :
+                            null
                     })
                 }
             </View >
