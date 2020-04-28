@@ -22,8 +22,7 @@ export default (props) => {
 
     const onItemPress = (item) => {
         console.log(item, 'item', props);
-        props.navigation.navigate('Served', { currentRoom: item })
-
+        props.navigation.navigate('Served', { room: { Id: item.Id, Name: item.Name, Position: 'A' } })
     }
 
     const renderRoom = (item, widthRoom) => {

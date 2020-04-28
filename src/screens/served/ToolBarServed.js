@@ -30,10 +30,11 @@ export default function ToolBarSelectFood(props) {
                 >
 
                     <View style={{ flex: 1, alignItems: "center" }}>
-                        <TouchableOpacity onPress={() => { }}>
+                        <TouchableOpacity onPress={() => { props.navigation.goBack() }}>
+                            <Icon name="keyboard-backspace" size={30} color="white" />
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 5, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <View style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-start',  }}>
                         <Subheading
                             numberOfLines={1}
                             style={{
@@ -43,7 +44,19 @@ export default function ToolBarSelectFood(props) {
                         </Subheading>
                     </View>
 
-                    <View style={{ flex: 1, alignItems: "center", }}>
+                    <View style={{ flex: 2, alignItems: "center", flexDirection:"row", justifyContent:"space-around" }}>
+                        <TouchableOpacity onPress={() => { }} >
+                            <View style={{}}>
+                                <Icon name="cart-outline" size={30} color="white" style={{ marginRight: 5 }} />
+                                <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>2</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => { }} >
+                            <View style={{}}>
+                                <Icon name="cart-outline" size={30} color="white" style={{ marginRight: 5 }} />
+                                <Text style={{ position: "absolute", top: 0, right: 0, backgroundColor: "red", color: "white", paddingHorizontal: 5, borderRadius: 50 }}>2</Text>
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => { }} >
                             <View style={{}}>
                                 <Icon name="cart-outline" size={30} color="white" style={{ marginRight: 5 }} />

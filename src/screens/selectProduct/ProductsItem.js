@@ -15,7 +15,7 @@ const ProductsItem = (props) => {
 
     return deviceType == "TABLET" ?
         (
-            <TouchableOpacity onPress={onClickItem} key={props.item.Id.toString()} style={{ width: "32%", backgroundColor: "white", marginHorizontal: 3, marginBottom: 10, borderRadius: 10 }}>
+            <TouchableOpacity onPress={onClickItem} key={props.item.Id.toString()} style={{ backgroundColor: "white", borderRadius: 10, flex: 1, marginBottom: 7, marginLeft: 2 }}>
                 <View style={{}}>
                     <Image
                         style={{ height: deviceType == "PHONE" ? 100 : 150, width: "100%", borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
@@ -26,7 +26,7 @@ const ProductsItem = (props) => {
                         <Text style={{ paddingVertical: 5, fontStyle: "italic" }}>{currencyToString(props.item.Price)}</Text>
                     </View>
                 </View>
-                {props.item.Quantity > 0  ?
+                {props.item.Quantity > 0 ?
                     <Image style={{ height: 30, width: 30, position: "absolute", top: 10, right: 10 }}
                         source={Images.icon_checked} /> :
                     null}

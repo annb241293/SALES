@@ -13,7 +13,7 @@ export default (props) => {
     }, [])
 
     return (
-        <View style={props.style}>
+        <View style={{flex: 1}}>
             <View style={{ height: 45, backgroundColor: Colors.colorchinh, alignItems: "center", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 0 }}>
                 <Text style={{ paddingHorizontal: 20 }}>C5</Text>
                 <TouchableOpacity style={{ paddingHorizontal: 20, flexDirection: "row" }}>
@@ -48,37 +48,41 @@ const Order = (props) => {
     }, [props.listProducts])
 
     return (
-        <View>
-            {
-                list.map(item => {
-                    return (
-                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10 }}>
-                            <Image style={{ width: 20, height: 20, margin: 10 }} source={Images.icon_checked} />
-                            <View style={{ flexDirection: "column", flex: 1 }}>
-                                <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 7 }}>{item.Name}</Text>
-                                <Text>{item.Price}x</Text>
+        <ScrollView>
+            <View>
+                {
+                    list.map(item => {
+                        return (
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10 }}>
+                                <Image style={{ width: 20, height: 20, margin: 10 }} source={Images.icon_checked} />
+                                <View style={{ flexDirection: "column", flex: 1 }}>
+                                    <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 7 }}>{item.Name}</Text>
+                                    <Text>{item.Price}x</Text>
+                                </View>
+                                <View style={{ alignItems: "center", flexDirection: "row" }}>
+                                    <TouchableOpacity onPress={() => {
+                                        item.Quantity++
+                                        setListOrder([...list])
+                                        // setTest("" + item.Quantity)
+                                    }}>
+                                        <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
+                                    </TouchableOpacity>
+                                    <Text style={{ padding: 20 }}>{item.Quantity}</Text>
+                                    <TouchableOpacity onPress={() => {
+                                        if (item.Quantity > 0)
+                                            item.Quantity--
+                                        setListOrder([...list])
+                                        // setTest("" + item.Quantity)
+                                    }}>
+                                        <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                            <View style={{ alignItems: "center", flexDirection: "row" }}>
-                                <TouchableOpacity onPress={() => {
-                                    item.Quantity++
-                                    setTest("" + item.Quantity)
-                                }}>
-                                    <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
-                                </TouchableOpacity>
-                                <Text style={{ padding: 20 }}>{item.Quantity}</Text>
-                                <TouchableOpacity onPress={() => {
-                                    if (item.Quantity > 0)
-                                        item.Quantity--
-                                    setTest("" + item.Quantity)
-                                }}>
-                                    <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )
-                })
-            }
-        </View >
+                        )
+                    })
+                }
+            </View >
+        </ScrollView>
 
     )
 }
