@@ -11,9 +11,9 @@ export default (props) => {
 
     const [numColumns, setNumColumns] = useState(1);
     const [listProducts, setListProducts] = useState([{
-        Id: 123, Name: "NguyenBinhAn"
+        Id: 881790, Name: "NguyenBinhAn", Quantity: 1
     }, {
-        Id: 2323123, Name: "asdklk"
+        Id: 2323123, Name: "asdklk", Quantity: 1
     }])
 
     const { deviceType, orientaition } = useSelector(state => {
@@ -22,7 +22,8 @@ export default (props) => {
     });
 
     const outputListProducts = (newList) => {
-        console.log('outputListProducts', newList);
+        setListProducts(newList)
+        console.log(newList, 'newlist');
 
     }
 

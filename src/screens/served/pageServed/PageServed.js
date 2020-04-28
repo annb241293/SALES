@@ -13,7 +13,7 @@ export default (props) => {
     }, [])
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={props.style}>
             <View style={{ height: 45, backgroundColor: Colors.colorchinh, alignItems: "center", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 0 }}>
                 <Text style={{ paddingHorizontal: 20 }}>C5</Text>
                 <TouchableOpacity style={{ paddingHorizontal: 20, flexDirection: "row" }}>
@@ -30,7 +30,7 @@ export default (props) => {
                 </TouchableOpacity>
             </View>
             {tab == 1 ?
-                <Order />
+                <Order {...props} />
                 :
                 <Text>Tab b</Text>
             }
@@ -38,17 +38,10 @@ export default (props) => {
     );
 }
 
-const Order = () => {
+const Order = (props) => {
 
     const [test, setTest] = useState("")
-    const [list, setListOrder] = useState([
-        {
-            Id: "123242",
-            Name: "Hoa quả dầm sữa chua",
-            Quantity: 1,
-            Price: 155000
-        }
-    ])
+    const [list, setListOrder] = useState(() => props.listProducts)
 
     return (
         <View>

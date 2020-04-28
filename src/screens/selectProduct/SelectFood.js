@@ -51,7 +51,7 @@ export default (props) => {
     }
     setProduct([...product, ...newProducts])
     console.log("getProducts newProducts ", newProducts);
-    
+
     setIsLoadMore(false)
     dialogManager.hiddenLoading();
   }, [skip])
@@ -89,9 +89,23 @@ export default (props) => {
   }
 
   const onClickProduct = (item, index) => {
-    // console.log('onClickProduct', item);
-    // product[index].Quantity += 1;
-    listProducts.forEach(elm => console.log(elm))
+    product[index].Quantity += 1;
+    let exist = false;
+    listProducts.forEach(elm => {
+      if (elm.Id == item.Id) {
+        elm.Quantity += 1
+        exist = true
+      } else {
+        exist = false;
+      }
+    })
+    if (exist) {
+      props.outputListProducts(listProducts)
+    } else {
+      listProducts.push(item)
+      props.outputListProducts(listProducts)
+    }
+
     setProduct([...product])
   }
 
