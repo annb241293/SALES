@@ -65,6 +65,8 @@ export default (props) => {
       productsRef.current = newProducts
     }
     setProduct([...product, ...newProducts])
+    console.log("getProducts newProducts ", newProducts);
+    
     setIsLoadMore(false)
     dialogManager.hiddenLoading();
   }, [skip])

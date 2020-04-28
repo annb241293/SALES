@@ -93,20 +93,6 @@ export default (props) => {
           })}
         </View>
       </ScrollView> */}
-
-      <View>
-        <TouchableOpacity onPress={() => {
-          dialogManager.showPopupOneButton("Nội dung thông báo", "Thông báo")
-          // dialogManager.showLoading();
-          // setTimeout(() => {
-          //   dialogManager.hiddenLoading();
-          // }, 2000);
-        }}
-        >
-          <Text>deviceType : {deviceType}</Text>
-          <Text>orientaition : {orientaition}</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
