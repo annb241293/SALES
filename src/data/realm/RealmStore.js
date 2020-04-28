@@ -157,7 +157,7 @@ const ProductSchema = {
         Id: 'int',
         Code: 'string',
         Name: 'string',
-        AttributesName: 'string',
+        AttributesName: { type: 'string', default: '' },
         Price: 'double',
         PriceLargeUnit: 'double',
         OnHand: 'double',
@@ -166,7 +166,7 @@ const ProductSchema = {
         IsPercentageOfTotalOrder: 'bool',
         ConversionValue: 'double',
         SplitForSalesOrder: 'bool',
-        Printer: 'string',
+        Printer: { type: 'string', default: '' },
         ProductType: 'int',
         Coefficient: { type: 'double', default: 0.0 },
         BonusPoint: 'double',
@@ -194,7 +194,7 @@ const CategoriesSchema = {
 const databaseOption = {
     path: 'Pos365Boss.realm',
     schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema],
-    schemaVersion: 38
+    schemaVersion: 62
 }
 
 const realm = new Realm(databaseOption);

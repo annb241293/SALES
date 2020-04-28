@@ -65,38 +65,38 @@ export default () => {
         }
     }
 
-    const backButtonHandler = useCallback(() => {
-        console.log(navigationRef.current, 'back buttom');
-        if (navigationRef.current.getRootState().index == 1) {
-            clickBack()
-            return true
-        }
-    }, [])
+    // const backButtonHandler = useCallback(() => {
+    //     console.log(navigationRef.current, 'back buttom');
+    //     if (navigationRef.current.getRootState().index == 1) {
+    //         clickBack()
+    //         return true
+    //     }
+    // }, [])
 
 
 
-    useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
+    // useEffect(() => {
+    //     BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
 
-        return () => {
-            BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
-        };
-    }, [backButtonHandler]);
+    //     return () => {
+    //         BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
+    //     };
+    // }, [backButtonHandler]);
 
-    const handleChange = useCallback(() => {
+    const handleChange = () => {
         setDeviceType(isTablet)
         setOrientaition(isPortrait)
         console.log("isTablet ", isTablet());
         dispatch({ type: 'TYPE_DEVICE', deviceType: isTablet() })
         dispatch({ type: 'ORIENTAITION', orientaition: isPortrait() })
-    }, [deviceType, orientaition])
+    }
 
     useEffect(() => {
         Dimensions.addEventListener('change', handleChange)
         return () => {
             Dimensions.removeEventListener('change', handleChange)
         }
-    }, [handleChange])
+    })
 
     return (
 

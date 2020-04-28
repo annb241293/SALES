@@ -15,27 +15,12 @@ export default (props) => {
   const [product, setProduct] = useState([])
   const [skip, setSkip] = useState(0)
   const [listCateId, setListCateId] = useState([])
-  const [numColumns, setNumColumns] = useState(1)
+  const [listProducts, setListProducts] = useState(() => props.listProducts)
   const count = useRef(0)
   const productsRef = useRef([]);
 
-  const { deviceType, orientaition } = useSelector(state => {
-    console.log("useSelector state ", state);
-    return state.Common
-  });
 
-  useEffect(() => {
-    const onOrientationChange = () => {
-      dialogManager.showLoading()
-      if (orientaition == 'PORTRAIT') {
-        setNumColumns(1)
-      } else if (orientaition == 'LANDSCAPE') {
-        setNumColumns(4)
-      }
-      dialogManager.hiddenLoading()
-    }
-    onOrientationChange()
-  }, [orientaition])
+
 
   useEffect(() => {
     const getCategories = async () => {
@@ -58,7 +43,7 @@ export default (props) => {
     let results = await realmStore.queryProducts().then(res => res.slice(skip, skip + limit));
     count.current = results.length
     results.forEach(item => {
-      item.quantity = 0;
+      item.Quantity = 0;
       newProducts.push(item)
     })
     if (skip == 0) {
@@ -102,45 +87,38 @@ export default (props) => {
   }
 
   const onClickProduct = (item, index) => {
-    console.log('onClickProduct');
-
-    product[index].quantity += 1;
+    // console.log('onClickProduct', item);
+    // product[index].Quantity += 1;
+    listProducts.forEach(elm => console.log(elm))
     setProduct([...product])
   }
 
   const handleButtonIncrease = (item, index) => {
     console.log('handleButtonIncrease', item, index);
-    product[index].quantity += 1;
+    product[index].Quantity += 1;
     setProduct([...product])
   }
 
   const handleButtonDecrease = (item, index) => {
     console.log('handleButtonIncrease', item, index);
-    product[index].quantity -= 1;
+    product[index].Quantity -= 1;
     setProduct([...product])
   }
 
 
   const renderCateItem = (item, index) => {
-    return orientaition == "LANDSCAPE" ?
-      (
-        <TouchableOpacity onPress={() => onClickCate(item, index)} key={item.Id.toString()} style={[styles.renderCateItem, { backgroundColor: item.Id == listCateId[0] ? "orange" : "white" }]}>
-          <Text numberOfLines={2} style={[styles.textRenderCateItem, { color: item.Id == listCateId[0] ? "white" : "orange" }]}>{item.Name}</Text>
-        </TouchableOpacity>
-      )
-      :
-      (
-        <TouchableOpacity onPress={() => onClickCate(item, index)} key={item.Id} style={[styles.renderCateItem, { backgroundColor: item.Id == listCateId[0] ? "orange" : "white" }]}>
-          <Text numberOfLines={2} style={[styles.textRenderCateItem, { color: item.Id == listCateId[0] ? "white" : "orange" }]}>{item.Name}</Text>
-        </TouchableOpacity>
-      )
+    return (
+      <TouchableOpacity onPress={() => onClickCate(item, index)} key={item.Id.toString()} style={[styles.renderCateItem, { backgroundColor: item.Id == listCateId[0] ? "orange" : "white" }]}>
+        <Text numberOfLines={2} style={[styles.textRenderCateItem, { color: item.Id == listCateId[0] ? "white" : "orange" }]}>{item.Name}</Text>
+      </TouchableOpacity>
+    );
   }
 
 
 
   return (
-    <View style={{ flex: 1, }}>
-      <View style={{ flex: orientaition == 'LANDSCAPE' ? 1 : 0.5, flexDirection: "row", marginVertical: 5, }}>
+    <View style={props.style}>
+      <View style={{ flex: 0.5, flexDirection: "row", marginVertical: 5, }}>
 
         <View style={{ flex: 6, marginHorizontal: 5 }}>
           <FlatList
@@ -160,8 +138,8 @@ export default (props) => {
           <FlatList
             showsVerticalScrollIndicator={false}
             data={product}
-            key={numColumns}
-            numColumns={numColumns}
+            key={props.numColumns}
+            numColumns={props.numColumns}
             renderItem={({ item, index }) => <ProductsItem
               item={item}
               index={index}
@@ -171,11 +149,13 @@ export default (props) => {
               handleButtonIncrease={handleButtonIncrease}
             />}
             keyExtractor={item => item.Id}
-            extraData={product.quantity}
+            extraData={product.Quantity}
             onEndReached={(info) => { loadMore(info) }}
           />
         </View>
       </View>
+      <Text>deviceType:{props.deviceType}</Text>
+      <Text>orientaition:{props.orientaition}</Text>
       {isLoadMore ? <ActivityIndicator style={{ position: "absolute", right: 5, bottom: 0 }} color="orange" /> : null}
     </View>
   );
