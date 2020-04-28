@@ -5,7 +5,7 @@ import { Images, Colors } from '../../theme';
 const Tab = createMaterialBottomTabNavigator();
 import Main from '../../screens/main/Main';
 import Messages from '../../screens/messenger/Messages';
-import WrapSelectFood from '../../screens/WrapSelectFood/WrapSelectFood';
+import WrapSelectFood from '../../screens/served/Served';
 import { IconButton } from 'react-native-paper';
 import colors from '../../theme/Colors';
 

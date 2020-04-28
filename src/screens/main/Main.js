@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, createRef } from 'react';
 import { StatusBar, Image, View, StyleSheet, TouchableOpacity, Text, ScrollView, SectionList } from 'react-native';
 import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
-import { syncAllDatas } from '../../data/DataManager'
+import dataManager from '../../data/DataManager'
 import realmStore from '../../data/realm/RealmStore'
 import Order from '../order/Order';
 import { syncServerEvent } from '../../data/DataManager'
@@ -25,7 +25,7 @@ export default (props) => {
 
   const clickLeftIcon = async () => {
     dialogManager.showLoading()
-    await syncAllDatas()
+    await dataManager.syncAllDatas()
     dialogManager.hiddenLoading()
   }
 
@@ -49,8 +49,7 @@ export default (props) => {
         leftIcon="refresh"
         clickLeftIcon={clickLeftIcon}
       />
-      <Order numberColumn = {4} >
-      </Order>
+      <Order ></Order>
       {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "red" }}>
         <View style={{ flexDirection: "row", flex: 1 }}>
           <Image source={Images.icon_transfer_money} style={{ width: 20, height: 20 }}></Image>
@@ -93,20 +92,6 @@ export default (props) => {
           })}
         </View>
       </ScrollView> */}
-
-      <View>
-        <TouchableOpacity onPress={() => {
-          dialogManager.showPopupOneButton("Nội dung thông báo", "Thông báo")
-          // dialogManager.showLoading();
-          // setTimeout(() => {
-          //   dialogManager.hiddenLoading();
-          // }, 2000);
-        }}
-        >
-          <Text>deviceType : {deviceType}</Text>
-          <Text>orientaition : {orientaition}</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };

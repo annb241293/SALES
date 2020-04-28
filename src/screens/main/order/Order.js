@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
-    SafeAreaView,
     StyleSheet,
     ScrollView,
     View,
     Text,
-    StatusBar,
     TouchableOpacity,
     Image,
     Dimensions
@@ -16,6 +14,7 @@ import realmStore from '../../data/realm/RealmStore'
 import { useSelector, useDispatch } from 'react-redux';
 import { currencyToString, dateUTCToMoment, momentToDateUTC } from '../../common/Utils'
 import moment from "moment";
+import { Constant } from '../../common/Constant'
 
 const onItemPress = (item) => { }
 
@@ -48,12 +47,20 @@ const renderRoomGroup = (item) => {
 }
 
 export default (props) => {
+    
+    const numberColumn = useSelector(state => {
+        console.log("useSelector state ", state);
+        let numberColumn = (state.Common.orientaition == Constant.LANDSCAPE)? 8 : 4
+        if (state.Common.deviceType == Constant.TABLET) numberColumn++
+        return numberColumn
+    });
+
     let rooms = []
     let roomGroups = []
     let serverEvents = []
     const [datas, setData] = useState([])
     const [valueAll, setValueAll] = useState({})
-    const widthRoom = Dimensions.get('screen').width / props.numberColumn;
+    const widthRoom = Dimensions.get('screen').width / numberColumn;
 
     useEffect(() => {
         init()
@@ -89,10 +96,6 @@ export default (props) => {
                     roomGroup.isGroup = true
                     newDatas.push(roomGroup)
                     newDatas = newDatas.concat(roomsInside.slice())
-                    let itemEmty = (lengthRoomsInside % props.numberColumn == 0) ? 0
-                        : props.numberColumn - lengthRoomsInside % props.numberColumn
-
-                    for (let i = 1; i <= itemEmty; i++) newDatas.push({ isEmpty: true })
                 }
             })
 
@@ -102,10 +105,6 @@ export default (props) => {
             if (roomsInside && lengthRoomsInside > 0) {
                 newDatas.push(otherGroup)
                 newDatas = newDatas.concat(roomsInside.slice())
-                let itemEmty = (lengthRoomsInside % props.numberColumn == 0) ? 0
-                    : props.numberColumn - lengthRoomsInside % props.numberColumn
-
-                for (let i = 1; i <= itemEmty; i++) newDatas.push({ isEmpty: true })
             }
         }
         else
@@ -152,7 +151,7 @@ export default (props) => {
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "red" }}>
                 <View style={{ flexDirection: "row", flex: 1 }}>
                     <Image source={Images.icon_transfer_money} style={{ width: 20, height: 20 }}></Image>
@@ -169,8 +168,8 @@ export default (props) => {
                     <Text>{I18n.t('dang_trong')}</Text>
                 </View>
             </View>
-            <View>
-                <ScrollView >
+            <View style={{ flex: 1 }}>
+                <ScrollView style={{ flex: 1 }}>
                     <View style={styles.containerRoom}>
                         {datas ?
                             datas.map(data =>
@@ -187,16 +186,17 @@ export default (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 16
+        marginHorizontal: 16,
     },
     containerRoom: {
+        flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap', alignContent: 'flex-start',
-        justifyContent: 'space-evenly'
+        justifyContent: 'flex-start'
     },
     room: {
         justifyContent: "center",
-        marginVertical: 4,
+        margin: 4,
     },
     roomGroup: {
         backgroundColor: "white",

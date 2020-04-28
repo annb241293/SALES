@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import ToolBarSelectFood from './ToolBarSelectFood';
-import SelectFood from './SelectFood';
-import SelectedItem from './SelectedItem';
 import { useSelector } from 'react-redux';
 import dialogManager from '../../components/dialog/DialogManager';
+import ToolBarSelectFood from './ToolBarServed';
+import SelectFood from '../selectProduct/SelectFood';
+import SelectedItem from './pageServed/PageServed';
 
 
 export default (props) => {
