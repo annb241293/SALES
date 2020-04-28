@@ -2,10 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import realmStore from '../../data/realm/RealmStore';
 import { FlatList } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
-import Images from '../../theme/Images';
 import dialogManager from '../../components/dialog/DialogManager';
-import { currencyToString } from '../../common/Utils';
 import ProductsItem from './ProductsItem';
 
 const limit = 20;
@@ -58,17 +55,6 @@ export default (props) => {
     dialogManager.hiddenLoading();
   }, [skip])
 
-
-  const checkExist = (item) => {
-    let exist = false;
-    listProducts.forEach(listProduct => {
-      if (listProduct.Id == item.Id) {
-        exist = true
-        return
-      }
-    })
-    return false;
-  }
 
   useEffect(() => {
     getProducts()
@@ -145,10 +131,9 @@ export default (props) => {
 
 
   return (
-    <View style={props.style}>
-      <View style={{ flex: 0.5, flexDirection: "row", marginVertical: 5, }}>
-
-        <View style={{ flex: 6, marginHorizontal: 5 }}>
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 0.5, flexDirection: "row", marginVertical: 10, marginHorizontal: 2 }}>
+        <View style={{ flex: 1 }}>
           <FlatList
             extraData={listCateId}
             horizontal={true}
@@ -157,12 +142,11 @@ export default (props) => {
             renderItem={({ item, index }) => renderCateItem(item, index)}
             keyExtractor={item => item.Id}
           />
-
         </View>
       </View>
 
       <View style={{ flex: 5, }}>
-        <View style={{ flex: 1, justifyContent: "center", }}>
+        <View style={{ flex: 1, }}>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={product}
@@ -181,15 +165,13 @@ export default (props) => {
           />
         </View>
       </View>
-      <Text>deviceType:{props.deviceType}</Text>
-      <Text>orientaition:{props.orientaition}</Text>
-      {isLoadMore ? <ActivityIndicator style={{ position: "absolute", right: 5, bottom: 0 }} color="orange" /> : null}
+      {isLoadMore ? <ActivityIndicator style={{ position: "absolute", right: 5, bottom: 5 }} color="orange" /> : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  renderCateItem: { width: 200, height: "100%", justifyContent: "center", alignItems: "center", borderRadius: 10, marginHorizontal: 5 },
-  textRenderCateItem: { fontWeight: "bold", textTransform: "uppercase", textAlign: "center", paddingHorizontal: 5 },
+  renderCateItem: { justifyContent: "center", alignItems: "center", paddingHorizontal: 5, marginLeft: 5, width: 150 },
+  textRenderCateItem: { fontWeight: "bold", textTransform: "uppercase", textAlign: "center", },
   button: { borderWidth: 1, padding: 20, borderRadius: 10 },
 });

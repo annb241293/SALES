@@ -13,7 +13,7 @@ export default (props) => {
 
 
     const [numColumns, setNumColumns] = useState(1);
-    const [listProducts, setListProducts] = useState([{ Name: 'lẩu 3112', Id: 881790, Quantity: 2 }])
+    const [listProducts, setListProducts] = useState([])
 
     const { deviceType, orientaition } = useSelector(state => {
         console.log("useSelector state ", state);
@@ -45,17 +45,21 @@ export default (props) => {
     }, [deviceType])
     return (
         <View style={{ flex: 1 }}>
-            <ToolBarSelectFood />
+            <ToolBarSelectFood navigation={props.navigation} />
             <View style={{ flex: 1, flexDirection: "row" }}>
-                <SelectFood style={{ flex: 6 }}
-                    numColumns={numColumns}
-                    deviceType={deviceType}
-                    orientaition={orientaition}
-                    listProducts={[...listProducts]}
-                    outputListProducts={outputListProducts} />
-                <SelectedItem style={{ flex: 4 }}
-                    listProducts={[...listProducts]}
-                    outputListProducts={outputListProducts} />
+                <View style={{ flex: 6 }}>
+                    <SelectFood
+                        numColumns={numColumns}
+                        deviceType={deviceType}
+                        orientaition={orientaition}
+                        listProducts={[...listProducts]}
+                        outputListProducts={outputListProducts} />
+                </View>
+                <View style={{ flex: 4 }}>
+                    <SelectedItem
+                        listProducts={[...listProducts]}
+                        outputListProducts={outputListProducts} />
+                </View>
             </View>
         </View>
     );
