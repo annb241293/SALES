@@ -26,7 +26,7 @@ const ProductsItem = (props) => {
                         <Text style={{ paddingVertical: 5, fontStyle: "italic" }}>{currencyToString(props.item.Price)}</Text>
                     </View>
                 </View>
-                {props.item.Quantity > 0 ?
+                {props.item.Quantity > 0  ?
                     <Image style={{ height: 30, width: 30, position: "absolute", top: 10, right: 10 }}
                         source={Images.icon_checked} /> :
                     null}

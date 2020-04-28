@@ -43,6 +43,10 @@ const Order = (props) => {
     const [test, setTest] = useState("")
     const [list, setListOrder] = useState(() => props.listProducts)
 
+    useEffect(() => {
+        setListOrder(props.listProducts)
+    }, [props.listProducts])
+
     return (
         <View>
             {

@@ -20,7 +20,9 @@ export default (props) => {
   const productsRef = useRef([]);
 
 
-
+  useEffect(() => {
+    setListProducts(props.listProducts)
+  }, [props.listProducts])
 
   useEffect(() => {
     const getCategories = async () => {
@@ -56,6 +58,18 @@ export default (props) => {
     dialogManager.hiddenLoading();
   }, [skip])
 
+
+  const checkExist = (item) => {
+    let exist = false;
+    listProducts.forEach(listProduct => {
+      if (listProduct.Id == item.Id) {
+        exist = true
+        return
+      }
+    })
+    return false;
+  }
+
   useEffect(() => {
     getProducts()
   }, [getProducts])
@@ -89,23 +103,21 @@ export default (props) => {
   }
 
   const onClickProduct = (item, index) => {
-    product[index].Quantity += 1;
     let exist = false;
-    listProducts.forEach(elm => {
-      if (elm.Id == item.Id) {
-        elm.Quantity += 1
-        exist = true
-      } else {
-        exist = false;
+    listProducts.forEach(listProduct => {
+      if (listProduct.Id === item.Id) {
+        console.log(listProduct, 'listProduct');
+        exist = true;
+        return
       }
     })
     if (exist) {
-      props.outputListProducts(listProducts)
+      props.outputListProducts([...listProducts])
     } else {
       listProducts.push(item)
-      props.outputListProducts(listProducts)
+      props.outputListProducts([...listProducts])
     }
-
+    product[index].Quantity += 1;
     setProduct([...product])
   }
 
@@ -159,7 +171,6 @@ export default (props) => {
             renderItem={({ item, index }) => <ProductsItem
               item={item}
               index={index}
-
               onClickProduct={onClickProduct}
               handleButtonDecrease={handleButtonDecrease}
               handleButtonIncrease={handleButtonIncrease}

@@ -13,11 +13,7 @@ export default (props) => {
 
 
     const [numColumns, setNumColumns] = useState(1);
-    const [listProducts, setListProducts] = useState([{
-        Id: 881790, Name: "NguyenBinhAn", Quantity: 1
-    }, {
-        Id: 2323123, Name: "asdklk", Quantity: 1
-    }])
+    const [listProducts, setListProducts] = useState([{ Name: 'lẩu 3112', Id: 881790, Quantity: 2 }])
 
     const { deviceType, orientaition } = useSelector(state => {
         console.log("useSelector state ", state);
@@ -55,10 +51,10 @@ export default (props) => {
                     numColumns={numColumns}
                     deviceType={deviceType}
                     orientaition={orientaition}
-                    listProducts={listProducts}
+                    listProducts={[...listProducts]}
                     outputListProducts={outputListProducts} />
                 <SelectedItem style={{ flex: 4 }}
-                    listProducts={listProducts}
+                    listProducts={[...listProducts]}
                     outputListProducts={outputListProducts} />
             </View>
         </View>
