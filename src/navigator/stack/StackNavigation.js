@@ -56,7 +56,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Animated from 'react-native-reanimated';
 import { Constant } from "../../common/Constant";
 import Login from '../../screens/login/LoginScreen';
-import WrapSelectFood from '../../screens/WrapSelectFood/WrapSelectFood';
+import WrapSelectFood from '../../screens/served/Served';
 import BottomTabNavigation from '../bottomTab/BottomTabNavigation';
 import PrintHtml from '../../screens/more/printHtml/PrintHtml'
 import Preview from '../../screens/more/printHtml/Preview'
