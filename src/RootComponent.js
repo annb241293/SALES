@@ -48,6 +48,10 @@ export default () => {
     }
 
     useEffect(() => {
+        setDeviceType(isTablet)
+        setOrientaition(isPortrait)
+        dispatch({ type: 'TYPE_DEVICE', deviceType: isTablet() })
+        dispatch({ type: 'ORIENTAITION', orientaition: isPortrait() })
         signalRManager.init()
         I18n.locale = "vi";
         setForceUpdate(!forceUpdate);
