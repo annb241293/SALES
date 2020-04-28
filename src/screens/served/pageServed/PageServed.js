@@ -61,7 +61,7 @@ const Order = (props) => {
                             <View style={{ alignItems: "center", flexDirection: "row" }}>
                                 <TouchableOpacity onPress={() => {
                                     item.Quantity++
-                                    setTest("" + item.Quantity)
+                                    // setTest("" + item.Quantity)
                                 }}>
                                     <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
                                 </TouchableOpacity>
@@ -69,7 +69,7 @@ const Order = (props) => {
                                 <TouchableOpacity onPress={() => {
                                     if (item.Quantity > 0)
                                         item.Quantity--
-                                    setTest("" + item.Quantity)
+                                    // setTest("" + item.Quantity)
                                 }}>
                                     <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
                                 </TouchableOpacity>
