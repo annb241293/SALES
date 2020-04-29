@@ -8,10 +8,15 @@ export default (props) => {
 
     const [tab, setTab] = useState(1)
     const [showModal, setShowModal] = useState(false)
-
+    const [position, setPosition] = useState(props.route.params.room.Position)
     useEffect(() => {
 
     }, [])
+
+    const selectPosition = (position) => {
+        setPosition(position)
+        setShowModal(false);
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -35,7 +40,7 @@ export default (props) => {
             {tab == 1 ?
                 <CustomerOrder {...props} />
                 :
-                <MenuConfirm  {...props} />
+                <MenuConfirm position={position} {...props} />
             }
             <Modal
                 animationType="fade"
@@ -68,16 +73,16 @@ export default (props) => {
                             backgroundColor: "#fff", borderRadius: 4, marginHorizontal: 20,
                             width: Metrics.screenWidth * 0.8
                         }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => selectPosition("A")}>
                                 <Text style={{ margin: 10, fontSize: 16 }}>A</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => selectPosition("B")}>
                                 <Text style={{ margin: 10, fontSize: 16 }}>B</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => selectPosition("C")}>
                                 <Text style={{ margin: 10, fontSize: 16 }}>C</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => selectPosition("D")}>
                                 <Text style={{ margin: 10, fontSize: 16 }}>D</Text>
                             </TouchableOpacity>
                         </View>
