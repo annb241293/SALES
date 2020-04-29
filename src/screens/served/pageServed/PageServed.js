@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-import { Colors, Images } from '../../../theme';
+import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Modal } from 'react-native';
+import { Colors, Images, Metrics } from '../../../theme';
 import MenuConfirm from './MenuConfirm';
 
 
 export default (props) => {
 
     const [tab, setTab] = useState(1)
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
 
@@ -14,9 +15,11 @@ export default (props) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={{ height: 45, backgroundColor: Colors.colorchinh, alignItems: "center", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 0 }}>
-                <Text style={{ paddingHorizontal: 20 }}>C5</Text>
-                <TouchableOpacity style={{ paddingHorizontal: 20, flexDirection: "row" }}>
+            <View style={{ backgroundColor: Colors.colorchinh, alignItems: "center", flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 0 }}>
+                <View style={{ flex: 1, height: 45, justifyContent: "center" }}>
+                    <Text style={{ paddingHorizontal: 20 }}>C5</Text>
+                </View>
+                <TouchableOpacity onPress={() => { setShowModal(true) }} style={{ flex: 1, height: 45, paddingHorizontal: 20, flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
                     <Text>A</Text>
                     <Image source={Images.arrow_down} style={{ width: 16, height: 16, marginLeft: 5 }} />
                 </TouchableOpacity>
@@ -30,15 +33,62 @@ export default (props) => {
                 </TouchableOpacity>
             </View>
             {tab == 1 ?
-                <Order {...props} />
+                <CustomerOrder {...props} />
                 :
                 <MenuConfirm {...props} />
             }
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={showModal}
+                onRequestClose={() => {
+                }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                    <TouchableWithoutFeedback
+                        onPress={() => setShowModal(false)}
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0
+                        }}>
+                        <View style={[{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0
+                        }, { backgroundColor: 'rgba(0,0,0,0.5)' }]}></View>
+
+                    </TouchableWithoutFeedback>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+                        <View style={{
+                            padding: 5,
+                            backgroundColor: "#fff", borderRadius: 4, marginHorizontal: 20,
+                            width: Metrics.screenWidth * 0.8
+                        }}>
+                            <TouchableOpacity>
+                                <Text style={{ margin: 10, fontSize: 16 }}>A</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Text style={{ margin: 10, fontSize: 16 }}>B</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Text style={{ margin: 10, fontSize: 16 }}>C</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Text style={{ margin: 10, fontSize: 16 }}>D</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View >
     );
 }
 
-const Order = (props) => {
+const CustomerOrder = (props) => {
 
     const [test, setTest] = useState("")
     const [list, setListOrder] = useState(() => props.listProducts)
@@ -73,7 +123,6 @@ const Order = (props) => {
                                     <TouchableOpacity onPress={() => {
                                         item.Quantity++
                                         setListOrder([...list])
-                                        // setTest("" + item.Quantity)
                                     }}>
                                         <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
                                     </TouchableOpacity>
@@ -83,10 +132,9 @@ const Order = (props) => {
                                             item.Quantity--
                                             setListOrder([...list])
                                         } else {
+                                            item.Quantity--
                                             removeItem(item)
                                         }
-                                        // setListOrder([...list])
-                                        // setTest("" + item.Quantity)
                                     }}>
                                         <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
                                     </TouchableOpacity>
