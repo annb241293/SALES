@@ -1,45 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View, Text, TouchableOpacity } from 'react-native';
+import { Image, View, Text, StyleSheet } from 'react-native';
+import Images from '../../../theme/Images';
+import realmStore from '../../../data/realm/RealmStore'
+import  Colors from '../../../theme/Colors'
 
 
 export default (props) => {
 
+    const row_key = `${props.route.params.room.Id}_${props.route.params.room.Position}`
     const [test, setTest] = useState("")
-    const [list, setListOrder] = useState([
-        {
-            Id: "123242",
-            Name: "Hoa quả dầm sữa chua",
-            Quantity: 1,
-            Price: 155000
+    const [jsonContent, setJsonContent] = useState({})
+
+    useEffect(() => {
+        init()
+        return () => {
+            realmStore.removeAllListener()
         }
-    ])
+    }, [])
+
+    init = async () => {
+        let serverEvent = await realmStore.queryServerEvents().then(res => res.filtered(`RowKey == '${row_key}'`))
+        console.log("init: ", JSON.stringify(serverEvent));
+        
+        setJsonContent(JSON.parse(serverEvent[0].JsonContent))
+        serverEvent.addListener((collection, changes) => { 
+            setJsonContent(JSON.parse(serverEvent[0].JsonContent))
+        })
+    }
 
     return (
         <View>
             {
-                list.map(item => {
+                !jsonContent.OrderDetails ? null
+                : jsonContent.OrderDetails.map((item, index) => {
                     return (
-                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10 }}>
-                            <Image style={{ width: 20, height: 20, margin: 10 }} source={Images.icon_checked} />
+                        <View style={[styles.item, { backgroundColor: (index % 2 == 0) ? Colors.backgroundYellow : Colors.backgroundWhite}]}>
+                            <Image style={{ width: 20, height: 20, margin: 10 }} source={Images.icon_return} />
                             <View style={{ flexDirection: "column", flex: 1 }}>
                                 <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 7 }}>{item.Name}</Text>
-                                <Text>{item.Price}x</Text>
+                                <View style={{ flexDirection: "row"}}>
+                                    <Text>{item.Price}x</Text>
+                                    <Text style={{ color: Colors.colorPhu}}> {item.Quantity} {}</Text>
+                                </View>
                             </View>
                             <View style={{ alignItems: "center", flexDirection: "row" }}>
-                                <TouchableOpacity onPress={() => {
-                                    item.Quantity++
-                                    setTest("" + item.Quantity)
-                                }}>
-                                    <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
-                                </TouchableOpacity>
+                     
                                 <Text style={{ padding: 20 }}>{item.Quantity}</Text>
-                                <TouchableOpacity onPress={() => {
-                                    if (item.Quantity > 0)
-                                        item.Quantity--
-                                    setTest("" + item.Quantity)
-                                }}>
-                                    <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
-                                </TouchableOpacity>
+                               
                             </View>
                         </View>
                     )
@@ -50,3 +57,7 @@ export default (props) => {
     )
 
 }
+
+const styles = StyleSheet.create({
+    item: { flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10 },
+})

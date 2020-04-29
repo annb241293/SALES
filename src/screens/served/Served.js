@@ -57,6 +57,7 @@ export default (props) => {
                 </View>
                 <View style={{ flex: 4 }}>
                     <SelectedItem
+                        {...props}
                         listProducts={[...listProducts]}
                         outputListProducts={outputListProducts} />
                 </View>
