@@ -8,7 +8,7 @@ export default (props) => {
 
     const [tab, setTab] = useState(1)
     const [showModal, setShowModal] = useState(false)
-    const [position, setPosition] = useState(props.route.params.room.Position)
+    const [position, setPosition] = useState("A")
     useEffect(() => {
 
     }, [])
@@ -25,7 +25,7 @@ export default (props) => {
                     <Text style={{ paddingHorizontal: 20 }}>C5</Text>
                 </View>
                 <TouchableOpacity onPress={() => { setShowModal(true) }} style={{ flex: 1, height: 45, paddingHorizontal: 20, flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
-                    <Text>A</Text>
+                    <Text>{position}</Text>
                     <Image source={Images.arrow_down} style={{ width: 16, height: 16, marginLeft: 5 }} />
                 </TouchableOpacity>
             </View>
