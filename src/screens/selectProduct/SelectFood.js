@@ -92,6 +92,7 @@ export default (props) => {
     let exist = false;
     listProducts.forEach(listProduct => {
       if (listProduct.Id === item.Id) {
+        ++listProduct.Quantity
         console.log(listProduct, 'listProduct');
         exist = true;
         return
@@ -103,7 +104,7 @@ export default (props) => {
       listProducts.push(item)
       props.outputListProducts([...listProducts])
     }
-    product[index].Quantity += 1;
+    // product[index].Quantity += 1;
     setProduct([...product])
   }
 

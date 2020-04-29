@@ -3,7 +3,7 @@ import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, Te
 import ToolBarPrintHtml from '../../../components/toolbar/ToolBarPrintHtml';
 import { Images, Colors, Metrics } from '../../../theme';
 import { WebView } from 'react-native-webview';
-import HtmlDefault from '../../../data/html/HtmlDefault';
+import HtmlDefault from '../../../data/html/htmlDefault';
 import useDidMountEffect from '../../../customHook/useDidMountEffect';
 import dialogManager from '../../../components/dialog/DialogManager';
 import { HTTPService } from '../../../data/services/HttpService';
@@ -35,9 +35,9 @@ export default (props) => {
 const DefaultComponent = (props) => {
     const [contentHtml, setContentHtml] = useState(HtmlDefault);
 
-    useEffect(()=>{
+    useEffect(() => {
         props.output(contentHtml)
-    },[])
+    }, [])
 
     return (
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
@@ -45,7 +45,7 @@ const DefaultComponent = (props) => {
                 margin: 10,
                 flex: 1,
                 width: Metrics.screenWidth - 5,
-                height: Metrics.screenHeight -50
+                height: Metrics.screenHeight - 50
             }} multiline={true} onChangeText={text => {
                 props.output(text)
                 setContentHtml(text)
