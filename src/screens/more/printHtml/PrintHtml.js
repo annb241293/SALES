@@ -3,7 +3,7 @@ import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, Te
 import ToolBarPrintHtml from '../../../components/toolbar/ToolBarPrintHtml';
 import { Images, Colors, Metrics } from '../../../theme';
 import { WebView } from 'react-native-webview';
-import HtmlDefault from '../../../data/html/htmlDefault';
+import HtmlDefault from '../../../data/html/HtmlDefault';
 import useDidMountEffect from '../../../customHook/useDidMountEffect';
 import dialogManager from '../../../components/dialog/DialogManager';
 import { HTTPService } from '../../../data/services/HttpService';
