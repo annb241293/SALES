@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity, CheckBox } from 'react-native';
 import realmStore from '../../data/realm/RealmStore';
 import { FlatList } from 'react-native-gesture-handler';
 import dialogManager from '../../components/dialog/DialogManager';
@@ -14,7 +14,8 @@ export default (props) => {
   const [listCateId, setListCateId] = useState([])
   const [listProducts, setListProducts] = useState(() => props.listProducts)
   const count = useRef(0)
-  const productsRef = useRef([]);
+  // const productsRef = useRef([]);
+  console.log(props.valueSearch, 'valueSearch');
 
 
   useEffect(() => {
@@ -22,12 +23,15 @@ export default (props) => {
   }, [props.listProducts])
 
   useEffect(() => {
+    resetProducts()
+  }, [props.position])
+
+  useEffect(() => {
     const getCategories = async () => {
       let newCategories = [];
       console.log('getCategories');
       let results = await realmStore.queryCategories()
       results.forEach(item => {
-        item.isSelected = false;
         newCategories.push(item)
       })
       setCategory(newCategories)
@@ -45,12 +49,11 @@ export default (props) => {
       item.Quantity = 0;
       newProducts.push(item)
     })
-    if (skip == 0) {
-      productsRef.current = newProducts
-    }
+    // if (skip == 0) {
+    //   productsRef.current = newProducts
+    // }
     setProduct([...product, ...newProducts])
     console.log("getProducts newProducts ", newProducts);
-
     setIsLoadMore(false)
     dialogManager.hiddenLoading();
   }, [skip])
@@ -63,7 +66,8 @@ export default (props) => {
 
   useEffect(() => {
     if (listCateId.length == 0) {
-      setProduct(productsRef.current)
+      setSkip(0)
+      // setProduct(productsRef.current)
     } else {
       let filterProducts = product.filter(product => listCateId.includes(product.Id))
       setProduct(filterProducts)
@@ -76,6 +80,10 @@ export default (props) => {
       setIsLoadMore(true)
       setSkip((prevSkip) => prevSkip + limit);
     }
+  }
+
+  const resetProducts = () => {
+    props.outputListProducts([])
   }
 
   const onClickCate = (item, index) => {
@@ -92,19 +100,17 @@ export default (props) => {
     let exist = false;
     listProducts.forEach(listProduct => {
       if (listProduct.Id === item.Id) {
-        ++listProduct.Quantity
-        console.log(listProduct, 'listProduct');
+        listProduct.Quantity++
         exist = true;
-        return
       }
     })
     if (exist) {
       props.outputListProducts([...listProducts])
     } else {
+      item.Quantity = 1
       listProducts.push(item)
       props.outputListProducts([...listProducts])
     }
-    // product[index].Quantity += 1;
     setProduct([...product])
   }
 
@@ -118,6 +124,16 @@ export default (props) => {
     console.log('handleButtonIncrease', item, index);
     product[index].Quantity -= 1;
     setProduct([...product])
+  }
+
+  const CheckItemExistInProducts = (arr, arrItem) => {
+    let exist = false
+    arr.forEach(item => {
+      if (item.Id == arrItem.Id) {
+        exist = true
+      }
+    })
+    return exist
   }
 
 
@@ -154,6 +170,7 @@ export default (props) => {
             key={props.numColumns}
             numColumns={props.numColumns}
             renderItem={({ item, index }) => <ProductsItem
+              CheckItemExistInProducts={CheckItemExistInProducts(listProducts, item)}
               item={item}
               index={index}
               onClickProduct={onClickProduct}

@@ -146,8 +146,7 @@ const RoomGroupSchema = {
     properties: {
         Id: 'int',
         Name: 'string'
-    },
-    isSelected: { type: 'bool', default: false }
+    }
 }
 
 const ProductSchema = {
@@ -194,7 +193,7 @@ const CategoriesSchema = {
 const databaseOption = {
     path: 'Pos365Boss.realm',
     schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema],
-    schemaVersion: 62
+    schemaVersion: 63
 }
 
 const realm = new Realm(databaseOption);

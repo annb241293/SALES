@@ -14,9 +14,7 @@ const initState = {
 		currentAccount: "",
 		notificationCount: 0
 	},
-	isLogin: false,
 	currentBranch: "",
-	tabIndex: 0,
 	deviceType: "",
 	orientaition: "",
 }

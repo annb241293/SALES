@@ -3,6 +3,9 @@ import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, D
 import { currencyToString } from '../../common/Utils';
 import Images from '../../theme/Images';
 import { useSelector } from 'react-redux';
+import { Constant } from '../../common/Constant';
+
+
 
 const ProductsItem = (props) => {
     const { deviceType, orientaition } = useSelector(state => {
@@ -13,12 +16,12 @@ const ProductsItem = (props) => {
         props.onClickProduct(props.item, props.index)
     }
 
-    return deviceType == "TABLET" ?
+    return deviceType == Constant.TABLET ?
         (
             <TouchableOpacity onPress={onClickItem} key={props.item.Id.toString()} style={{ backgroundColor: "white", borderRadius: 10, flex: 1, marginBottom: 7, marginLeft: 2 }}>
                 <View style={{}}>
                     <Image
-                        style={{ height: deviceType == "PHONE" ? 100 : 150, width: "100%", borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
+                        style={{ height: deviceType == Constant.PHONE ? 100 : 150, width: "100%", borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
                         source={JSON.parse(props.item.ProductImages).length > 0 ? { uri: JSON.parse(props.item.ProductImages)[0].ImageURL } : Images.default_food_image}
                     />
                     <View style={{ marginLeft: 10 }}>
@@ -26,9 +29,10 @@ const ProductsItem = (props) => {
                         <Text style={{ paddingVertical: 5, fontStyle: "italic" }}>{currencyToString(props.item.Price)}</Text>
                     </View>
                 </View>
-                {props.item.Quantity > 0 ?
+                {props.CheckItemExistInProducts ?
                     <Image style={{ height: 30, width: 30, position: "absolute", top: 10, right: 10 }}
-                        source={Images.icon_checked} /> :
+                        source={Images.icon_checked} />
+                    :
                     null}
             </TouchableOpacity>
         )

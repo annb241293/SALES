@@ -4,31 +4,16 @@ import { useSelector } from 'react-redux';
 import dialogManager from '../../components/dialog/DialogManager';
 import ToolBarSelectFood from './ToolBarServed';
 import SelectFood from '../selectProduct/SelectFood';
-import SelectedItem from './pageServed/PageServed';
+import PageServed from './pageServed/PageServed';
 
 
 export default (props) => {
 
-    console.log(props, 'Served screen');
-
-
     const [numColumns, setNumColumns] = useState(1);
     const [listProducts, setListProducts] = useState([])
+    const [position, setPosition] = useState("A")
+    const [value, setValue] = useState('');
 
-    const { deviceType, orientaition } = useSelector(state => {
-        console.log("useSelector state ", state);
-        return state.Common
-    });
-
-    const outputListProducts = (newList) => {
-        setListProducts(newList)
-        console.log(newList, 'newlist');
-
-    }
-
-    const outputPostition = (position) => {
-
-    }
 
     useEffect(() => {
         const onOrientationChange = () => {
@@ -47,23 +32,49 @@ export default (props) => {
         }
         onOrientationChange()
     }, [deviceType])
+
+    const { deviceType, orientaition } = useSelector(state => {
+        console.log("useSelector state ", state);
+        return state.Common
+    });
+
+    const outputListProducts = (newList) => {
+        setListProducts(newList)
+        console.log(newList, 'newlist');
+
+    }
+
+    const outputPostition = (position) => {
+        setPosition(position)
+        console.log(position, 'position');
+    }
+
+    const outputTextSearch = (text) => {
+        setValue(text)
+        console.log('outputTextSearch', text);
+
+    }
+
     return (
         <View style={{ flex: 1 }}>
-            <ToolBarSelectFood navigation={props.navigation} />
+            <ToolBarSelectFood navigation={props.navigation}
+                outputTextSearch={outputTextSearch} />
             <View style={{ flex: 1, flexDirection: "row" }}>
                 <View style={{ flex: 6 }}>
                     <SelectFood
+                        valueSearch={value}
                         numColumns={numColumns}
                         deviceType={deviceType}
                         orientaition={orientaition}
                         listProducts={[...listProducts]}
+                        position={position}
                         outputListProducts={outputListProducts} />
                 </View>
                 <View style={{ flex: 4 }}>
-                    <SelectedItem
-                        outputPostition={(position) => { outputPostition(position) }}
+                    <PageServed
                         {...props}
                         listProducts={[...listProducts]}
+                        outputPostition={outputPostition}
                         outputListProducts={outputListProducts} />
                 </View>
             </View>

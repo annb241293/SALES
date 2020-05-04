@@ -32,6 +32,7 @@ export default () => {
     const [forceUpdate, setForceUpdate] = useState(false);
     const [deviceType, setDeviceType] = useState("");
     const [orientaition, setOrientaition] = useState("");
+    const dispatch = useDispatch();
 
     const isPortrait = () => {
         const dim = Dimensions.get("screen");
@@ -48,16 +49,11 @@ export default () => {
     }
 
     useEffect(() => {
-        setDeviceType(isTablet)
-        setOrientaition(isPortrait)
-        dispatch({ type: 'TYPE_DEVICE', deviceType: isTablet() })
-        dispatch({ type: 'ORIENTAITION', orientaition: isPortrait() })
         signalRManager.init()
         I18n.locale = "vi";
         setForceUpdate(!forceUpdate);
     }, [])
 
-    const dispatch = useDispatch();
 
     const clickBack = () => {
         if (time + 1000 > new Date().getTime()) {

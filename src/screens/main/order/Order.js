@@ -26,10 +26,11 @@ export default (props) => {
     }
 
     const renderRoom = (item, widthRoom) => {
+        widthRoom = parseInt(widthRoom)
         return item.isEmpty ?
             (<View style={{ width: widthRoom - 8 }}></View>)
             :
-            (<TouchableOpacity onPress={() => { onItemPress(item) }}
+            (<TouchableOpacity onPress={() => { onItemPress(item) }} key={item.Id}
                 style={[styles.room, { width: widthRoom - 8, height: widthRoom, backgroundColor: item.IsActive ? 'blue' : 'white' }]}>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: "space-between" }}>
                     <View style={{ justifyContent: "center", padding: 4, flex: 1 }}>
@@ -47,7 +48,7 @@ export default (props) => {
 
     const renderRoomGroup = (item) => {
         return (
-            <View style={styles.roomGroup}>
+            <View key={item.Id} style={styles.roomGroup}>
                 <Text style={{ padding: 0, fontSize: 16, textTransform: "uppercase" }}>{item.Name}</Text>
             </View>
         )

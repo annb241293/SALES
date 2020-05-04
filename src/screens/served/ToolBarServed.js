@@ -9,14 +9,21 @@ import { Colors, Metrics, Images } from '../../theme'
 import { IconButton, Subheading } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Fonts from '../../theme/Fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
+import { debounceTime, map, tap, distinctUntilChanged } from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
 
 export default function ToolBarSelectFood(props) {
 
     const [value, onChangeText] = useState('');
     const [isSearch, setIsSearch] = useState(false);
+
+    const handleSearch = (text) => {
+        onChangeText(text)
+        props.outputTextSearch(value)
+
+    }
 
     return (
         <LinearGradient
@@ -51,8 +58,8 @@ export default function ToolBarSelectFood(props) {
                         {isSearch ?
                             <TextInput
                                 placeholder="what are you searching?"
-                                style={{backgroundColor:"white"}}
-                                onChangeText={text => onChangeText(text)}
+                                style={{ backgroundColor: "white" }}
+                                onChangeText={handleSearch}
                                 value={value}
                             /> :
                             null}
