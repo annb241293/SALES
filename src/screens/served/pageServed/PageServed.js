@@ -128,18 +128,33 @@ const CustomerOrder = (props) => {
     const [showModal, setShowModal] = useState(false)
     const [list, setListOrder] = useState(() => props.listProducts)
 
-    const [listInPosition, setListInPosition] = useState([])
+    let listPosition = [];
 
     useEffect(() => {
         console.log("props ", props);
-        setListInPosition({key: props.position, list: props.listProducts})
         setListOrder(props.listProducts)
+        checkPosition();
     }, [props.listProducts])
 
     useEffect(() => {
         console.log("position ", props.position);
 
     }, [props.position])
+
+    const checkPosition = () => {
+        if (listPosition.length > 0) {
+            listPosition.forEach(element => {
+                if (element.key == props.position) {
+                    element.list = props.listProducts;
+                }
+            });
+        } else {
+            listPosition.push({ key: props.position, list: props.listProducts })
+        }
+
+        console.log("checkPosition listPosition ", listPosition);
+
+    }
 
     const removeItem = (item) => {
         console.log("removeItem item ", item);
@@ -217,11 +232,11 @@ const CustomerOrder = (props) => {
                         ref={setMenuRef}
                         button={<Image style={{ width: 24, height: 24, margin: 20 }} source={Images.icon_menu} />}
                     >
-                       <View style={{
+                        <View style={{
                             padding: 5,
                             backgroundColor: "#fff", borderRadius: 4, marginHorizontal: 20,
                         }}>
-                            <Text style={{ margin: 15,fontSize: 16 }}>Giờ vào: 27/04/2020 08:00</Text>
+                            <Text style={{ margin: 15, fontSize: 16 }}>Giờ vào: 27/04/2020 08:00</Text>
                             <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => _menu.hide()}>
                                 <Image style={{ width: 20, height: 20 }} source={Images.icon_notification} />
                                 <Text style={{ margin: 15, fontSize: 16 }}>Yêu cầu thanh toán</Text>

@@ -26,6 +26,10 @@ export default (props) => {
 
     }
 
+    const outputPostition = (position) => {
+
+    }
+
     useEffect(() => {
         const onOrientationChange = () => {
             dialogManager.showLoading()
@@ -57,6 +61,7 @@ export default (props) => {
                 </View>
                 <View style={{ flex: 4 }}>
                     <SelectedItem
+                        outputPostition={(position) => { outputPostition(position) }}
                         {...props}
                         listProducts={[...listProducts]}
                         outputListProducts={outputListProducts} />
