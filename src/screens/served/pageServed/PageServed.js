@@ -19,6 +19,7 @@ export default (props) => {
 
     const selectPosition = (position) => {
         setPosition(position)
+        props.outputPostition(position)
         setShowModal(false);
     }
 
@@ -65,7 +66,7 @@ export default (props) => {
                 </TouchableOpacity>
             </View>
             {tab == 1 ?
-                <CustomerOrder {...props} />
+                <CustomerOrder position={position} {...props} />
                 :
                 <MenuConfirm position={position} {...props} />
             }
@@ -127,9 +128,18 @@ const CustomerOrder = (props) => {
     const [showModal, setShowModal] = useState(false)
     const [list, setListOrder] = useState(() => props.listProducts)
 
+    const [listInPosition, setListInPosition] = useState([])
+
     useEffect(() => {
+        console.log("props ", props);
+        setListInPosition({key: props.position, list: props.listProducts})
         setListOrder(props.listProducts)
     }, [props.listProducts])
+
+    useEffect(() => {
+        console.log("position ", props.position);
+
+    }, [props.position])
 
     const removeItem = (item) => {
         console.log("removeItem item ", item);
@@ -161,23 +171,11 @@ const CustomerOrder = (props) => {
     return (
         <View style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
-                <Menu
-                    ref={setMenuRef}
-                    button={<Text onPress={showMenu}>Show menu</Text>}
-                >
-                    <MenuItem onPress={hideMenu}>Menu item 1</MenuItem>
-                    <MenuItem onPress={hideMenu}>Menu item 2</MenuItem>
-                    <MenuItem onPress={hideMenu} disabled>
-                        Menu item 3
-                        </MenuItem>
-                    <MenuDivider />
-                    <MenuItem onPress={hideMenu}>Menu item 4</MenuItem>
-                </Menu>
                 <ScrollView style={{ flex: 1 }}>
                     {
                         list.map(item => {
                             return item.Quantity > 0 ? (
-                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10 }}>
+                                <View key={item.Id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10 }}>
                                     <TouchableOpacity onPress={() => {
                                         item.Quantity = 0
                                         setListOrder([...list])
@@ -199,13 +197,6 @@ const CustomerOrder = (props) => {
                                         </TouchableOpacity>
                                         <Text style={{ padding: 20 }}>{item.Quantity}</Text>
                                         <TouchableOpacity onPress={() => {
-                                            // if (item.Quantity > 1) {
-                                            //     item.Quantity--
-                                            //     setListOrder([...list])
-                                            // } else {
-                                            //     item.Quantity--
-                                            //     removeItem(item)
-                                            // }
                                             item.Quantity--
                                             setListOrder([...list])
                                             props.outputListProducts([...list])
@@ -226,28 +217,21 @@ const CustomerOrder = (props) => {
                         ref={setMenuRef}
                         button={<Image style={{ width: 24, height: 24, margin: 20 }} source={Images.icon_menu} />}
                     >
-                        {/* <MenuItem >Giờ vào: 27/04/2020 08:00</MenuItem>
-                        <MenuItem onPress={() => { }} style={{ padding: 10, backgroundColor: "green", }}>
-                            <Image style={{ width: 20, height: 20 }} source={Images.icon_notification} />
-                            <Text style={{ backgroundColor: "red", justifyContent: "center", paddingBottom: 10 }}>Yêu cầu thanh toán</Text>
-                        </MenuItem>
-                        <MenuItem onPress={() => { }} style={{ padding: 10 }}><Image style={{ width: 20, height: 20 }} source={Images.icon_notification} /> <Text style={{ alignItems: "center" }}>Gửi thông báo tới thu ngân</Text></MenuItem> */}
-                         <View style={{
+                       <View style={{
                             padding: 5,
                             backgroundColor: "#fff", borderRadius: 4, marginHorizontal: 20,
                         }}>
-                            <Text style={{ margin: 10 }}>Giờ vào: 27/04/2020 08:00</Text>
-                            <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => setShowModal(false)}>
+                            <Text style={{ margin: 15,fontSize: 16 }}>Giờ vào: 27/04/2020 08:00</Text>
+                            <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => _menu.hide()}>
                                 <Image style={{ width: 20, height: 20 }} source={Images.icon_notification} />
-                                <Text style={{ margin: 10, fontSize: 16 }}>Yêu cầu thanh toán</Text>
+                                <Text style={{ margin: 15, fontSize: 16 }}>Yêu cầu thanh toán</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => setShowModal(false)}>
+                            <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => _menu.hide()}>
                                 <Image style={{ width: 20, height: 20 }} source={Images.icon_notification} />
-                                <Text style={{ margin: 10, fontSize: 16 }}>Gửi thông báo tới thu ngân</Text>
+                                <Text style={{ margin: 15, fontSize: 16 }}>Gửi thông báo tới thu ngân</Text>
                             </TouchableOpacity>
                         </View>
                     </Menu>
-                    {/* <Image style={{ width: 24, height: 24, margin: 20 }} source={Images.icon_menu} /> */}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={sendOrder} style={{ flex: 1, justifyContent: "center", alignItems: "center", borderLeftColor: "#fff", borderLeftWidth: 2, height: "100%" }}>
                     <Text style={{ fontSize: 18, color: "#fff", fontWeight: "bold" }}>Gửi thực đơn</Text>
