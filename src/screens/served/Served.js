@@ -39,15 +39,16 @@ export default (props) => {
     });
 
     const outputListProducts = (newList) => {
+        newList = newList.filter(item => item.Quantity > 0)
         setListProducts(newList)
         console.log(newList, 'newlist');
 
     }
 
-    const outputPostition = (position) => {
-        setPosition(position)
-        console.log(position, 'position');
-    }
+    // const outputPostition = (position) => {
+    //     setPosition(position)
+    //     console.log(position, 'position');
+    // }
 
     const outputTextSearch = (text) => {
         setValue(text)
@@ -66,16 +67,15 @@ export default (props) => {
                         numColumns={numColumns}
                         deviceType={deviceType}
                         orientaition={orientaition}
-                        listProducts={[...listProducts]}
-                        position={position}
-                        outputListProducts={outputListProducts} />
+                        listProducts={[...listProducts]} // input
+                        // position={position}
+                        outputListProducts={outputListProducts} /* output */ />
                 </View>
                 <View style={{ flex: 4 }}>
                     <PageServed
                         {...props}
-                        listProducts={[...listProducts]}
-                        outputPostition={outputPostition}
-                        outputListProducts={outputListProducts} />
+                        listProducts={[...listProducts]} // input
+                        outputListProducts={outputListProducts} /* output*/ />
                 </View>
             </View>
         </View>

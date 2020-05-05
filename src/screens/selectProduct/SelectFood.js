@@ -4,27 +4,22 @@ import realmStore from '../../data/realm/RealmStore';
 import { FlatList } from 'react-native-gesture-handler';
 import dialogManager from '../../components/dialog/DialogManager';
 import ProductsItem from './ProductsItem';
+import { Constant } from '../../common/Constant';
 
-const limit = 20;
 export default (props) => {
   const [isLoadMore, setIsLoadMore] = useState(false)
   const [category, setCategory] = useState([])
   const [product, setProduct] = useState([])
   const [skip, setSkip] = useState(0)
   const [listCateId, setListCateId] = useState([])
-  const [listProducts, setListProducts] = useState(() => props.listProducts)
+  const [listProducts, setListProducts] = useState([])
   const count = useRef(0)
-  // const productsRef = useRef([]);
   console.log(props.valueSearch, 'valueSearch');
 
 
   useEffect(() => {
     setListProducts(props.listProducts)
   }, [props.listProducts])
-
-  useEffect(() => {
-    resetProducts()
-  }, [props.position])
 
   useEffect(() => {
     const getCategories = async () => {
@@ -43,15 +38,12 @@ export default (props) => {
     let newProducts = [];
     dialogManager.showLoading();
     console.log('getProducts');
-    let results = await realmStore.queryProducts().then(res => res.slice(skip, skip + limit));
+    let results = await realmStore.queryProducts().then(res => res.slice(skip, skip + Constant.LOAD_LIMIT));
     count.current = results.length
     results.forEach(item => {
       item.Quantity = 0;
       newProducts.push(item)
     })
-    // if (skip == 0) {
-    //   productsRef.current = newProducts
-    // }
     setProduct([...product, ...newProducts])
     console.log("getProducts newProducts ", newProducts);
     setIsLoadMore(false)
@@ -67,7 +59,6 @@ export default (props) => {
   useEffect(() => {
     if (listCateId.length == 0) {
       setSkip(0)
-      // setProduct(productsRef.current)
     } else {
       let filterProducts = product.filter(product => listCateId.includes(product.Id))
       setProduct(filterProducts)
@@ -78,13 +69,10 @@ export default (props) => {
     console.log(info, 'loadMore');
     if (count.current > 0) {
       setIsLoadMore(true)
-      setSkip((prevSkip) => prevSkip + limit);
+      setSkip((prevSkip) => prevSkip + Constant.LOAD_LIMIT);
     }
   }
 
-  const resetProducts = () => {
-    props.outputListProducts([])
-  }
 
   const onClickCate = (item, index) => {
     console.log(index);

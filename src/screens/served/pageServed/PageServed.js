@@ -15,19 +15,17 @@ export default (props) => {
 
     useEffect(() => {
         console.log("PageSeved props ", props);
-
-    }, [])
-
-    useEffect(() => {
-        console.log("PageSeved props ", props);
     }, [props.listProducts])
 
     const selectPosition = (position) => {
         setPosition(position)
-        props.outputPostition(position)
         setShowModal(false);
     }
 
+    const outputListProducts = (listProducts) => {
+        props.outputListProducts(listProducts)
+    }
+    
     let _menu = null;
 
     const setMenuRef = ref => {
@@ -71,7 +69,7 @@ export default (props) => {
                 </TouchableOpacity>
             </View>
             {tab == 1 ?
-                <CustomerOrder position={position} {...props} />
+                <CustomerOrder position={position} {...props} outputListProducts={outputListProducts} />
                 :
                 <MenuConfirm position={position} {...props} />
             }
