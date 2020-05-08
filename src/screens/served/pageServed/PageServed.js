@@ -13,10 +13,6 @@ export default (props) => {
     const [listOrderWithPosition, setListOrderWithPosition] = useState([])
 
 
-    useEffect(() => {
-        console.log("PageSeved props ", props);
-    }, [props.listProducts])
-
     const selectPosition = (position) => {
         setPosition(position)
         setShowModal(false);

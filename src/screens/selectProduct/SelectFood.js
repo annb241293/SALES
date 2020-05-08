@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity, CheckBox } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
 import realmStore from '../../data/realm/RealmStore';
-import { FlatList } from 'react-native-gesture-handler';
 import dialogManager from '../../components/dialog/DialogManager';
 import ProductsItem from './ProductsItem';
 import { Constant } from '../../common/Constant';
+import I18n from '../../common/language/i18n';
 
 export default (props) => {
   const [isLoadMore, setIsLoadMore] = useState(false)
@@ -12,9 +12,8 @@ export default (props) => {
   const [product, setProduct] = useState([])
   const [skip, setSkip] = useState(0)
   const [listCateId, setListCateId] = useState([])
-  const [listProducts, setListProducts] = useState([])
+  const [listProducts, setListProducts] = useState(() => props.listProducts)
   const count = useRef(0)
-  console.log(props.valueSearch, 'valueSearch');
 
 
   useEffect(() => {
@@ -23,7 +22,7 @@ export default (props) => {
 
   useEffect(() => {
     const getCategories = async () => {
-      let newCategories = [];
+      let newCategories = [{ Id: -1, Name: I18n.t('tat_ca') }];
       console.log('getCategories');
       let results = await realmStore.queryCategories()
       results.forEach(item => {
@@ -99,7 +98,6 @@ export default (props) => {
       listProducts.push(item)
       props.outputListProducts([...listProducts])
     }
-    setProduct([...product])
   }
 
   const handleButtonIncrease = (item, index) => {

@@ -5,6 +5,7 @@ import dialogManager from '../../components/dialog/DialogManager';
 import ToolBarSelectFood from './ToolBarServed';
 import SelectFood from '../selectProduct/SelectFood';
 import PageServed from './pageServed/PageServed';
+import dataManager from '../../data/DataManager';
 
 
 export default (props) => {
@@ -14,6 +15,9 @@ export default (props) => {
     const [position, setPosition] = useState("A")
     const [value, setValue] = useState('');
 
+    useEffect(() => {
+        console.log(dataManager.dataChoosing, 'dataManager.dataChoosing');
+    }, [])
 
     useEffect(() => {
         const onOrientationChange = () => {
@@ -45,10 +49,6 @@ export default (props) => {
 
     }
 
-    // const outputPostition = (position) => {
-    //     setPosition(position)
-    //     console.log(position, 'position');
-    // }
 
     const outputTextSearch = (text) => {
         setValue(text)
@@ -68,7 +68,6 @@ export default (props) => {
                         deviceType={deviceType}
                         orientaition={orientaition}
                         listProducts={[...listProducts]} // input
-                        // position={position}
                         outputListProducts={outputListProducts} /* output */ />
                 </View>
                 <View style={{ flex: 4 }}>

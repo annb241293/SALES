@@ -3,81 +3,73 @@ import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, T
 import { Colors, Images, Metrics } from '../../../theme';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 import dataManager from '../../../data/DataManager';
-import { usePrevious } from '../../../customHook/usePrevious';
+import { Constant } from '../../../common/Constant';
 
 export default (props) => {
 
-    const listPosition = useRef([])
+    const [listPosition, setListPosition] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [list, setListOrder] = useState(() => props.listProducts)
-    const prevPosition = usePrevious(props.position)
 
     useEffect(() => {
-        console.log("CustomerOrder props ", props);
-        setListOrder(props.listProducts)
-        // checkPosition();
-    }, [props.listProducts])
+        const initialState = () => {
+            console.log('contructor');
+            let tempListPosition = dataManager.dataChoosing.filter(item => item.Id == props.route.params.room.Id)
+            if (tempListPosition && tempListPosition.length > 0) {
+                console.log('from tempListPosition');
+                setListPosition(tempListPosition[0].data)
+            } else {
+                setListPosition(Constant.LIST_POSITION)
+            }
+        }
+        initialState()
+        return () => {
+            console.log(dataManager.dataChoosing, 'dataManager.dataChoosing');
+        }
+    }, [])
 
     useEffect(() => {
-        let exist = false
-        listPosition.current.forEach(element => {
+        console.log(listPosition, 'listPosition');
+
+    }, [listPosition])
+
+    const syncListProducts = (listProducts) => {
+        console.log('syncListProducts');
+        setListOrder([...listProducts])
+        props.outputListProducts([...listProducts])
+    }
+
+    useEffect(() => {
+        listPosition.forEach(element => {
             if (element.key == props.position) {
+                syncListProducts([...element.list])
+            }
+        })
+    }, [props.position, listPosition])
+
+    useEffect(() => {
+        listPosition.forEach(element => {
+            if (element.key == props.position) {
+                element.list = [...props.listProducts]
+            }
+        })
+        setListOrder(props.listProducts)
+        savePosition()
+    }, [props.listProducts, listPosition])
+
+    const savePosition = () => {
+        let exist = false
+        dataManager.dataChoosing.forEach(element => {
+            if (element.Id == props.route.params.room.Id) {
                 exist = true
-                syncListProducts(element.list)
+                element.data = listPosition
             }
         })
         if (!exist) {
-            listPosition.current.push({ key: prevPosition, list: list })
-            syncListProducts([])
+            dataManager.dataChoosing.push({ Id: props.route.params.room.Id, data: listPosition })
         }
-        console.log('listPosition', listPosition.current);
-    }, [props.position])
-
-    const syncListProducts = (listProducts) => {
-        setListOrder([listProducts])
-        props.outputListProducts(listProducts)
+        console.log(dataManager.dataChoosing, 'savePosition');
     }
-
-    const backupPosition = (position) => {
-
-    }
-
-    // const checkPosition = () => {
-    //     console.log("checkPosition start listPosition ", listPosition);
-    //     if (listPosition.length > 0) {
-    //         let check = false;
-    //         listPosition.forEach(element => {
-    //             if (element.key == props.position) {
-    //                 check = true;
-    //                 element.list = props.listProducts;
-    //             }
-    //         });
-
-    //         if (check == false) {
-    //             listPosition.push({ key: props.position, list: props.listProducts })
-    //         }
-    //     } else {
-    //         listPosition.push({ key: props.position, list: props.listProducts })
-    //     }
-
-    //     if (dataManager.dataChoosing.length > 0) {
-    //         let check = false;
-    //         dataManager.dataChoosing.forEach(element => {
-    //             if (element.Id == props.route.params.room.Id) {
-    //                 check = true;
-    //                 element.list = listPosition;
-    //             }
-    //         });
-
-    //         if (check == false) {
-    //             dataManager.dataChoosing.push({ Id: props.route.params.room.Id, list: listPosition })
-    //         }
-    //     } else {
-    //         dataManager.dataChoosing.push({ Id: props.route.params.room.Id, list: listPosition })
-    //     }
-    //     console.log("checkPosition listPosition ", listPosition);
-    //     console.log("checkPosition dataManager.dataChoosing ", dataManager.dataChoosing);
-    // }
 
     const removeItem = (item) => {
         console.log("removeItem item ", item);
