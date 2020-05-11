@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { Images, Colors, Metrics } from '../../../theme';
 import { WebView } from 'react-native-webview';
@@ -11,6 +11,7 @@ import JsonContent1 from '../../../data/json/data_print_demo'
 import { dateToDate, DATE_FORMAT, currencyToString } from '../../../common/Utils';
 import { getFileDuLieuString } from '../../../data/fileStore/FileStorage';
 import { Constant } from '../../../common/Constant';
+import { useSelector } from 'react-redux';
 
 const typeHeader1 = "HOÁ ĐƠN TEST PRINT"
 const code1 = "HD000000"
@@ -18,10 +19,15 @@ const number1 = "0000"
 
 const CONTENT_FOOTER_POS365 = "Powered by POS365.VN"
 
-export default (props) => {
+export default forwardRef((props, ref) => {
 
     const [data, setData] = useState("");
     const [vendorSession, setVendorSession] = useState({});
+
+    const deviceType = useSelector(state => {
+        console.log("useSelector state ", state);
+        return state.Common.deviceType
+    });
 
     useEffect(() => {
         console.log("Preview props", props);
@@ -29,11 +35,16 @@ export default (props) => {
             let data = await getFileDuLieuString(Constant.VENDOR_SESSION, true);
             console.log('data', JSON.parse(data));
             setVendorSession(JSON.parse(data))
-            handlerDataHtml(props.route.params.data, typeHeader1, code1, number1, JsonContent1, JSON.parse(data))
+            if (deviceType == Constant.PHONE)
+                handlerDataHtml(props.route.params.data, typeHeader1, code1, number1, JsonContent1, JSON.parse(data))
+            else {
+                if (props.data != "")
+                    handlerDataHtml(props.data, typeHeader1, code1, number1, JsonContent1, JSON.parse(data))
+            }
         }
         getVendorSession()
         // dialogManager.showLoading();
-    }, [])
+    }, [props.data])
 
     const handlerDataHtml = (html, typeHeader, code, number, JsonContent, vendorSession) => {
         let HTMLBase = html;
@@ -110,7 +121,7 @@ export default (props) => {
         console.log("clickCheck vendorSession ", vendorSession)
         let params = {
             printTemplate: {
-                Content: props.route.params.data,
+                Content: deviceType != Constant.PHONE ? props.data : props.route.params.data,
                 Id: 0,
                 RetailerId: vendorSession.CurrentRetailer.Id,
                 Type: 10,
@@ -131,13 +142,22 @@ export default (props) => {
         alert("clickPrint")
     }
 
+    useImperativeHandle(ref, () => ({
+        clickCheckInRef() {
+            clickCheck()
+        },
+        clickPrintInRef() {
+            clickPrint()
+        }
+    }));
+
     return (
         <View style={{ flex: 1 }}>
-            <ToolBarPreviewHtml
+            {deviceType == Constant.PHONE ? <ToolBarPreviewHtml
                 navigation={props.navigation} title="HTML"
                 clickPrint={() => clickPrint()}
                 clickCheck={() => clickCheck()}
-            />
+            /> : null}
             <WebView
                 source={{ html: data }}
                 style={{ marginTop: 0, flex: 1 }}
@@ -150,4 +170,4 @@ export default (props) => {
             />
         </View>
     );
-};
+});
