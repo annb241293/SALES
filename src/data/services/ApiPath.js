@@ -16,4 +16,5 @@ export const ApiPath = {
     SYNC_CATEGORIES: "api/categories/sync",
     PRINT_TEMPLATES: "api/printtemplates",
     SYNC_EXTRAEXT: "api/products/sync/extraext",
+    SAVE_ORDER: "api/rooms/task/saveorder",
 }

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
+import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import ToolBarPrintHtml from '../../../components/toolbar/ToolBarPrintHtml';
 import { Images, Colors, Metrics } from '../../../theme';
 import { WebView } from 'react-native-webview';
@@ -73,14 +73,13 @@ const DefaultComponent = (props) => {
     }, [])
 
     return (
-        // <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS == "ios" ? "padding" : "none"}>
             <TextInput style={{
                 margin: 5,
                 marginRight: 0,
                 padding: 0,
                 flex: 1,
-                paddingBottom: 20
+                paddingBottom: Platform.OS == "ios" ? 20 : 0
             }}
                 multiline={true} onChangeText={text => {
                     props.output(text)
@@ -112,13 +111,13 @@ const OnlineComponent = (props) => {
     }, [])
 
     return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS == "ios" ? "padding" : "none"}>
             <TextInput style={{
                 margin: 5,
                 marginRight: 0,
                 padding: 0,
                 flex: 1,
-                paddingBottom: 20
+                paddingBottom: Platform.OS == "ios" ? 20 : 0
             }}
                 multiline={true} onChangeText={text => {
                     props.output(text)
