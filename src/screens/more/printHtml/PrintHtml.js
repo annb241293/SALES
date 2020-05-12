@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { Image, View, StyleSheet, Button, Text, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 import ToolBarPrintHtml from '../../../components/toolbar/ToolBarPrintHtml';
 import { Images, Colors, Metrics } from '../../../theme';
 import { WebView } from 'react-native-webview';
@@ -8,6 +8,9 @@ import useDidMountEffect from '../../../customHook/useDidMountEffect';
 import dialogManager from '../../../components/dialog/DialogManager';
 import { HTTPService } from '../../../data/services/HttpService';
 import { ApiPath } from '../../../data/services/ApiPath';
+import { useSelector } from 'react-redux';
+import { Constant } from '../../../common/Constant';
+import Preview from './Preview';
 
 export default (props) => {
 
@@ -15,18 +18,49 @@ export default (props) => {
     const [dataDefault, setDataDefault] = useState("");
     const [dataOnline, setDataOnline] = useState("");
 
+    const deviceType = useSelector(state => {
+        console.log("useSelector state ", state);
+        return state.Common.deviceType
+    });
+
+    let preview = null;
+    clickCheck = () => {
+        childRef.current.clickCheckInRef()
+    }
+
+    clickPrint = () => {
+        childRef.current.clickPrintInRef()
+    }
+
+    const childRef = useRef();
+
     return (
         <View style={{ flex: 1 }}>
             <ToolBarPrintHtml
                 navigation={props.navigation} title="Print HTML"
                 clickDefault={() => { setTabType(1) }}
                 clickLoadOnline={() => { setTabType(2) }}
+                clickPrint={clickPrint}
+                clickCheck={clickCheck}
                 clickShow={() => { props.navigation.navigate("Preview", { data: tabType == 1 ? dataDefault : dataOnline }) }}
             />
-            {
+            {deviceType == Constant.PHONE ?
                 tabType == 1 ?
                     <DefaultComponent output={(text) => setDataDefault(text)} />
                     : <OnlineComponent output={(text) => setDataOnline(text)} />
+                :
+                <View style={{ flex: 1, flexDirection: "row" }}>
+                    <View style={{ flex: 1 }}>
+                        {
+                            tabType == 1 ?
+                                <DefaultComponent output={(text) => setDataDefault(text)} />
+                                : <OnlineComponent output={(text) => setDataOnline(text)} />
+                        }
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Preview ref={childRef} data={tabType == 1 ? dataDefault : dataOnline} />
+                    </View>
+                </View>
             }
         </View>
     );
@@ -34,23 +68,25 @@ export default (props) => {
 
 const DefaultComponent = (props) => {
     const [contentHtml, setContentHtml] = useState(HtmlDefault);
-
     useEffect(() => {
         props.output(contentHtml)
     }, [])
 
     return (
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        // <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
             <TextInput style={{
-                margin: 10,
+                margin: 5,
+                marginRight: 0,
+                padding: 0,
                 flex: 1,
-                width: Metrics.screenWidth - 5,
-                height: Metrics.screenHeight - 50
-            }} multiline={true} onChangeText={text => {
-                props.output(text)
-                setContentHtml(text)
-            }} value={contentHtml} />
-        </ScrollView>
+                paddingBottom: 20
+            }}
+                multiline={true} onChangeText={text => {
+                    props.output(text)
+                    setContentHtml(text)
+                }} value={contentHtml} />
+        </KeyboardAvoidingView>
     )
 }
 
@@ -76,16 +112,18 @@ const OnlineComponent = (props) => {
     }, [])
 
     return (
-        <View style={{ flex: 1 }} >
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
             <TextInput style={{
-                margin: 10,
+                margin: 5,
+                marginRight: 0,
+                padding: 0,
                 flex: 1,
-                width: Metrics.screenWidth - 5,
-                height: Metrics.screenHeight - 50
-            }} multiline={true} onChangeText={text => {
-                props.output(text)
-                setDataHTML(text)
-            }} value={dataHTML} />
-        </View>
+                paddingBottom: 20
+            }}
+                multiline={true} onChangeText={text => {
+                    props.output(text)
+                    setDataHTML(text)
+                }} value={dataHTML} />
+        </KeyboardAvoidingView>
     )
 }

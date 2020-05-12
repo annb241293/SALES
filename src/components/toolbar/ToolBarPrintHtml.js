@@ -12,12 +12,24 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fonts from '../../theme/Fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { Constant } from '../../common/Constant';
 
 export default function ToolBarPrintHtml(props) {
 
     onClickBack = () => {
         props.navigation.pop();
     };
+
+    const deviceType = useSelector(state => {
+        console.log("useSelector state ", state);
+        return state.Common.deviceType
+    });
+
+    const orientaition = useSelector(state => {
+        console.log("useSelector state ", state);
+        return state.Common.orientaition
+    });
 
     return (
         <LinearGradient
@@ -63,11 +75,25 @@ export default function ToolBarPrintHtml(props) {
                             <Text style={{ color: 'white' }}>LOAD ONLINE</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 1, alignItems: "center" }}>
-                        <TouchableOpacity onPress={props.clickShow} >
-                            <Text style={{ color: 'white' }}>HIỂN THỊ</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {deviceType == Constant.PHONE ?
+                        <View style={{ flex: 1, alignItems: "center" }}>
+                            <TouchableOpacity onPress={props.clickShow} >
+                                <Text style={{ color: 'white' }}>HIỂN THỊ</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        <View style={{flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
+                            <View style={{ alignItems: "center" }}>
+                                <TouchableOpacity onPress={props.clickPrint} >
+                                    <Text style={{ color: 'white' }}>IN</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ alignItems: "center" }}>
+                                <TouchableOpacity onPress={props.clickCheck} >
+                                    <Icon delayPressIn={0} name="check" size={24} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>}
                 </View>
             </View>
         </LinearGradient>
