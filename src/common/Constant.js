@@ -5,12 +5,6 @@ export const Constant = {
     TABLET: "TABLET",
     PHONE: "PHONE",
     CURRENT_ACCOUNT: "CURRENT_ACCOUNT",
-    LOAD_LIMIT: 20,
-    VENDOR_SESSION: "VENDOR_SESSION",
-    LIST_POSITION: [
-        { key: 'A', list: [] },
-        { key: 'B', list: [] },
-        { key: 'C', list: [] },
-        { key: 'D', list: [] }
-    ]
+    LOAD_LIMIT: 21,
+    VENDOR_SESSION: "VENDOR_SESSION"
 };

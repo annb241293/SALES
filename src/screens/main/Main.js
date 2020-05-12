@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, createRef } from 'react';
 import { StatusBar, Image, View, StyleSheet, TouchableOpacity, Text, ScrollView, SectionList } from 'react-native';
-import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
+import MainToolBar from './MainToolBar';
 import dataManager from '../../data/DataManager'
 import realmStore from '../../data/realm/RealmStore'
 import Order from './order/Order';
@@ -19,35 +19,20 @@ export default (props) => {
   // }
   //   , [])
 
-  const clickRightIcon = () => {
-    props.navigation.openDrawer();
-  }
 
-  const clickLeftIcon = async () => {
+  const clickRightIcon = async () => {
     dialogManager.showLoading()
     await dataManager.syncAllDatas()
     dialogManager.hiddenLoading()
   }
 
-  const deviceType = useSelector(state => {
-    console.log("useSelector state ", state);
-    return state.Common.deviceType
-  });
-
-  const orientaition = useSelector(state => {
-    console.log("useSelector state ", state);
-    return state.Common.orientaition
-  });
-
   return (
     <View style={{ flex: 1 }}>
-      <ToolBarDefault
+      <MainToolBar
         navigation={props.navigation}
         title="Main"
-        rightIcon="menu"
+        rightIcon="refresh"
         clickRightIcon={clickRightIcon}
-        leftIcon="refresh"
-        clickLeftIcon={clickLeftIcon}
       />
       <Order {...props}></Order>
       {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 5, borderBottomWidth: 1, borderBottomColor: "red" }}>

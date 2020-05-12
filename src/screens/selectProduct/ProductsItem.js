@@ -18,7 +18,7 @@ const ProductsItem = (props) => {
 
     return deviceType == Constant.TABLET ?
         (
-            <TouchableOpacity onPress={onClickItem} key={props.item.Id.toString()} style={{ backgroundColor: "white", borderRadius: 10, flex: 1, marginBottom: 7, marginLeft: 2 }}>
+            <TouchableOpacity onPress={onClickItem} key={props.index} style={{ backgroundColor: "white", borderRadius: 10, flex: 1, marginBottom: 7, marginLeft: 2 }}>
                 <View style={{}}>
                     <Image
                         style={{ height: deviceType == Constant.PHONE ? 100 : 150, width: "100%", borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
@@ -38,7 +38,7 @@ const ProductsItem = (props) => {
         )
         :
         (
-            <TouchableOpacity onPress={onClickItem} style={{ flex: 1, flexDirection: "row", backgroundColor: "white", paddingVertical: 10, margin: 5, borderRadius: 10 }}>
+            <TouchableOpacity key={props.index} onPress={onClickItem} style={{ flex: 1, flexDirection: "row", backgroundColor: "white", paddingVertical: 10, margin: 5, borderRadius: 10 }}>
                 <Image
                     style={{ height: 70, width: 70, borderRadius: 50 }}
                     source={JSON.parse(props.item.ProductImages).length > 0 ? { uri: JSON.parse(props.item.ProductImages)[0].ImageURL } : Images.default_food_image}

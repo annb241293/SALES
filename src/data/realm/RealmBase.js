@@ -3,9 +3,9 @@ const Realm = require('realm');
 
 export class RealmBase {
 
-    constructor(){}
+    constructor() { }
 
-    async queryAll (databaseOption, schema) {        
+    async queryAll(databaseOption, schema) {
         let realm = await Realm.open(databaseOption)
         return realm.objects(schema)
     }
@@ -28,14 +28,14 @@ export class RealmBase {
         )
     }
 
-    async insertDatas (databaseOption, schema, datas) {
+    async insertDatas(databaseOption, schema, datas) {
         let realm = await Realm.open(databaseOption)
         return new Promise((resolve) => realm.write(() => {
-            datas.map( data => {
+            datas.map(data => {
                 console.log("insertDatas", data)
                 realm.create(schema, data, true)
             })
-            resolve(datas)  
+            resolve(datas)
         })
         )
     }

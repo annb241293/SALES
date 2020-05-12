@@ -93,13 +93,21 @@ class RealmStore extends RealmBase {
 
     //Categories
     insertCategories(newCategories) {
-        return this.insertDatas(databaseOption, SchemaName.CATEGORIES, newCategories)
+        return this.insertDatas( SchemaName.CATEGORIES, newCategories)
     }
 
     queryCategories() {
         return this.queryAll(databaseOption, SchemaName.CATEGORIES)
     }
 
+    //Topping
+    insertTopping(newTopping) {
+        return this.insertDatas( SchemaName.TOPPING, newTopping)
+    }
+
+    queryTopping() {
+        return this.queryAll(databaseOption, SchemaName.TOPPING)
+    }
 }
 
 //define schema
@@ -108,7 +116,8 @@ export const SchemaName = {
     ROOM: "Room",
     ROOM_GROUP: "RoomGroup",
     PRODUCT: "Product",
-    CATEGORIES: "Categories"
+    CATEGORIES: "Categories",
+    TOPPING: "Topping"
 }
 
 const ServerEventSchema = {
@@ -190,10 +199,25 @@ const CategoriesSchema = {
 
 }
 
+const ToppingsSchema = {
+    name: SchemaName.TOPPING,
+    primaryKey: 'Id',
+    properties: {
+        Id: 'int',
+        ExtraId: 'int',
+        Quantity: 'int',
+        Price: 'double',
+        ExtraGroup: { type: 'string', default: '' },
+        Name: 'string',
+        Code: 'string'
+    },
+
+}
+
 const databaseOption = {
     path: 'Pos365Boss.realm',
-    schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema],
-    schemaVersion: 63
+    schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema, ToppingsSchema],
+    schemaVersion: 1
 }
 
 const realm = new Realm(databaseOption);

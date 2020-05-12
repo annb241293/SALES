@@ -15,9 +15,6 @@ export default (props) => {
     const [position, setPosition] = useState("A")
     const [value, setValue] = useState('');
 
-    useEffect(() => {
-        console.log(dataManager.dataChoosing, 'dataManager.dataChoosing');
-    }, [])
 
     useEffect(() => {
         const onOrientationChange = () => {
@@ -52,8 +49,6 @@ export default (props) => {
 
     const outputTextSearch = (text) => {
         setValue(text)
-        console.log('outputTextSearch', text);
-
     }
 
     return (

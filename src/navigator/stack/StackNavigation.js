@@ -60,7 +60,7 @@ import Served from '../../screens/served/Served';
 import BottomTabNavigation from '../bottomTab/BottomTabNavigation';
 import PrintHtml from '../../screens/more/printHtml/PrintHtml'
 import Preview from '../../screens/more/printHtml/Preview'
-
+import Topping from '../../screens/served/topping';
 const MainStack = createStackNavigator();
 export const navigationRef = createRef();
 export default (props) => {
@@ -76,6 +76,7 @@ export default (props) => {
                 <MainStack.Screen name="Served">{props => <Served {...props} />}</MainStack.Screen>
                 <MainStack.Screen name="PrintHtml">{props => <PrintHtml {...props} />}</MainStack.Screen>
                 <MainStack.Screen name="Preview">{props => <Preview {...props} />}</MainStack.Screen>
+                <MainStack.Screen name="Topping">{props => <Topping {...props} />}</MainStack.Screen>
             </MainStack.Navigator>
         </Animated.View>
     );

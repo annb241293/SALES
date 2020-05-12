@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import {
     View, Text, TouchableOpacity, Image, StyleSheet,
@@ -21,7 +19,7 @@ export default function ToolBarSelectFood(props) {
 
     const handleSearch = (text) => {
         onChangeText(text)
-        props.outputTextSearch(value)
+        props.outputTextSearch(text)
 
     }
 

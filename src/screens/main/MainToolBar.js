@@ -12,7 +12,7 @@ import Fonts from '../../theme/Fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 
-export default function ToolBarDefault(props) {
+export default function MainToolBar(props) {
 
     return (
         <LinearGradient
@@ -35,9 +35,7 @@ export default function ToolBarDefault(props) {
                                 <Icon name={props.leftIcon} size={props.size ? props.size : 30} color="white" />
                             </TouchableOpacity>
                             :
-                            <TouchableOpacity onPress={() => { props.navigation.goBack() }}>
-                                <Icon name="keyboard-backspace" size={props.size ? props.size : 30} color="white" />
-                            </TouchableOpacity>
+                            null
                         }
                     </View>
                     <View style={{ flex: 5, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -82,7 +80,7 @@ const styles = StyleSheet.create({
     },
 })
 
-ToolBarDefault.propTypes = {
+MainToolBar.propTypes = {
     title: PropTypes.string,
     rightIcon: PropTypes.string,
     leftIcon: PropTypes.string,
@@ -90,6 +88,6 @@ ToolBarDefault.propTypes = {
     clickLeftIcon: PropTypes.func
 }
 
-ToolBarDefault.defaultProps = {
+MainToolBar.defaultProps = {
 
 }

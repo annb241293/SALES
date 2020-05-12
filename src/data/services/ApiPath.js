@@ -15,4 +15,5 @@ export const ApiPath = {
     SYNC_PRODUCTS: "api/products/sync",
     SYNC_CATEGORIES: "api/categories/sync",
     PRINT_TEMPLATES: "api/printtemplates",
+    SYNC_EXTRAEXT: "api/products/sync/extraext",
 }

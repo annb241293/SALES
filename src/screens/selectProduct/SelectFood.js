@@ -11,9 +11,18 @@ export default (props) => {
   const [category, setCategory] = useState([])
   const [product, setProduct] = useState([])
   const [skip, setSkip] = useState(0)
-  const [listCateId, setListCateId] = useState([])
+  const [listCateId, setListCateId] = useState([-1])
   const [listProducts, setListProducts] = useState(() => props.listProducts)
+  const [valueSearch, setValueSearch] = useState(() => props.valueSearch)
   const count = useRef(0)
+
+  useEffect(() => {
+    console.log(valueSearch, 'valueSearch');
+  }, [valueSearch])
+
+  useEffect(() => {
+    setValueSearch(props.valueSearch)
+  }, [props.valueSearch])
 
 
   useEffect(() => {
@@ -23,7 +32,6 @@ export default (props) => {
   useEffect(() => {
     const getCategories = async () => {
       let newCategories = [{ Id: -1, Name: I18n.t('tat_ca') }];
-      console.log('getCategories');
       let results = await realmStore.queryCategories()
       results.forEach(item => {
         newCategories.push(item)
@@ -33,70 +41,61 @@ export default (props) => {
     getCategories()
   }, [])
 
-  const getProducts = useCallback(async () => {
-    let newProducts = [];
+  const getProductsById = useCallback(async (cateId) => {
     dialogManager.showLoading();
     console.log('getProducts');
-    let results = await realmStore.queryProducts().then(res => res.slice(skip, skip + Constant.LOAD_LIMIT));
-    count.current = results.length
-    results.forEach(item => {
-      item.Quantity = 0;
-      newProducts.push(item)
-    })
-    setProduct([...product, ...newProducts])
-    console.log("getProducts newProducts ", newProducts);
+    let results = await realmStore.queryProducts()
+    if (cateId != -1) {
+      results = results.filtered(`CategoryId == ${cateId}`)
+    }
+    let productsRes = results.slice(skip, skip + Constant.LOAD_LIMIT)
+    count.current = productsRes.length
+    setProduct([...product, ...productsRes])
     setIsLoadMore(false)
     dialogManager.hiddenLoading();
   }, [skip])
 
 
   useEffect(() => {
-    getProducts()
-  }, [getProducts])
+    getProductsById(listCateId[0])
+  }, [getProductsById])
 
 
-  useEffect(() => {
-    if (listCateId.length == 0) {
-      setSkip(0)
-    } else {
-      let filterProducts = product.filter(product => listCateId.includes(product.Id))
-      setProduct(filterProducts)
+  const onClickCate = async (item, index) => {
+    resetState()
+    if (item.Id == listCateId[0]) {
+      return
     }
-  }, [listCateId])
-
-  const loadMore = (info) => {
-    console.log(info, 'loadMore');
-    if (count.current > 0) {
-      setIsLoadMore(true)
-      setSkip((prevSkip) => prevSkip + Constant.LOAD_LIMIT);
-    }
+    setListCateId([item.Id])
   }
 
-
-  const onClickCate = (item, index) => {
-    console.log(index);
-
-    if (item.Id == listCateId[0]) {
-      setListCateId([])
-    } else {
-      setListCateId([item.Id])
-    }
+  const resetState = () => {
+    setProduct([])
+    setSkip(0)
   }
 
   const onClickProduct = (item, index) => {
-    let exist = false;
-    listProducts.forEach(listProduct => {
-      if (listProduct.Id === item.Id) {
-        listProduct.Quantity++
-        exist = true;
-      }
-    })
-    if (exist) {
-      props.outputListProducts([...listProducts])
-    } else {
+    console.log(item, 'onClickProduct');
+    if (item.SplitForSalesOrder) {
       item.Quantity = 1
-      listProducts.push(item)
+      listProducts.unshift({ ...item })
       props.outputListProducts([...listProducts])
+    }
+    else {
+      let exist = false;
+      listProducts.forEach(listProduct => {
+        if (listProduct.Id === item.Id) {
+          listProduct.Quantity++
+          exist = true;
+        }
+      })
+      if (exist) {
+        props.outputListProducts([...listProducts])
+      } else {
+        item.Quantity = 1
+        listProducts.unshift(item)
+        props.outputListProducts([...listProducts])
+      }
     }
   }
 
@@ -122,10 +121,18 @@ export default (props) => {
     return exist
   }
 
+  const loadMore = (info) => {
+    console.log(info, 'loadMore');
+    if (count.current > 0) {
+      setIsLoadMore(true)
+      setSkip((prevSkip) => prevSkip + Constant.LOAD_LIMIT);
+    }
+  }
+
 
   const renderCateItem = (item, index) => {
     return (
-      <TouchableOpacity onPress={() => onClickCate(item, index)} key={item.Id.toString()} style={[styles.renderCateItem, { backgroundColor: item.Id == listCateId[0] ? "orange" : "white" }]}>
+      <TouchableOpacity onPress={() => onClickCate(item, index)} key={index} style={[styles.renderCateItem, { backgroundColor: item.Id == listCateId[0] ? "orange" : "white" }]}>
         <Text numberOfLines={2} style={[styles.textRenderCateItem, { color: item.Id == listCateId[0] ? "white" : "orange" }]}>{item.Name}</Text>
       </TouchableOpacity>
     );
@@ -143,7 +150,7 @@ export default (props) => {
             showsHorizontalScrollIndicator={false}
             data={category}
             renderItem={({ item, index }) => renderCateItem(item, index)}
-            keyExtractor={item => item.Id}
+            keyExtractor={item => item.Id.toString()}
           />
         </View>
       </View>
@@ -163,7 +170,7 @@ export default (props) => {
               handleButtonDecrease={handleButtonDecrease}
               handleButtonIncrease={handleButtonIncrease}
             />}
-            keyExtractor={item => item.Id}
+            keyExtractor={item => item.Id.toString()}
             extraData={product.Quantity}
             onEndReached={(info) => { loadMore(info) }}
           />
