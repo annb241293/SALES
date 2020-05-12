@@ -98,47 +98,47 @@ export default (props) => {
     }
 
     const sendOrder = () => {
-        let ls = [];
-        ls = JSON.parse(JSON.stringify(list))
-        console.log("sendOrder", ls, vendorSession);
-        let params = {
-            ServeEntities: []
-        };
-        ls.forEach(element => {
-            let obj = {
-                BasePrice: element.Price,
-                Code: element.Code,
-                Name: element.Name,
-                OrderQuickNotes: [],
-                Position: props.position,
-                Price: element.Price,
-                Printer: element.Printer,
-                Printer3: null,
-                Printer4: null,
-                Printer5: null,
-                ProductId: element.Id,
-                Quantity: element.Quantity,
-                RoomId: props.route.params.room.Id,
-                RoomName: props.route.params.room.Name,
-                SecondPrinter: null,
-                Serveby: vendorSession.CurrentUser && vendorSession.CurrentUser.Id ? vendorSession.CurrentUser.Id : ""
-            }
-            params.ServeEntities.push(obj)
-        });
-        dialogManager.showLoading();
-        new HTTPService().setPath(ApiPath.SAVE_ORDER).POST(params).then((res) => {
-            console.log("sendOrder res ", res);
-            setListOrder([])
-            let tempListPosition = dataManager.dataChoosing.filter(item => item.Id != props.route.params.room.Id)
-            console.log("sendOrder tempListPosition ", tempListPosition);
-            // if (tempListPosition && tempListPosition.length > 0) {
+        if (list.length > 0) {
+            let ls = [];
+            ls = JSON.parse(JSON.stringify(list))
+            console.log("sendOrder", ls, vendorSession);
+            let params = {
+                ServeEntities: []
+            };
+            ls.forEach(element => {
+                let obj = {
+                    BasePrice: element.Price,
+                    Code: element.Code,
+                    Name: element.Name,
+                    OrderQuickNotes: [],
+                    Position: props.position,
+                    Price: element.Price,
+                    Printer: element.Printer,
+                    Printer3: null,
+                    Printer4: null,
+                    Printer5: null,
+                    ProductId: element.Id,
+                    Quantity: element.Quantity,
+                    RoomId: props.route.params.room.Id,
+                    RoomName: props.route.params.room.Name,
+                    SecondPrinter: null,
+                    Serveby: vendorSession.CurrentUser && vendorSession.CurrentUser.Id ? vendorSession.CurrentUser.Id : ""
+                }
+                params.ServeEntities.push(obj)
+            });
+            dialogManager.showLoading();
+            new HTTPService().setPath(ApiPath.SAVE_ORDER).POST(params).then((res) => {
+                console.log("sendOrder res ", res);
+                setListOrder([])
+                let tempListPosition = dataManager.dataChoosing.filter(item => item.Id != props.route.params.room.Id)
+                console.log("sendOrder tempListPosition ", tempListPosition);
                 dataManager.dataChoosing = tempListPosition;
-            // }
-            dialogManager.hiddenLoading()
-        }).catch((e) => {
-            console.log("sendOrder err ", e);
-            dialogManager.hiddenLoading()
-        })
+                dialogManager.hiddenLoading()
+            }).catch((e) => {
+                console.log("sendOrder err ", e);
+                dialogManager.hiddenLoading()
+            })
+        }
     }
 
     let _menu = null;
