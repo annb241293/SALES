@@ -128,6 +128,12 @@ export default (props) => {
         dialogManager.showLoading();
         new HTTPService().setPath(ApiPath.SAVE_ORDER).POST(params).then((res) => {
             console.log("sendOrder res ", res);
+            setListOrder([])
+            let tempListPosition = dataManager.dataChoosing.filter(item => item.Id != props.route.params.room.Id)
+            console.log("sendOrder tempListPosition ", tempListPosition);
+            // if (tempListPosition && tempListPosition.length > 0) {
+                dataManager.dataChoosing = tempListPosition;
+            // }
             dialogManager.hiddenLoading()
         }).catch((e) => {
             console.log("sendOrder err ", e);
@@ -284,7 +290,7 @@ export default (props) => {
                                         }}>
                                             <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
                                         </TouchableOpacity>
-                                        <TextInput style={{ padding: 20,textAlign: "center", margin: 10, flex: 1, borderRadius: 4, borderWidth: 0.5 }} value={"" + itemOrder.Quantity} />
+                                        <TextInput style={{ padding: 20, textAlign: "center", margin: 10, flex: 1, borderRadius: 4, borderWidth: 0.5 }} value={"" + itemOrder.Quantity} />
                                         <TouchableOpacity onPress={() => {
                                             itemOrder.Quantity--
                                             setValue({ ...itemOrder })
@@ -300,13 +306,13 @@ export default (props) => {
                                     </View>
                                 </View>
                                 <View style={{ alignItems: "center", justifyContent: "space-between", flexDirection: "row", marginTop: 10 }}>
-                                    <TouchableOpacity style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} onPress={() => { }}>
+                                    <TouchableOpacity onPress={() => setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
                                         <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Huỷ</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} onPress={() => { }}>
+                                    <TouchableOpacity onPress={() => setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
                                         <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Topping</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: Colors.colorchinh }} onPress={() => { }}>
+                                    <TouchableOpacity onPress={() => setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: Colors.colorchinh }} >
                                         <Text style={{ color: "#fff", textTransform: "uppercase", }}>Xong</Text>
                                     </TouchableOpacity>
                                 </View>
