@@ -10,7 +10,6 @@ export default (props) => {
     const [tab, setTab] = useState(1)
     const [showModal, setShowModal] = useState(false)
     const [position, setPosition] = useState("A")
-    const [listOrderWithPosition, setListOrderWithPosition] = useState([])
 
 
     const selectPosition = (position) => {

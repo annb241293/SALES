@@ -174,7 +174,7 @@ export default (props) => {
                                             setListOrder([...list])
                                             props.outputListProducts([...list])
                                         }}>
-                                            <Icon name="trash-can-outline" size={50} color="black" />
+                                            <Icon name="trash-can-outline" size={50} color="gray" />
                                         </TouchableOpacity>
                                         <View style={{ flexDirection: "column", flex: 1 }}>
                                             <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 7 }}>{item.Name}</Text>

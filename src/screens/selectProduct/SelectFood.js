@@ -17,7 +17,14 @@ export default (props) => {
   const count = useRef(0)
 
   useEffect(() => {
-    console.log(valueSearch, 'valueSearch');
+    const getSearchResult = async () => {
+      if (valueSearch != '') {
+        let results = await realmStore.queryProducts()
+        let searchResult = results.filtered(`Name CONTAINS[c] "${valueSearch}"`)
+        setProduct(searchResult)
+      }
+    }
+    getSearchResult()
   }, [valueSearch])
 
   useEffect(() => {
@@ -41,35 +48,39 @@ export default (props) => {
     getCategories()
   }, [])
 
-  const getProductsById = useCallback(async (cateId) => {
+  const getProducts = useCallback(async () => {
     dialogManager.showLoading();
     console.log('getProducts');
     let results = await realmStore.queryProducts()
-    if (cateId != -1) {
-      results = results.filtered(`CategoryId == ${cateId}`)
+    if (listCateId[0] != -1) {
+      results = results.filtered(`CategoryId == ${listCateId[0]}`)
     }
     let productsRes = results.slice(skip, skip + Constant.LOAD_LIMIT)
     count.current = productsRes.length
     setProduct([...product, ...productsRes])
     setIsLoadMore(false)
     dialogManager.hiddenLoading();
-  }, [skip])
+    return () => {
+      count.current = 0
+    }
+  }, [skip, listCateId])
 
 
   useEffect(() => {
-    getProductsById(listCateId[0])
-  }, [getProductsById])
+    getProducts()
+  }, [getProducts])
 
 
   const onClickCate = async (item, index) => {
-    resetState()
     if (item.Id == listCateId[0]) {
       return
     }
+    resetState()
     setListCateId([item.Id])
   }
 
   const resetState = () => {
+    console.log('reset');
     setProduct([])
     setSkip(0)
   }

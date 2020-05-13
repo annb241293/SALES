@@ -79,8 +79,9 @@ class RealmStore extends RealmBase {
         let realm = await Realm.open(databaseOption)
         return new Promise((resolve) => realm.write(() => {
             newProducts.map(product => {
-                product.ProductImages = JSON.stringify(product.ProductImages)
-                realm.create(SchemaName.PRODUCT, product, true)
+                product.BasePrice = product.Price;
+                product.ProductImages = JSON.stringify(product.ProductImages);
+                realm.create(SchemaName.PRODUCT, product, true);
             })
             resolve(newProducts)
         })
@@ -93,7 +94,7 @@ class RealmStore extends RealmBase {
 
     //Categories
     insertCategories(newCategories) {
-        return this.insertDatas( SchemaName.CATEGORIES, newCategories)
+        return this.insertDatas(SchemaName.CATEGORIES, newCategories)
     }
 
     queryCategories() {
@@ -102,7 +103,7 @@ class RealmStore extends RealmBase {
 
     //Topping
     insertTopping(newTopping) {
-        return this.insertDatas( SchemaName.TOPPING, newTopping)
+        return this.insertDatas(SchemaName.TOPPING, newTopping)
     }
 
     queryTopping() {
@@ -185,6 +186,31 @@ const ProductSchema = {
         BlockOfTimeToUseService: 'double',
         IsPriceForBlock: 'bool',
         CategoryId: { type: 'int', default: 0 },
+        ProductId: { type: 'int', default: 0 },
+        Code2: { type: 'string', default: '' },
+        Code3: { type: 'string', default: '' },
+        Code4: { type: 'string', default: '' },
+        OnlinePrice: { type: 'double', default: 0.0 },
+        Unit: { type: 'string', default: '' },
+        LargeUnit: { type: 'string', default: '' },
+        IsTimer: { type: 'bool', default: false },
+        OrderQuickNotes: { type: 'string', default: '' },
+        BasePrice: { type: 'double', default: 0.0 },
+        Description: { type: 'string', default: '' },
+        IsLargeUnit: { type: 'bool', default: false },
+        UnitPrice: { type: 'double', default: 0.0 },
+        DiscountRatio: { type: 'double', default: 0.0 },
+        Checkin: { type: 'string', default: '' },
+        Processed: { type: 'double', default: 0.0 },
+        labelPrinted: { type: 'double', default: 0.0 },
+        Serveby: { type: 'double', default: 0.0 },
+        Checkout: { type: 'string', default: '' },
+        Topping: { type: 'string', default: "{}" },
+        TotalTopping: { type: 'double', default: 0.0 },
+        StopTimer: { type: 'bool', default: false },
+        Hidden: { type: 'bool', default: false },
+        IsCheckPriceServer: { type: 'bool', default: true },
+
     }
 }
 
@@ -217,7 +243,7 @@ const ToppingsSchema = {
 const databaseOption = {
     path: 'Pos365Boss.realm',
     schema: [ServerEventSchema, RoomSchema, RoomGroupSchema, ProductSchema, CategoriesSchema, ToppingsSchema],
-    schemaVersion: 1
+    schemaVersion: 4
 }
 
 const realm = new Realm(databaseOption);
