@@ -79,14 +79,14 @@ export default function ToolBarSelectFood(props) {
     }
 
     return (
-        <View style={{ flex: 1, }}>
-            <ToolBarDefault
+        <View style={{width: "100%" }}>
+            {/* <ToolBarDefault
                 navigation={props.navigation}
                 title="Topping"
                 rightIcon="refresh"
-                clickRightIcon={() => { }} />
-            <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={{ flex: 1 }}>
+                clickRightIcon={() => { }} /> */}
+            <View style={{ flexDirection: "row" }}>
+                <View style={{width: "100%" }}>
                     <View>
                         <FlatList
                             horizontal={true}

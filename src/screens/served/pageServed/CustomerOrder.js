@@ -9,6 +9,7 @@ import dialogManager from '../../../components/dialog/DialogManager';
 import { HTTPService } from '../../../data/services/HttpService';
 import { getFileDuLieuString } from '../../../data/fileStore/FileStorage';
 import { Constant } from '../../../common/Constant';
+import ToolBarSelectFood from '../topping'
 
 export default (props) => {
 
@@ -79,7 +80,8 @@ export default (props) => {
         if (!exist) {
             listPosition.push({ key: props.position, list: props.listProducts })
         }
-        setListOrder(props.listProducts)
+        let ls = JSON.parse(JSON.stringify(props.listProducts))
+        setListOrder(ls)
         savePosition()
     }, [props.listProducts])
 
@@ -129,7 +131,7 @@ export default (props) => {
             dialogManager.showLoading();
             new HTTPService().setPath(ApiPath.SAVE_ORDER).POST(params).then((res) => {
                 console.log("sendOrder res ", res);
-                setListOrder([])
+                syncListProducts([])
                 let tempListPosition = dataManager.dataChoosing.filter(item => item.Id != props.route.params.room.Id)
                 console.log("sendOrder tempListPosition ", tempListPosition);
                 dataManager.dataChoosing = tempListPosition;
@@ -139,6 +141,21 @@ export default (props) => {
                 dialogManager.hiddenLoading()
             })
         }
+    }
+
+    const mapDataToList = (data) => {
+        console.log("mapDataToList(data) ", data);
+        let ls = []
+        list.forEach(element => {
+            if (element.Id == data.Id) {
+                // element = data;
+                ls.push(data)
+            } else {
+                ls.push(element)
+            }
+        });
+        console.log("mapDataToList(ls) ", ls);
+        setListOrder([...ls])
     }
 
     let _menu = null;
@@ -163,8 +180,8 @@ export default (props) => {
                         list.map((item, index) => {
                             return item.Quantity > 0 ? (
                                 <TouchableOpacity key={index} onPress={() => {
+                                    console.log("setItemOrder ", item);
                                     setItemOrder(item)
-                                    setValue(154)
                                     setShowModal(!showModal)
                                 }}>
                                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10, borderBottomColor: "#ABB2B9", borderBottomWidth: 0.5 }}>
@@ -179,6 +196,7 @@ export default (props) => {
                                         <View style={{ flexDirection: "column", flex: 1 }}>
                                             <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 7 }}>{item.Name}</Text>
                                             <Text>{item.Price}x</Text>
+                                            <Text>{item.Description}</Text>
                                         </View>
                                         <View style={{ alignItems: "center", flexDirection: "row" }}>
                                             <TouchableOpacity onPress={() => {
@@ -270,53 +288,19 @@ export default (props) => {
                             backgroundColor: "#fff", borderRadius: 4, marginHorizontal: 20,
                             width: Metrics.screenWidth * 0.8
                         }}>
-                            <View style={{ backgroundColor: Colors.colorchinh, borderTopRightRadius: 4, borderTopLeftRadius: 4, }}>
-                                <Text style={{ margin: 10, textTransform: "uppercase", fontSize: 20, marginLeft: 20, color: "#fff" }}>{itemOrder.Name}</Text>
-                            </View>
-                            <View style={{ padding: 10 }}>
-                                <View style={{ padding: 0, flexDirection: "row", justifyContent: "center" }} onPress={() => setShowModal(false)}>
-                                    <Text style={{ fontSize: 16, flex: 3 }}>Đơn giá</Text>
-                                    <View style={{ alignItems: "center", flexDirection: "row", flex: 7 }}>
-                                        <Text style={{ paddingHorizontal: 20, paddingVertical: 20, flex: 1, fontSize: 16, borderWidth: 0.5, borderRadius: 4 }}>{itemOrder.Price}</Text>
-                                    </View>
-
-                                </View>
-                                <View style={{ padding: 0, flexDirection: "row", justifyContent: "center" }} >
-                                    <Text style={{ fontSize: 16, flex: 3 }}>Số lượng</Text>
-                                    <View style={{ alignItems: "center", flexDirection: "row", flex: 7 }}>
-                                        <TouchableOpacity onPress={() => {
-                                            itemOrder.Quantity++
-                                            setValue({ ...itemOrder })
-                                        }}>
-                                            <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
-                                        </TouchableOpacity>
-                                        <TextInput style={{ padding: 20, textAlign: "center", margin: 10, flex: 1, borderRadius: 4, borderWidth: 0.5 }} value={"" + itemOrder.Quantity} />
-                                        <TouchableOpacity onPress={() => {
-                                            itemOrder.Quantity--
-                                            setValue({ ...itemOrder })
-                                        }}>
-                                            <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                                <View style={{ padding: 0, flexDirection: "row", justifyContent: "center" }} onPress={() => setShowModal(false)}>
-                                    <Text style={{ fontSize: 16, flex: 3 }}>Ghi chú</Text>
-                                    <View style={{ alignItems: "center", flexDirection: "row", flex: 7 }}>
-                                        <TextInput numberOfLines={4} multiline={true} style={{ height: 100, paddingHorizontal: 20, paddingVertical: 5, flex: 7, fontSize: 16, borderWidth: 0.5, borderRadius: 4 }} value={itemOrder.Price} placeholder="Nhập ghi chú" />
-                                    </View>
-                                </View>
-                                <View style={{ alignItems: "center", justifyContent: "space-between", flexDirection: "row", marginTop: 10 }}>
-                                    <TouchableOpacity onPress={() => setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
-                                        <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Huỷ</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
-                                        <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Topping</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: Colors.colorchinh }} >
-                                        <Text style={{ color: "#fff", textTransform: "uppercase", }}>Xong</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+{/*                             
+                            <PopupDetail
+                                item={itemOrder}
+                                getDataOnClick={(data) => {
+                                    console.log("getDataOnClick ", data);
+                                    mapDataToList(data)
+                                }}
+                                setShowModal={() => {
+                                    console.log("getDataOnClick list ", list);
+                                    setShowModal(false)
+                                }
+                                } /> */}
+                                <ToolBarSelectFood />
                         </View>
                     </View>
                 </View>
@@ -324,3 +308,73 @@ export default (props) => {
         </View>
     )
 }
+
+const PopupDetail = (props) => {
+
+    const [itemOrder, setItemOrder] = useState({ ...props.item })
+
+    const onClickOk = () => {
+        console.log("onClickOk itemOrder ", itemOrder);
+        props.getDataOnClick(itemOrder)
+        props.setShowModal(false)
+    }
+
+
+    return (
+        <View>
+            <View style={{ backgroundColor: Colors.colorchinh, borderTopRightRadius: 4, borderTopLeftRadius: 4, }}>
+                <Text style={{ margin: 10, textTransform: "uppercase", fontSize: 20, marginLeft: 20, color: "#fff" }}>{itemOrder.Name}</Text>
+            </View>
+            <View style={{ padding: 10 }}>
+                <View style={{ padding: 0, flexDirection: "row", justifyContent: "center" }} onPress={() => setShowModal(false)}>
+                    <Text style={{ fontSize: 16, flex: 3 }}>Đơn giá</Text>
+                    <View style={{ alignItems: "center", flexDirection: "row", flex: 7 }}>
+                        <Text style={{ paddingHorizontal: 20, paddingVertical: 20, flex: 1, fontSize: 16, borderWidth: 0.5, borderRadius: 4 }}>{itemOrder.Price}</Text>
+                    </View>
+
+                </View>
+                <View style={{ padding: 0, flexDirection: "row", justifyContent: "center" }} >
+                    <Text style={{ fontSize: 16, flex: 3 }}>Số lượng</Text>
+                    <View style={{ alignItems: "center", flexDirection: "row", flex: 7 }}>
+                        <TouchableOpacity onPress={() => {
+                            itemOrder.Quantity++
+                            setItemOrder({ ...itemOrder })
+                        }}>
+                            <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>+</Text>
+                        </TouchableOpacity>
+                        <TextInput style={{ padding: 20, textAlign: "center", margin: 10, flex: 1, borderRadius: 4, borderWidth: 0.5 }} value={"" + itemOrder.Quantity} />
+                        <TouchableOpacity onPress={() => {
+                            if (itemOrder.Quantity > 0) {
+                                itemOrder.Quantity--
+                                setItemOrder({ ...itemOrder })
+                            }
+                        }}>
+                            <Text style={{ borderWidth: 1, padding: 20, borderRadius: 10 }}>-</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{ padding: 0, flexDirection: "row", justifyContent: "center" }} onPress={() => setShowModal(false)}>
+                    <Text style={{ fontSize: 16, flex: 3 }}>Ghi chú</Text>
+                    <View style={{ alignItems: "center", flexDirection: "row", flex: 7 }}>
+                        <TextInput onChangeText={text => {
+                            itemOrder.Description = text
+                            setItemOrder({ ...itemOrder })
+                        }} numberOfLines={4} multiline={true} value={itemOrder.Description} style={{ height: 100, paddingHorizontal: 20, paddingVertical: 5, flex: 7, fontSize: 16, borderWidth: 0.5, borderRadius: 4 }} placeholder="Nhập ghi chú" />
+                    </View>
+                </View>
+                <View style={{ alignItems: "center", justifyContent: "space-between", flexDirection: "row", marginTop: 10 }}>
+                    <TouchableOpacity onPress={() => props.setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
+                        <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Huỷ</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => props.setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
+                        <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Topping</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => onClickOk()} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: Colors.colorchinh }} >
+                        <Text style={{ color: "#fff", textTransform: "uppercase", }}>Xong</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    )
+}
+
