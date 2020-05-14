@@ -1,6 +1,7 @@
 const Realm = require('realm');
 import { Observable } from 'rxjs';
 import { RealmBase } from './RealmBase';
+import { change_alias } from '../../common/Utils';
 
 class RealmStore extends RealmBase {
 
@@ -16,6 +17,14 @@ class RealmStore extends RealmBase {
     //override
     insertDatas(schema, datas) {
         return super.insertDatas(databaseOption, schema, datas);
+    }
+
+    deleteAll = async () => {
+        let realm = await Realm.open(databaseOption)
+        return new Promise((resolve) => realm.write(() => {
+            realm.deleteAll()
+            resolve()
+        }))
     }
 
     //server event
@@ -80,6 +89,7 @@ class RealmStore extends RealmBase {
         return new Promise((resolve) => realm.write(() => {
             newProducts.map(product => {
                 product.BasePrice = product.Price;
+                product.NameLatin = change_alias(product.Name)
                 product.ProductImages = JSON.stringify(product.ProductImages);
                 realm.create(SchemaName.PRODUCT, product, true);
             })
@@ -109,6 +119,8 @@ class RealmStore extends RealmBase {
     queryTopping() {
         return this.queryAll(databaseOption, SchemaName.TOPPING)
     }
+
+
 }
 
 //define schema
@@ -166,6 +178,7 @@ const ProductSchema = {
         Id: 'int',
         Code: 'string',
         Name: 'string',
+        NameLatin: { type: 'string', default: '' },
         AttributesName: { type: 'string', default: '' },
         Price: 'double',
         PriceLargeUnit: 'double',

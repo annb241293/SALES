@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { Colors, Images, Metrics } from '../../../theme';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 import dataManager from '../../../data/DataManager';
@@ -9,7 +9,7 @@ import dialogManager from '../../../components/dialog/DialogManager';
 import { HTTPService } from '../../../data/services/HttpService';
 import { getFileDuLieuString } from '../../../data/fileStore/FileStorage';
 import { Constant } from '../../../common/Constant';
-import ToolBarSelectFood from '../topping'
+import Topping from '../Topping'
 
 export default (props) => {
 
@@ -18,7 +18,6 @@ export default (props) => {
     const [list, setListOrder] = useState(() => props.listProducts)
     const [vendorSession, setVendorSession] = useState({})
     const [itemOrder, setItemOrder] = useState({})
-    const [value, setValue] = useState(123)
 
     useEffect(() => {
         console.log("Customer props ", props);
@@ -216,10 +215,7 @@ export default (props) => {
                                         </View>
                                         <TouchableOpacity
                                             style={{ marginLeft: 10 }}
-                                            onPress={() => {
-                                                console.log(props, 'item');
-                                                props.navigation.navigate("Topping")
-                                            }}>
+                                            onPress={() => { }}>
                                             <Icon name="access-point" size={50} color="orange" />
                                         </TouchableOpacity>
                                     </View>
@@ -265,7 +261,7 @@ export default (props) => {
                 }}>
                 <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <TouchableWithoutFeedback
-                        onPress={() => setShowModal(false)}
+                        onPress={() => { setShowModal(false) }}
                         style={{
                             position: 'absolute',
                             top: 0,
@@ -286,10 +282,10 @@ export default (props) => {
                         <View style={{
                             padding: 0,
                             backgroundColor: "#fff", borderRadius: 4, marginHorizontal: 20,
-                            width: Metrics.screenWidth * 0.8
+                            width: Metrics.screenWidth * 0.8,
                         }}>
-{/*                             
                             <PopupDetail
+                                setIsTopping={() => { props.setIsTopping() }}
                                 item={itemOrder}
                                 getDataOnClick={(data) => {
                                     console.log("getDataOnClick ", data);
@@ -299,8 +295,7 @@ export default (props) => {
                                     console.log("getDataOnClick list ", list);
                                     setShowModal(false)
                                 }
-                                } /> */}
-                                <ToolBarSelectFood />
+                                } />
                         </View>
                     </View>
                 </View>
@@ -316,6 +311,11 @@ const PopupDetail = (props) => {
     const onClickOk = () => {
         console.log("onClickOk itemOrder ", itemOrder);
         props.getDataOnClick(itemOrder)
+        props.setShowModal(false)
+    }
+
+    const onClickTopping = () => {
+        props.setIsTopping()
         props.setShowModal(false)
     }
 
@@ -366,7 +366,7 @@ const PopupDetail = (props) => {
                     <TouchableOpacity onPress={() => props.setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
                         <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Huỷ</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => props.setShowModal(false)} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
+                    <TouchableOpacity onPress={() => onClickTopping()} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: "#fff" }} >
                         <Text style={{ color: Colors.colorchinh, textTransform: "uppercase" }}>Topping</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => onClickOk()} style={{ alignItems: "center", margin: 2, flex: 1, borderWidth: 1, borderColor: Colors.colorchinh, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 4, backgroundColor: Colors.colorchinh }} >

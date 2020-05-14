@@ -5,6 +5,6 @@ export const Constant = {
     TABLET: "TABLET",
     PHONE: "PHONE",
     CURRENT_ACCOUNT: "CURRENT_ACCOUNT",
-    LOAD_LIMIT: 21,
+    LOAD_LIMIT: 20,
     VENDOR_SESSION: "VENDOR_SESSION"
 };

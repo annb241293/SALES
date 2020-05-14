@@ -9,28 +9,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
-import useDebounce from '../../customHook/useDebounce';
 
 export default function ToolBarSelectFood(props) {
 
     const [value, onChangeText] = useState('');
     const [isSearch, setIsSearch] = useState(false);
-    const debouncedVal = useDebounce(value)
 
     useEffect(() => {
-        if (debouncedVal) {
-            props.outputTextSearch(debouncedVal)
-        }
-    }, [debouncedVal])
-
-    // useEffect(() => {
-    //     const handler = setTimeout(() => {
-    //         props.outputTextSearch(value)
-    //     }, 300);
-    //     return () => {
-    //         clearTimeout(handler)
-    //     }
-    // }, [value])
+        props.outputTextSearch(value)
+    }, [value])
 
     return (
         <LinearGradient

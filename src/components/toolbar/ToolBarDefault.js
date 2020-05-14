@@ -18,7 +18,7 @@ export default function ToolBarDefault(props) {
         <LinearGradient
             start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             colors={['#FFAB40', '#FF5722']}
-            style={{ height: 44 }}
+            style={{ height: 45 }}
         >
             <View style={styles.toolbarContainer}>
                 <View style={{
@@ -35,9 +35,7 @@ export default function ToolBarDefault(props) {
                                 <Icon name={props.leftIcon} size={props.size ? props.size : 30} color="white" />
                             </TouchableOpacity>
                             :
-                            <TouchableOpacity onPress={() => { props.navigation.goBack() }}>
-                                <Icon name="keyboard-backspace" size={props.size ? props.size : 30} color="white" />
-                            </TouchableOpacity>
+                            null
                         }
                     </View>
                     <View style={{ flex: 5, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -70,7 +68,7 @@ export default function ToolBarDefault(props) {
 const styles = StyleSheet.create({
 
     toolbarContainer: {
-        height: 44,
+        height: 45,
         flex: 1,
         shadowColor: Colors.black,
         shadowOffset: {

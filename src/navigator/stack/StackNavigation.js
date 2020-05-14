@@ -60,7 +60,7 @@ import Served from '../../screens/served/Served';
 import BottomTabNavigation from '../bottomTab/BottomTabNavigation';
 import PrintHtml from '../../screens/more/printHtml/PrintHtml'
 import Preview from '../../screens/more/printHtml/Preview'
-import Topping from '../../screens/served/topping';
+import Topping from '../../screens/served/Topping';
 const MainStack = createStackNavigator();
 export const navigationRef = createRef();
 export default (props) => {

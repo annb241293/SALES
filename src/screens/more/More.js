@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Image, View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
-import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import { Images, Colors } from '../../theme';
 import { setFileLuuDuLieu, getFileDuLieuString } from '../../data/fileStore/FileStorage';
 import { Constant } from '../../common/Constant';
+import realmStore from '../../data/realm/RealmStore';
 
 export default (props) => {
 
@@ -79,6 +79,13 @@ const HeaderComponent = () => {
 }
 
 const ContentComponent = (props) => {
+
+    const onClickLogOut = () => {
+        realmStore.deleteAll()
+        setFileLuuDuLieu(Constant.CURRENT_ACCOUNT, "");
+        props.navigation.navigate('Login', { param: "logout" })
+    }
+
     return (
         <View>
             <View style={{ padding: 20, borderBottomWidth: 0.5, borderBottomColor: "#ddd" }}>
@@ -88,10 +95,7 @@ const ContentComponent = (props) => {
                 </TouchableOpacity>
             </View>
             <View style={{ padding: 20, borderBottomWidth: 0.5, borderBottomColor: "#ddd" }}>
-                <TouchableOpacity onPress={() => {
-                    setFileLuuDuLieu(Constant.CURRENT_ACCOUNT, "");
-                    props.navigation.navigate('Login', { param: "logout" })
-                }}>
+                <TouchableOpacity onPress={() => onClickLogOut()}>
                     <Text style={{ marginTop: 20 }}>Logout</Text>
                 </TouchableOpacity>
             </View>

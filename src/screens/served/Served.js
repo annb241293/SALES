@@ -5,15 +5,14 @@ import dialogManager from '../../components/dialog/DialogManager';
 import ToolBarSelectFood from './ToolBarServed';
 import SelectFood from '../selectProduct/SelectFood';
 import PageServed from './pageServed/PageServed';
-import dataManager from '../../data/DataManager';
-
+import Topping from './Topping';
 
 export default (props) => {
 
     const [numColumns, setNumColumns] = useState(1);
     const [listProducts, setListProducts] = useState([])
-    const [position, setPosition] = useState("A")
     const [value, setValue] = useState('');
+    const [isTopping, setIsTopping] = useState(false)
 
 
     useEffect(() => {
@@ -24,7 +23,7 @@ export default (props) => {
                     setNumColumns(1)
                     break;
                 case 'TABLET':
-                    setNumColumns(3)
+                    setNumColumns(4)
                     break;
                 default:
                     break;
@@ -56,20 +55,26 @@ export default (props) => {
             <ToolBarSelectFood navigation={props.navigation}
                 outputTextSearch={outputTextSearch} />
             <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={{ flex: 6 }}>
-                    <SelectFood
-                        valueSearch={value}
-                        numColumns={numColumns}
-                        deviceType={deviceType}
-                        orientaition={orientaition}
-                        listProducts={[...listProducts]} // input
-                        outputListProducts={outputListProducts} /* output */ />
+                <View style={{ flex: 6, }}>
+                    <View style={isTopping ? { flex: 1, } : {}}>
+                        <SelectFood
+                            valueSearch={value}
+                            numColumns={numColumns}
+                            deviceType={deviceType}
+                            orientaition={orientaition}
+                            listProducts={[...listProducts]}
+                            outputListProducts={outputListProducts} />
+                    </View>
+                    <View style={!isTopping ? { flex: 1, } : {}}>
+                        <Topping setIsTopping={() => { setIsTopping(!isTopping) }} />
+                    </View>
                 </View>
-                <View style={{ flex: 4 }}>
+                <View style={{ flex: 4, marginLeft: 2 }}>
                     <PageServed
                         {...props}
-                        listProducts={[...listProducts]} // input
-                        outputListProducts={outputListProducts} /* output*/ />
+                        setIsTopping={() => { setIsTopping(!isTopping) }}
+                        listProducts={[...listProducts]}
+                        outputListProducts={outputListProducts} />
                 </View>
             </View>
         </View>
