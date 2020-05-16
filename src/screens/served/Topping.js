@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Colors, Metrics, Images } from '../../theme'
-import ToolBarDefault from '../../components/toolbar/ToolBarDefault';
 import realmStore from '../../data/realm/RealmStore';
 import I18n from '../../common/language/i18n';
+import dataManager from '../../data/DataManager';
 
 
 export default (props) => {
@@ -11,29 +11,45 @@ export default (props) => {
     const [topping, setTopping] = useState([])
     const [categories, setCategories] = useState([])
     const [listCateId, setlistCateId] = useState([-1])
+    // const [listTopping, setListTopping] = useState([])
+    const [itemOrder, setItemOrder] = useState({ ...props.itemOrder })
 
     useEffect(() => {
-        const getTopping = async () => {
-            let newCategories = [{ Id: -1, Name: I18n.t('tat_ca') }]
-            let newTopping = []
-            let results = await realmStore.queryTopping()
-            console.log(results, 'getTopping');
-            results.forEach(item => {
-                if (item.ExtraGroup !== '' && newCategories.filter(cate => cate.Name == item.ExtraGroup).length == 0) {
-                    newCategories.push({ Id: item.Id, Name: item.ExtraGroup })
-                }
-                newTopping.push({ ...item, Quantity: 0 })
-            })
-            setCategories(newCategories)
-            setTopping(newTopping)
-        }
         getTopping()
     }, [])
 
+
     useEffect(() => {
-        console.log(topping, 'topping');
-        console.log(categories, 'categories');
-    }, [topping, categories])
+        setItemOrder({ ...props.itemOrder })
+    }, [props.itemOrder])
+
+    useEffect(() => {
+        console.log(itemOrder, 'itemOrder');
+    }, [itemOrder])
+
+    const onclose = () => {
+        props.setIsTopping()
+    }
+
+    const mapdataToList = (list) => {
+        console.log('mapdataToList', list);
+
+    }
+
+    const getTopping = async () => {
+        let newCategories = [{ Id: -1, Name: I18n.t('tat_ca') }]
+        let newTopping = []
+        let results = await realmStore.queryTopping().then(res => res.slice(0, 5))
+        console.log(results, 'getTopping');
+        results.forEach(item => {
+            if (item.ExtraGroup !== '' && newCategories.filter(cate => cate.Name == item.ExtraGroup).length == 0) {
+                newCategories.push({ Id: item.Id, Name: item.ExtraGroup })
+            }
+            newTopping.push({ ...item, Quantity: 0 })
+        })
+        setCategories(newCategories)
+        setTopping(newTopping)
+    }
 
 
     const renderCateItem = (item, index) => {
@@ -49,7 +65,10 @@ export default (props) => {
     const renderTopping = (item, index) => {
         return (
             <View key={item.Id} style={styles.toppingItem}>
-                <Text numberOfLines={2} style={{ flex: 3 }}>{item.Name}</Text>
+                <View style={{ flex: 3 }}>
+                    <Text numberOfLines={2} style={{}}>{item.Name}</Text>
+                    <Text numberOfLines={2} style={{}}>{item.Price}</Text>
+                </View>
                 <View style={{ flexDirection: "row", flex: 2, justifyContent: "space-between", alignItems: "center" }}>
                     <TouchableOpacity onPress={() => { handleButtonDecrease(item, index) }}>
                         <Text style={styles.button}>+</Text>
@@ -63,30 +82,45 @@ export default (props) => {
         )
     }
 
+    const outputListTopping = () => {
+        let listTopping = topping.filter(item => item.Quantity > 0);
+
+        // props.outputListTopping(listTopping)
+    }
+
+    const saveListTopping = () => {
+
+        console.log(dataManager.listTopping, 'savePosition');
+    }
+
     const handleButtonDecrease = (item, index) => {
-        console.log(item, index, 'item');
         topping[index].Quantity += 1;
         setTopping([...topping])
+        outputListTopping()
+        saveListTopping()
     }
 
     const handleButtonIncrease = (item, index) => {
-        console.log(item, 'item');
         if (item.Quantity == 0) {
             return
         }
         topping[index].Quantity -= 1;
         setTopping([...topping])
+        outputListTopping()
+        saveListTopping()
     }
 
     return (
         <View style={{ flex: 1 }}>
             <View style={{ height: 45, backgroundColor: Colors.colorchinh, flexDirection: "row" }}>
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}></View>
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                    <Text>{itemOrder ? itemOrder.Name : ''}</Text>
+                </View>
                 <View style={{ flex: 5, justifyContent: "center", alignItems: "center" }}>
                     <Text>Topping</Text>
                 </View>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}>
-                    <TouchableOpacity style={{}} onPress={() => { props.setIsTopping() }}>
+                    <TouchableOpacity style={{}} onPress={() => { onclose() }}>
                         <Text style={{ fontStyle: "italic", paddingHorizontal: 5 }}>Đóng</Text>
                     </TouchableOpacity>
                 </View>

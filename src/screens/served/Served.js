@@ -13,6 +13,8 @@ export default (props) => {
     const [listProducts, setListProducts] = useState([])
     const [value, setValue] = useState('');
     const [isTopping, setIsTopping] = useState(false)
+    const [itemOrder, setItemOrder] = useState({})
+    const [listTopping, setListTopping] = useState([])
 
 
     useEffect(() => {
@@ -50,13 +52,21 @@ export default (props) => {
         setValue(text)
     }
 
+    const outputIdItemOrder = (item) => {
+        setItemOrder(item)
+    }
+
+    const outputListTopping = (listTopping) => {
+        setListTopping(listTopping)
+    }
+
     return (
         <View style={{ flex: 1 }}>
             <ToolBarSelectFood navigation={props.navigation}
                 outputTextSearch={outputTextSearch} />
             <View style={{ flex: 1, flexDirection: "row" }}>
                 <View style={{ flex: 6, }}>
-                    <View style={isTopping ? { flex: 1, } : {}}>
+                    <View style={{ flex: 1, }}>
                         <SelectFood
                             valueSearch={value}
                             numColumns={numColumns}
@@ -65,16 +75,21 @@ export default (props) => {
                             listProducts={[...listProducts]}
                             outputListProducts={outputListProducts} />
                     </View>
-                    <View style={!isTopping ? { flex: 1, } : {}}>
-                        <Topping setIsTopping={() => { setIsTopping(!isTopping) }} />
+                    <View style={{ flex: 1  }}>
+                        <Topping
+                            itemOrder={{ ...itemOrder }}
+                            setIsTopping={() => { setIsTopping(false) }}
+                            outputListTopping={outputListTopping} />
                     </View>
                 </View>
                 <View style={{ flex: 4, marginLeft: 2 }}>
                     <PageServed
                         {...props}
-                        setIsTopping={() => { setIsTopping(!isTopping) }}
+                        setIsTopping={() => { setIsTopping(true) }}
                         listProducts={[...listProducts]}
-                        outputListProducts={outputListProducts} />
+                        outputListProducts={outputListProducts}
+                        outputIdItemOrder={outputIdItemOrder}
+                        listTopping={[...listTopping]} />
                 </View>
             </View>
         </View>

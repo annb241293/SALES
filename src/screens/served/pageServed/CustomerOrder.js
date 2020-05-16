@@ -42,9 +42,6 @@ export default (props) => {
         }
     }
 
-    useEffect(() => {
-        console.log(listPosition, 'listPosition');
-    }, [listPosition])
 
     const syncListProducts = (listProducts) => {
         console.log('syncListProducts');
@@ -54,35 +51,42 @@ export default (props) => {
 
     useEffect(() => {
         console.log('useEffect props.position', props.position);
-        listPosition.forEach(element => {
-            if (element.key == props.position) {
-                syncListProducts([...element.list])
-            } else {
-                console.log('not exist this position');
-
-            }
-        })
-    }, [props.position, listPosition])
-
-    useEffect(() => {
-        if (props.listProducts.length == 0) {
-            return
-        }
-        console.log('useEffect props.listProducts', props.listProducts);
         let exist = false
         listPosition.forEach(element => {
             if (element.key == props.position) {
                 exist = true
-                element.list = props.listProducts
+                syncListProducts([...element.list])
             }
         })
         if (!exist) {
-            listPosition.push({ key: props.position, list: props.listProducts })
+            listPosition.push({ key: props.position, list: [] })
+            syncListProducts([])
         }
-        let ls = JSON.parse(JSON.stringify(props.listProducts))
-        setListOrder(ls)
-        savePosition()
+    }, [props.position, listPosition])
+
+    useEffect(() => {
+        if (props.listProducts) {
+            console.log('useEffect props.listProducts', props.listProducts);
+            let exist = false
+            listPosition.forEach(element => {
+                if (element.key == props.position) {
+                    exist = true
+                    element.list = props.listProducts
+                }
+            })
+            if (!exist) {
+                listPosition.push({ key: props.position, list: props.listProducts })
+            }
+            let ls = JSON.parse(JSON.stringify(props.listProducts))
+            setListOrder(ls)
+            savePosition()
+        }
     }, [props.listProducts])
+
+    useEffect(() => {
+        console.log(props.listTopping, 'props.listTopping');
+
+    }, [props.listTopping])
 
     const savePosition = () => {
         let exist = false
@@ -131,9 +135,9 @@ export default (props) => {
             new HTTPService().setPath(ApiPath.SAVE_ORDER).POST(params).then((res) => {
                 console.log("sendOrder res ", res);
                 syncListProducts([])
-                let tempListPosition = dataManager.dataChoosing.filter(item => item.Id != props.route.params.room.Id)
-                console.log("sendOrder tempListPosition ", tempListPosition);
-                dataManager.dataChoosing = tempListPosition;
+                // let tempListPosition = dataManager.dataChoosing.filter(item => item.Id != props.route.params.room.Id)
+                // console.log("sendOrder tempListPosition ", tempListPosition);
+                // dataManager.dataChoosing = tempListPosition;
                 dialogManager.hiddenLoading()
             }).catch((e) => {
                 console.log("sendOrder err ", e);
@@ -183,7 +187,7 @@ export default (props) => {
                                     setItemOrder(item)
                                     setShowModal(!showModal)
                                 }}>
-                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10, borderBottomColor: "#ABB2B9", borderBottomWidth: 0.5 }}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10, borderBottomColor: "#ABB2B9", borderBottomWidth: 0.5, backgroundColor: item.Id == itemOrder.Id ? "pink" : null }}>
                                         <TouchableOpacity onPress={() => {
                                             console.log('delete');
                                             item.Quantity = 0
@@ -215,7 +219,11 @@ export default (props) => {
                                         </View>
                                         <TouchableOpacity
                                             style={{ marginLeft: 10 }}
-                                            onPress={() => { }}>
+                                            onPress={() => {
+                                                setItemOrder(item)
+                                                props.outputIdItemOrder(item);
+                                                props.setIsTopping();
+                                            }}>
                                             <Icon name="access-point" size={50} color="orange" />
                                         </TouchableOpacity>
                                     </View>
