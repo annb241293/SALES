@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Colors, Metrics, Images } from '../../theme'
 import realmStore from '../../data/realm/RealmStore';
@@ -11,46 +11,132 @@ export default (props) => {
     const [topping, setTopping] = useState([])
     const [categories, setCategories] = useState([])
     const [listCateId, setlistCateId] = useState([-1])
-    // const [listTopping, setListTopping] = useState([])
-    const [itemOrder, setItemOrder] = useState({ ...props.itemOrder })
+    const [itemOrder, setItemOrder] = useState(() => props.itemOrder)
+    const [listTopping, setListTopping] = useState([])
+
 
     useEffect(() => {
+        const getTopping = async () => {
+            let newCategories = [{ Id: -1, Name: I18n.t('tat_ca') }]
+            let newTopping = []
+            let results = await realmStore.queryTopping()
+            console.log(results, 'getTopping');
+            results.forEach(item => {
+                if (item.ExtraGroup !== '' && newCategories.filter(cate => cate.Name == item.ExtraGroup).length == 0) {
+                    newCategories.push({ Id: item.Id, Name: item.ExtraGroup })
+                }
+                newTopping.push({ ...JSON.parse(JSON.stringify(item)), Quantity: 0 })
+            })
+            setCategories(newCategories)
+            setTopping(newTopping)
+        }
+        const init = () => {
+            dataManager.listTopping.forEach(item => {
+                if (item.IdRoom == props.route.params.room.Id) {
+                    setListTopping([...item.Data])
+                }
+            })
+        }
         getTopping()
+        init()
     }, [])
 
-
     useEffect(() => {
-        setItemOrder({ ...props.itemOrder })
+        setItemOrder(props.itemOrder)
     }, [props.itemOrder])
 
     useEffect(() => {
-        console.log(itemOrder, 'itemOrder');
-    }, [itemOrder])
+        console.log(props.position, 'props.position');
+
+    }, [props.position])
+
+
+    useEffect(() => {
+        let exist = false
+        listTopping.forEach(lt => {
+            if (lt.Id == itemOrder.Id && lt.Key == props.position) {
+                exist = true
+                mergeTopping(lt.List)
+            }
+        })
+        if (!exist) {
+            resetTopping()
+        }
+    }, [itemOrder, listTopping, props.position])
+
+    const mergeTopping = (list) => {
+        resetTopping()
+        console.log('mergeTopping', list);
+        topping.forEach(top => {
+            list.forEach(ls => {
+                if (top.Id == ls.Id) {
+                    top.Quantity = ls.Quantity
+                }
+            })
+        })
+        setTopping([...topping])
+    }
+
+    const resetTopping = () => {
+        topping.forEach(item => {
+            item.Quantity = 0
+        })
+        setTopping([...topping])
+    }
 
     const onclose = () => {
-        props.setIsTopping()
+        props.onClose()
     }
 
-    const mapdataToList = (list) => {
-        console.log('mapdataToList', list);
-
+    const handleButtonDecrease = (item, index) => {
+        topping[index].Quantity += 1;
+        setTopping([...topping])
+        saveListTopping()
     }
 
-    const getTopping = async () => {
-        let newCategories = [{ Id: -1, Name: I18n.t('tat_ca') }]
-        let newTopping = []
-        let results = await realmStore.queryTopping().then(res => res.slice(0, 5))
-        console.log(results, 'getTopping');
-        results.forEach(item => {
-            if (item.ExtraGroup !== '' && newCategories.filter(cate => cate.Name == item.ExtraGroup).length == 0) {
-                newCategories.push({ Id: item.Id, Name: item.ExtraGroup })
+    const handleButtonIncrease = (item, index) => {
+        if (item.Quantity == 0) {
+            return
+        }
+        topping[index].Quantity -= 1;
+        setTopping([...topping])
+        saveListTopping()
+    }
+
+    const saveListTopping = () => {
+        console.log('saveListTopping');
+        let exist = false
+        let ls = topping.filter(item => item.Quantity > 0)
+        ls = JSON.parse(JSON.stringify(ls))
+        listTopping.forEach(lt => {
+            if (lt.Id == itemOrder.Id && lt.Key == props.position) {
+                exist = true
+                lt.List = [...ls]
+                lt.Key = props.position
             }
-            newTopping.push({ ...item, Quantity: 0 })
         })
-        setCategories(newCategories)
-        setTopping(newTopping)
+        if (!exist) {
+            listTopping.push({ Id: itemOrder.Id, List: [...ls], Key: props.position })
+        }
+        saveData()
+        props.outputListTopping(ls)
+
     }
 
+    const saveData = () => {
+        let exist = false
+        dataManager.listTopping.forEach(data => {
+            if (data.IdRoom == props.route.params.room.Id) {
+                exist = true
+                data.Data = listTopping
+            }
+        })
+        if (!exist) {
+            dataManager.listTopping.push({ IdRoom: props.route.params.room.Id, Data: listTopping })
+        }
+        console.log(dataManager.listTopping, 'dataManager.listTopping');
+
+    }
 
     const renderCateItem = (item, index) => {
         let isSelected = item.Id == listCateId[0] ? "orange" : "black";
@@ -64,7 +150,7 @@ export default (props) => {
 
     const renderTopping = (item, index) => {
         return (
-            <View key={item.Id} style={styles.toppingItem}>
+            <View key={item.Id} style={[styles.toppingItem, { backgroundColor: item.Quantity > 0 ? "red" : "green" }]}>
                 <View style={{ flex: 3 }}>
                     <Text numberOfLines={2} style={{}}>{item.Name}</Text>
                     <Text numberOfLines={2} style={{}}>{item.Price}</Text>
@@ -82,33 +168,6 @@ export default (props) => {
         )
     }
 
-    const outputListTopping = () => {
-        let listTopping = topping.filter(item => item.Quantity > 0);
-
-        // props.outputListTopping(listTopping)
-    }
-
-    const saveListTopping = () => {
-
-        console.log(dataManager.listTopping, 'savePosition');
-    }
-
-    const handleButtonDecrease = (item, index) => {
-        topping[index].Quantity += 1;
-        setTopping([...topping])
-        outputListTopping()
-        saveListTopping()
-    }
-
-    const handleButtonIncrease = (item, index) => {
-        if (item.Quantity == 0) {
-            return
-        }
-        topping[index].Quantity -= 1;
-        setTopping([...topping])
-        outputListTopping()
-        saveListTopping()
-    }
 
     return (
         <View style={{ flex: 1 }}>

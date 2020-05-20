@@ -9,7 +9,6 @@ import dialogManager from '../../../components/dialog/DialogManager';
 import { HTTPService } from '../../../data/services/HttpService';
 import { getFileDuLieuString } from '../../../data/fileStore/FileStorage';
 import { Constant } from '../../../common/Constant';
-import Topping from '../Topping'
 
 export default (props) => {
 
@@ -64,8 +63,12 @@ export default (props) => {
         }
     }, [props.position, listPosition])
 
+    useEffect(()=>{
+        props.outputPosition(props.position)
+    },[props.position])
+
     useEffect(() => {
-        if (props.listProducts) {
+        if (props.listProducts.length > 0) {
             console.log('useEffect props.listProducts', props.listProducts);
             let exist = false
             listPosition.forEach(element => {
@@ -77,27 +80,48 @@ export default (props) => {
             if (!exist) {
                 listPosition.push({ key: props.position, list: props.listProducts })
             }
-            let ls = JSON.parse(JSON.stringify(props.listProducts))
-            setListOrder(ls)
+            setListOrder(props.listProducts)
             savePosition()
         }
     }, [props.listProducts])
 
     useEffect(() => {
-        console.log(props.listTopping, 'props.listTopping');
+        setItemOrder(props.itemOrder)
+    }, [props.itemOrder])
 
+    useEffect(() => {
+        const getDescription = (listTopping) => {
+            let description = '';
+            listTopping.forEach(item => {
+                if (item.Quantity > 0) {
+                    description += `\n* ${item.Name}x${item.Quantity};`
+                }
+            })
+            return description
+        }
+        console.log(props.listTopping, 'props.listTopping');
+        let description = getDescription(props.listTopping)
+        list.forEach(element => {
+            if (element.Id == props.itemOrder.Id) {
+                element.Description = description
+            }
+        });
+        setListOrder([...list])
     }, [props.listTopping])
+
+
+
 
     const savePosition = () => {
         let exist = false
         dataManager.dataChoosing.forEach(element => {
             if (element.Id == props.route.params.room.Id) {
                 exist = true
-                element.data = [...listPosition]
+                element.data = listPosition
             }
         })
         if (!exist) {
-            dataManager.dataChoosing.push({ Id: props.route.params.room.Id, data: [...listPosition] })
+            dataManager.dataChoosing.push({ Id: props.route.params.room.Id, data: listPosition })
         }
         console.log(dataManager.dataChoosing, 'savePosition');
     }
@@ -135,9 +159,6 @@ export default (props) => {
             new HTTPService().setPath(ApiPath.SAVE_ORDER).POST(params).then((res) => {
                 console.log("sendOrder res ", res);
                 syncListProducts([])
-                // let tempListPosition = dataManager.dataChoosing.filter(item => item.Id != props.route.params.room.Id)
-                // console.log("sendOrder tempListPosition ", tempListPosition);
-                // dataManager.dataChoosing = tempListPosition;
                 dialogManager.hiddenLoading()
             }).catch((e) => {
                 console.log("sendOrder err ", e);
@@ -148,17 +169,27 @@ export default (props) => {
 
     const mapDataToList = (data) => {
         console.log("mapDataToList(data) ", data);
-        let ls = []
         list.forEach(element => {
             if (element.Id == data.Id) {
-                // element = data;
-                ls.push(data)
-            } else {
-                ls.push(element)
+                element.Description = data.Description
+                element.Quantity = data.Quantity
             }
         });
-        console.log("mapDataToList(ls) ", ls);
-        setListOrder([...ls])
+        // updateDataManager(ls)
+        console.log("mapDataToList(ls) ", list);
+        setListOrder([...list])
+    }
+
+    const updateDataManager = (list) => {
+        dataManager.dataChoosing.forEach(data => {
+            if (data.Id == props.route.params.room.Id) {
+                data.data.forEach(dt => {
+                    if (dt.key == props.position) {
+                        dt.list = list
+                    }
+                })
+            }
+        })
     }
 
     let _menu = null;
@@ -187,7 +218,7 @@ export default (props) => {
                                     setItemOrder(item)
                                     setShowModal(!showModal)
                                 }}>
-                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10, borderBottomColor: "#ABB2B9", borderBottomWidth: 0.5, backgroundColor: item.Id == itemOrder.Id ? "pink" : null }}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 10, borderBottomColor: "#ABB2B9", borderBottomWidth: 0.5, backgroundColor: item.Id == props.itemOrder.Id ? "pink" : null }}>
                                         <TouchableOpacity onPress={() => {
                                             console.log('delete');
                                             item.Quantity = 0
@@ -220,9 +251,7 @@ export default (props) => {
                                         <TouchableOpacity
                                             style={{ marginLeft: 10 }}
                                             onPress={() => {
-                                                setItemOrder(item)
-                                                props.outputIdItemOrder(item);
-                                                props.setIsTopping();
+                                                props.outputItemOrder(item)
                                             }}>
                                             <Icon name="access-point" size={50} color="orange" />
                                         </TouchableOpacity>

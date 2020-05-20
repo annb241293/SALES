@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ActivityIndicator, Image, View, StyleSheet, Picker, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import dialogManager from '../../components/dialog/DialogManager';
@@ -12,9 +12,10 @@ export default (props) => {
     const [numColumns, setNumColumns] = useState(1);
     const [listProducts, setListProducts] = useState([])
     const [value, setValue] = useState('');
-    const [isTopping, setIsTopping] = useState(false)
     const [itemOrder, setItemOrder] = useState({})
     const [listTopping, setListTopping] = useState([])
+    const [position, setPosition] = useState("")
+    const meMoItemOrder = useMemo(() => itemOrder, [itemOrder])
 
 
     useEffect(() => {
@@ -42,6 +43,7 @@ export default (props) => {
 
     const outputListProducts = (newList) => {
         newList = newList.filter(item => item.Quantity > 0)
+        newList = JSON.parse(JSON.stringify(newList))
         setListProducts(newList)
         console.log(newList, 'newlist');
 
@@ -52,8 +54,12 @@ export default (props) => {
         setValue(text)
     }
 
-    const outputIdItemOrder = (item) => {
+    const outputItemOrder = (item) => {
         setItemOrder(item)
+    }
+
+    const outputPosition = (position) => {
+        setPosition(position)
     }
 
     const outputListTopping = (listTopping) => {
@@ -66,7 +72,7 @@ export default (props) => {
                 outputTextSearch={outputTextSearch} />
             <View style={{ flex: 1, flexDirection: "row" }}>
                 <View style={{ flex: 6, }}>
-                    <View style={{ flex: 1, }}>
+                    <View style={!itemOrder.Id ? { flex: 1 } : {}}>
                         <SelectFood
                             valueSearch={value}
                             numColumns={numColumns}
@@ -75,21 +81,25 @@ export default (props) => {
                             listProducts={[...listProducts]}
                             outputListProducts={outputListProducts} />
                     </View>
-                    <View style={{ flex: 1  }}>
+                    <View style={itemOrder.Id ? { flex: 1 } : {}}>
                         <Topping
-                            itemOrder={{ ...itemOrder }}
-                            setIsTopping={() => { setIsTopping(false) }}
-                            outputListTopping={outputListTopping} />
+                            {...props}
+                            position={position}
+                            itemOrder={meMoItemOrder}
+                            onClose={() => { setItemOrder({}) }}
+                            outputListTopping={outputListTopping}
+                        />
                     </View>
                 </View>
                 <View style={{ flex: 4, marginLeft: 2 }}>
                     <PageServed
                         {...props}
-                        setIsTopping={() => { setIsTopping(true) }}
+                        itemOrder={meMoItemOrder}
                         listProducts={[...listProducts]}
                         outputListProducts={outputListProducts}
-                        outputIdItemOrder={outputIdItemOrder}
-                        listTopping={[...listTopping]} />
+                        outputItemOrder={outputItemOrder}
+                        outputPosition={outputPosition}
+                        listTopping={listTopping} />
                 </View>
             </View>
         </View>
